@@ -22,7 +22,6 @@
     4. followers
     5. tracks
     6. playlists
-    7. albums **
     8. bio
     9. reposts
     10. based in (location)
@@ -38,12 +37,7 @@
     2. belongs to user
     3. belong to playlist
     4. belong to comment
-5. mood**
-    1. type of reaction
-    2. belongs to track
-    3. belongs track list**
-    4. belongs comments**
-6. Playlists
+5. Playlists
     1. tracks
     2. likes
     3. reposts
@@ -51,11 +45,11 @@
     5. picture
     6. time made
     7. comments **
-7. Reposts
+6. Reposts
     1.  belongs to trackless
     2. belongs to track
     3. belongs to user
-8. Concerts**
+7. Concerts**
     1. location
     2. venue
     3. time
@@ -66,8 +60,7 @@
     8. comments
     9. likes
     10. reposts
-    11. mood**
-
+ 
 
 
 ### Controllers
