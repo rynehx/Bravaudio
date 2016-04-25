@@ -4,11 +4,11 @@
 
 [heroku]: http://www.herokuapp.com
 
-FresherNote is a full-stack web application inspired by Evernote.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
+Bravaudio is a fullstack music hosting app inspired by soundcloud.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
 ## Features & Implementation
 
- **NB**: don't copy and paste any of this.  Many folks will implement similar features, and many employers will see the READMEs of a lot of a/A grads.  You must write in a way that distinguishes your README from that of other students', but use this as a guide for what topics to cover.  
+Features of Bravaudio includes .
 
 ### Single-Page App
 

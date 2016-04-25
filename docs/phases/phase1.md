@@ -1,4 +1,4 @@
-# Phase 1: User Authentication, Note Model and JSON API
+# Phase 1: User Authentication, Track Model and JSON API
 
 ## Rails
 ### Models
@@ -46,10 +46,16 @@
     6. time made
     7. comments **
 6. Reposts
-    1.  belongs to trackless
+    1. belongs to trackless
     2. belongs to track
     3. belongs to user
-7. Concerts**
+7. Tags
+    1. name
+8. Taggings
+    1. belongs to tags
+    2. belongs to tracks
+    3. belongs to playlists
+8. Concerts**
     1. location
     2. venue
     3. time
@@ -60,7 +66,7 @@
     8. comments
     9. likes
     10. reposts
- 
+
 
 
 ### Controllers
@@ -69,26 +75,61 @@
 * Api::TracksController (create, destroy, index, show, update)
 * Api::CommentsController (create, destroy, show, update)
 * Api::LikesController (create, destroy, show)
-* Api::MoodController (create, destroy, show)
 * Api::PlaylistsController (create, destroy, update, show)
 * Api::RepostsController (create,destroy, show)
-* Api::ConcertsController (create, destroy, show, update)
+* Api::TagsController (create, destroy, show, update)
 
 ### Views
 * users/new.html.erb
 * session/new.html.erb
 * tracks/index.json.jbuilder
 * tracks/show.json.jbuilder
-* 
+* playlists/index.json.jbuilder
+* playlists/show.json.jbuilder
+* likes/index.json.jbuilder
+* comments/index.json.jbuilder
+* reposts/index.json.jbuilder
+* tags/index.json.jbuilder
 
 ## Flux
+
 ### Views (React Components)
+* components/home.jsx
+* components/collection.jsx
+* components/track.jsx
+* components/playlist.jsx
+* components/sidebar.jsx
+* components/navBar.jsx
+* components/musicBar.jsx
+* components/artist.jsx
 
 ### Stores
-
+  * stores/tracks.js
+  * stores/playlists.js
+  * stores/likes.js
+  * stores/comments.js
+  * stores/tags.js
+  * stores/reposts.js
+  * stores/users.js
 ### Actions
-
+  * actions/tracks/client_action.js
+  * actions/tracks/server_action.js
+  * actions/playlists/client_action.js
+  * actions/playlists/server_action.js
+  * actions/likes/client_action.js
+  * actions/likes/server_action.js
+  * actions/comments/client_action.js
+  * actions/comments/server_action.js
+  * actions/taggings/client_action.js
+  * actions/taggings/server_action.js
+  * actions/reposts/client_action.js
+  * actions/reposts/server_action.js
+  * actions/users/client_action.js
+  * actions/users/server_action.js
 ### ApiUtil
-
+  * utils/api_utils.js
 ## Gems/Libraries
 * BCrypt (Gem)
+* React
+* React-dom
+* babel
