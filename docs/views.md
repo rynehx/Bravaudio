@@ -6,14 +6,13 @@
 ## New Session
 ![new-session]
 
-## NotesIndex / NoteIndexItem / NoteForm
-![notes]
+## TrackItem
+![tracks]
 
-## NotebooksIndex / NotebookIndexItem
-![notebooks]
+## TrackListItem
+![tracklists]
 
-## NotebookForm
-![notebook-form]
+
 
 [new-user]: ./wireframes/new_user.png
 [new-session]: ./wireframes/new_session.png
