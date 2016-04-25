@@ -1,4 +1,4 @@
-# FresherNote
+# Bravaudio
 
 [Heroku link][heroku] Link to App_Name
 
