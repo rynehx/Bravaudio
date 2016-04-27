@@ -1,8 +1,8 @@
 # Bravaudio
 
-[Heroku link][heroku] Link to App_Name
+[Heroku link][heroku] Link to Bravaudio
 
-[heroku]: http://www.herokuapp.com/App_name
+[heroku]: https://bravaudio.herokuapp.com/#
 
 ## Minimum Viable Product
 
