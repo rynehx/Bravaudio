@@ -26,17 +26,20 @@ The App has the following minimum viable product features
 
 
 
-FresherNote will allow users to do the following:
+Bravaudio will allow users to do the following:
 
 <!-- This is a Markdown checklist. Use it to keep track of your
 progress. Put an x between the brackets for a checkmark: [x] -->
 
 - [ ] Create an account (MVP)
 - [ ] Log in / Log out, including as a Guest/Demo User (MVP)
-- [ ] Create, read, edit, and delete notes (MVP)
-- [ ] Organize notes within Notebooks (MVP)
-- [ ] Tag notes with multiple tags (expected feature, but not MVP)
-- [ ] Apply complex styling to notes while editing (expected feature, but not MVP)
+- [ ] Create, listen, update, and delete tracks (MVP)
+- [ ] Organize tracks in playlists (MVP)
+- [ ] Tag tracks and playlists with multiple tags (expected feature, but not MVP)
+- [ ] Allow comments on tracks (expected feature, but not MVP)
+- [ ] Allow likes on tracks (expected feature, but not MVP)
+- [ ] Allows users to follow other users
+- [ ] Allows users to repost playlists and tracks
 
 ## Design Docs
 * [View Wireframes][views]
