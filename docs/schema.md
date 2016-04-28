@@ -1,6 +1,6 @@
 # Schema Information
 
-## Tracks
+## tracks
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
@@ -11,7 +11,7 @@ image_url   | string    | not null
 music_url   | string    | not null
 times_played| integer   | not null, initial 0
 
-## Playlists
+## playlists
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
@@ -51,7 +51,6 @@ name        | string    | not null
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
-name        | string    | not null
 tag_id      | integer   | foreign key (references notes), indexed, unique [tag_id]
 track_id    | integer   | foreign key (references notes), indexed, unique [track_id]
 playlist_id | integer   | foreign key (references notes), indexed, unique [playlist_id]

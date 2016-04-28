@@ -3,7 +3,7 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
     userConstants = require('../constants/userConstants');
 
 var UserStore = new Store(AppDispatcher);
-var _currentUser, _authErrors;
+var _currentUser, _authErrors, _checked = false;
 
 UserStore.fetchCurrentUser = function(){
   return _currentUser;
@@ -11,15 +11,24 @@ UserStore.fetchCurrentUser = function(){
 
 UserStore.login = function(user){
   _currentUser = user;
+  _checked = true;
+};
+
+UserStore.check = function(){
+  return _checked;
 };
 
 UserStore.logout = function(){
   _currentUser = null;
+
 };
 
 
 UserStore.updateError = function(errors){
+
   _authErrors = errors;
+  _checked = true;
+
 };
 
 UserStore.fetchError= function(){
@@ -38,6 +47,7 @@ UserStore.__onDispatch = function(payload){
       UserStore.updateError(payload.errors);
       break;
   }
+  UserStore.__emitChange();
 };
 
 module.exports = UserStore;

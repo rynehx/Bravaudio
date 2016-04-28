@@ -11,119 +11,108 @@ finally to the **components** that update as a result. This is important
 because once you start implementing your flux loops, that's precisely
 what you'll need to do.
 
+##Stores
 
-## Note Cycles
+* `MusicBar Store`
+* `Track Store`
+* `Playlist Store`
+* `Search Store`
+* `User Store`
 
-### Notes API Request Actions
 
-* `fetchAllNotes`
-  0. invoked from `NotesIndex` `didMount`/`willReceiveProps`
-  0. `GET /api/notes` is called.
-  0. `receiveAllNotes` is set as the callback.
+## Track Cycles
 
-* `createNote`
-  0. invoked from new note button `onClick`
-  0. `POST /api/notes` is called.
-  0. `receiveSingleNote` is set as the callback.
+### Tracks API Request Actions
 
-* `fetchSingleNote`
-  0. invoked from `NoteDetail` `didMount`/`willReceiveProps`
-  0. `GET /api/notes/:id` is called.
-  0. `receiveSingleNote` is set as the callback.
+* `fetchDisplayedTrack`
+  0. invoked from `Track` `didMount`/`willReceiveProps`
+  0. `GET /api/tracks/id` is called.
+  0. `receiveDisplayedTrack` is set as the callback.
 
-* `updateNote`
-  0. invoked from `NoteForm` `onSubmit`
-  0. `POST /api/notes` is called.
-  0. `receiveSingleNote` is set as the callback.
+### Tracks API Response Actions
 
-* `destroyNote`
-  0. invoked from delete note button `onClick`
-  0. `DELETE /api/notes/:id` is called.
-  0. `removeNote` is set as the callback.
-
-### Notes API Response Actions
-
-* `receiveAllNotes`
+* `receiveAllTracks`
   0. invoked from an API callback.
-  0. `Note` store updates `_notes` and emits change.
-
-* `receiveSingleNote`
-  0. invoked from an API callback.
-  0. `Note` store updates `_notes[id]` and emits change.
-
-* `removeNote`
-  0. invoked from an API callback.
-  0. `Note` store removes `_notes[id]` and emits change.
+  0. `Track` store updates `_Track` by replacing the displayed song and emits change.
 
 ### Store Listeners
 
-* `NotesIndex` component listens to `Note` store.
-* `NoteDetail` component listens to `Note` store.
+* `Track` component listens to `Track` store.
 
 
-## Notebook Cycles
+## MusicBar Cycles
 
-### Notebooks API Request Actions
+### Tracks API Request Actions
 
-* `fetchAllNotebooks`
-  0. invoked from `NotebooksIndex` `didMount`/`willReceiveProps`
-  0. `GET /api/notebooks` is called.
-  0. `receiveAllNotebooks` is set as the callback.
+* `fetchCurrentTrack`
+  0. invoked from `MusicBar` `onClick`
+  0. `GET /api/tracks/id` is called.
+  0. `receiveCurrentTrack` is set as the callback.
 
-* `createNotebook`
-  0. invoked from new notebook button `onClick`
-  0. `POST /api/notebooks` is called.
-  0. `receiveSingleNotebook` is set as the callback.
+### Tracks API Response Actions
 
-* `fetchSingleNotebook`
-  0. invoked from `NotebookDetail` `didMount`/`willReceiveProps`
-  0. `GET /api/notebooks/:id` is called.
-  0. `receiveSingleNotebook` is set as the callback.
-
-* `updateNotebook`
-  0. invoked from `NotebookForm` `onSubmit`
-  0. `POST /api/notebooks` is called.
-  0. `receiveSingleNotebook` is set as the callback.
-
-* `destroyNotebook`
-  0. invoked from delete notebook button `onClick`
-  0. `DELETE /api/notebooks/:id` is called.
-  0. `removeNotebook` is set as the callback.
-
-### Notebooks API Response Actions
-
-* `receiveAllNotebooks`
+* `receiveCurrentTrack`
   0. invoked from an API callback.
-  0. `Notebook` store updates `_notebooks` and emits change.
-
-* `receiveSingleNotebook`
-  0. invoked from an API callback.
-  0. `Notebook` store updates `_notebooks[id]` and emits change.
-
-* `removeNotebook`
-  0. invoked from an API callback.
-  0. `Notebook` store removes `_notebooks[id]` and emits change.
+  0. `Track` store updates `_Tracks` by adding into the hash and emits change.
 
 ### Store Listeners
 
-* `NotebooksIndex` component listens to `Notebook` store.
+* `MusicBar` component listens to `MusicBar` store.
 
+## User Cycles
 
-## SearchSuggestion Cycles
+### User API Request Actions
 
-* `fetchSearchSuggestions`
-  0. invoked from `NoteSearchBar` `onChange` when there is text
-  0. `GET /api/notes` is called with `text` param.
-  0. `receiveSearchSuggestions` is set as the callback.
+* `fetchCurrentUser`
+  0. invoked from `NavBar` `didMount`/`willReceiveProps`
+  0. `GET /api/users/id` is called.
+  0. `receiveCurrentUser` is set as the callback.
 
-* `receiveSearchSuggestions`
+### User API Response Actions
+
+* `receiveCurrentUser`
   0. invoked from an API callback.
-  0. `SearchSuggestion` store updates `_suggestions` and emits change.
-
-* `removeSearchSuggestions`
-  0. invoked from `NoteSearchBar` `onChange` when empty
-  0. `SearchSuggestion` store resets `_suggestions` and emits change.
+  0. `User` store updates `_currentUser` by adding into the hash and emits change.
 
 ### Store Listeners
 
-* `SearchBarSuggestions` component listens to `SearchSuggestion` store.
+* `NavBar` component listens to `User` store.
+
+
+## Playlist Cycles
+
+### Playlist API Request Actions
+
+* `fetchCurrentPlaylist`
+  0. invoked from `Playlist` `didMount`/`willReceiveProps`
+  0. `GET /api/playlists/id` is called.
+  0. `receiveCurrentPlaylist` is set as the callback.
+
+### Playlist API Response Actions
+
+* `receiveCurrentPlaylist`
+  0. invoked from an API callback.
+  0. `Playlist` store updates `_currentPlaylist` by replacing previous and emit change.
+
+### Store Listeners
+
+* `Playlist` component listens to `Playlist` store.
+
+## Search Cycles
+
+### Search API Request Actions
+
+* `fetchQuery`
+  0. invoked from `NavBar/SearchBar` `didMount`/`willReceiveProps`
+  0. `GET /api/search` is called.
+  0. `receiveQueryResults` is set as the callback.
+
+### Playlist API Response Actions
+
+* `receiveQueryResults`
+  0. invoked from an API callback.
+  0. `Search` store updates `_searchResults` by replacing previous and emit change.
+
+### Store Listeners
+
+* `SearchBar` component listens to `Search` store.

@@ -1,54 +1,53 @@
 ## Component Hierarchy
 
 * `App`
-  * `NavBar`
+  0. `NavBar`
     * `Home`
     * `Upload`
-    * `Search`
+    * `SearchBar`
     * `Collection`
     * `Config`
     * `User Info`
     * `Messages`
     * `Notification`
-  * `MusicBar`
+  0. `MusicBar`
     * `Play/Stop Button`
     * `Back/Forward Button`
     * `Music UI`
     * `Current Track`
     * `Current Playlist`
     * `Option to like`
-  * `Home`
+  0. `Home`
     * `Main`
-      * `Stream`
-      * `TopCharts`
+      - `Stream`
+      - `TopCharts`
     * `Sidebar`
-      * `Likes`
-      * `Follows`
-  * `Collection`
+      - `Likes`
+      - `Follows`
+  0. `Collection`
     * `Overview`
     * `Likes`
     * `Playlists`
     * `Following`
-  * `Upload`
+  0. `Upload`
     * `Submission`
-  * `TrackList`
+  0. `PlayList`
     * `Main`
-      * `Tracks`
-      * `Owner`
+      - `Tracks`
+      - `Owner`
     * `Sidebar`
     * `ForeGround`
-      * `NumTracks`
-      * `TrackListLogo`
-  * `Track`
+      - `NumTracks`
+      - `TrackListLogo`
+  0. `Track`
     * `Sidebar`
     * `ForeGround`
     * `Main`
-      * `Owner`
-      * `Comments`
-      * `Description`
-      * `Stats`
-  * `ConcertPage`
-  * `UserPage`
+      - `Owner`
+      - `Comments`
+      - `Description`
+      - `Stats`
+  0. `UserPage`
     * `ForeGround`
     * `Sidebar`
     * `Main`

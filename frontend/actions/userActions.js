@@ -29,7 +29,7 @@ var UserActions = {
 		UserActions.login({username: "guest", password: "password"});
 	},
 	receiveCurrentUser: function(user){
-    debugger
+  
 		AppDispatcher.dispatch({
 			actionType: UserConstants.LOGIN,
 			user: user

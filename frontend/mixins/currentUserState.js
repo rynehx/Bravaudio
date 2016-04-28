@@ -1,21 +1,24 @@
-var UserStore = require('../stores/userStore');
-
+var UserStore = require('../stores/userStore'),
+    UserActions = require('../actions/userActions');
 
 var CurrentUserStateMixin = {
   getInitialState: function(){
     return {
       currentUser: UserStore.fetchCurrentUser(),
-       authError: UserStore.fetchError()};
+      authError: UserStore.fetchError()
+     };
   },
-  componentDidMount: function(){
+  componentWillMount: function(){
+
     UserStore.addListener(this.updateUser);
 
-    if (!this.state.currentUser){
-      UserStore.fetchCurrentUser();
-    }
+    // if (!this.state.currentUser){
+    //   UserActions.fetchCurrentUser();
+    // }
 
   },
   updateUser: function(){
+
     this.setState({
       currentUser: UserStore.fetchCurrentUser(),
       authError: UserStore.fetchError()

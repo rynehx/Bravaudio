@@ -1,13 +1,14 @@
 var React = require("react"),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     UserActions = require("../actions/userActions"),
-    CurrentUserState = require("../mixins/currentUserState");
-
+    CurrentUserState = require("../mixins/currentUserState"),
+    UserStore = require('../stores/userStore');
 var LoginForm = React.createClass({
 	mixins: [LinkedStateMixin, CurrentUserState],
 	getInitialState: function(){
 		return {form: "login"};
 	},
+
 	setForm: function(e){
 		this.setState({form: e.currentTarget.value});
 	},
@@ -47,9 +48,12 @@ var LoginForm = React.createClass({
 		</ul>);
 	},
 	form: function(){
+
 		if (this.state.currentUser) {
 			return;
-		}
+		} else if(!UserStore.check()){
+      return;
+    }
 		return(
 				<form onSubmit={this.handleSubmit}>
 					<section>
@@ -79,6 +83,7 @@ var LoginForm = React.createClass({
 		);
 	},
 	render: function(){
+    setTimeout(function(){},10000);
 		return (
 			<div id="login-form">
 				{this.greeting()}
