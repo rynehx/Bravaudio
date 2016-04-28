@@ -35,14 +35,14 @@ var LoginForm = React.createClass({
 		);
 	},
 	errors: function(){
-		if (!this.state.userErrors){
+		if (!this.state.authError){
 			return;
 		}
 		var self = this;
 		return (<ul>
 		{
-			Object.keys(this.state.userErrors).map(function(key, i){
-				return (<li key={i}>{self.state.userErrors[key]}</li>);
+			Object.keys(this.state.authError).map(function(key, i){
+				return (<li key={i}>{self.state.authError[key]}</li>);
 			})
 		}
 		</ul>);
@@ -67,12 +67,12 @@ var LoginForm = React.createClass({
 					</section>
 
 					<section>
-						<label> Login
+						<label className = "log-in-button"> Login
 							<input type="Radio" name="action"
               value="login" onChange={this.setForm}/>
 						</label>
 
-						<label> Sign Up
+						<label className = "sign-up-button" > Sign Up
 							<input type="Radio" name="action"
               value="signup" onChange={this.setForm}/>
 						</label>
@@ -83,7 +83,7 @@ var LoginForm = React.createClass({
 		);
 	},
 	render: function(){
-    setTimeout(function(){},10000);
+  
 		return (
 			<div id="login-form">
 				{this.greeting()}

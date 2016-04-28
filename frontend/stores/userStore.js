@@ -31,7 +31,7 @@ UserStore.updateError = function(errors){
 
 };
 
-UserStore.fetchError= function(){
+UserStore.fetchError = function(){
   return _authErrors;
 };
 
@@ -47,6 +47,8 @@ UserStore.__onDispatch = function(payload){
       UserStore.updateError(payload.errors);
       break;
   }
+
+
   UserStore.__emitChange();
 };
 

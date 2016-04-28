@@ -13,3 +13,29 @@
  *= require_tree .
  *= require_self
  */
+
+
+.navBar {
+  background-color: pink;
+  display: block;
+}
+
+body {
+  background-color: lightgrey;
+}
+
+.sign-up-button {
+  float: right;
+  background-color: blue;
+  display: block;
+  width: 75px;
+  margin: 0px 30px;
+}
+
+.log-in-button {
+  float: right;
+  background-color: blue;
+  display: block;
+  width: 75px;
+  margin: 0px 30px;
+}

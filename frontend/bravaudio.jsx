@@ -8,7 +8,7 @@ var Router = ReactRouter.Router,
     IndexRoute = ReactRouter.IndexRoute,
     hashHistory = ReactRouter.hashHistory;
 //Components
-var LoginForm = require('./components/loginForm.jsx');
+var NavBar = require('./components/navBar.jsx');
 
 //Mixins
 var CurrentUserState = require('./mixins/currentUserState'),
@@ -18,18 +18,15 @@ var CurrentUserState = require('./mixins/currentUserState'),
 var App = React.createClass({
   mixins: [CurrentUserState],
   componentWillMount: function(){
-
-
     if (!this.state.currentUser){
       UserActions.fetchCurrentUser();
     }
-
   },
   render: function(){
     return (
       <div>
-        <header><h1>WELCOME</h1></header>
-        <LoginForm/>
+        <NavBar />
+        <p>body content</p>
         {this.props.children}
       </div>
     );

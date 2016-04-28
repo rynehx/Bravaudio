@@ -6,23 +6,28 @@
   * `keeps historic tracks playing time`
   * `current playing track must contain playlist they are instantiated`
 
-###Track Store
+###Tracks Store
   * `contain the show page information for the currently displaying track`
   * `may contain an array of tracks for index (trending)`
 
-### Track Store Method
+### Tracks Store Method
   * `updateCurrentTrack`
     0. looks through the entire `_Tracks` and see if there is a match, if so replace Current Track with the found track. If track not found call fetchCurrentTrack to prob data base.
 
-###Playlist Store
+###Playlists Store
   * `contain the show page information for the current displaying playlist`
 
 ###Search Store
   * `contains the current search query`
   * `contains all returned matches separated into users/playlists/tracks`
 
-###User Store
+###Users Store
   * `keep track of current user`
+###People Store
+  * `keep track of other people`
+
+
+
 
 
 ##question
