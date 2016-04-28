@@ -3,36 +3,34 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
     userConstants = require('../constants/userConstants');
 
 var UserStore = new Store(AppDispatcher);
-var _currentUser, _authErrors, _checked = false;
+
+var myLocStorage = localStorage;
+
+// var _currentUser, _authErrors;
 
 UserStore.fetchCurrentUser = function(){
-  return _currentUser;
+  return JSON.parse(myLocStorage.getItem("currentUser"));
 };
 
 UserStore.login = function(user){
-  _currentUser = user;
-  _checked = true;
+  myLocStorage.setItem("currentUser",JSON.stringify(user));
 };
 
-UserStore.check = function(){
-  return _checked;
-};
+
 
 UserStore.logout = function(){
-  _currentUser = null;
-
+  return myLocStorage.setItem("currentUser",null);
 };
 
 
 UserStore.updateError = function(errors){
 
-  _authErrors = errors;
-  _checked = true;
-
+  myLocStorage.setItem("authErrors",errors);
 };
 
 UserStore.fetchError = function(){
-  return _authErrors;
+
+  return myLocStorage.getItem("authErrors");
 };
 
 UserStore.__onDispatch = function(payload){

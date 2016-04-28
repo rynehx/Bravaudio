@@ -8,8 +8,8 @@ var Router = ReactRouter.Router,
     IndexRoute = ReactRouter.IndexRoute,
     hashHistory = ReactRouter.hashHistory;
 //Components
-var NavBar = require('./components/navBar.jsx');
-
+var NavBar = require('./components/navBar'),
+    MusicBar = require('./components/musicBar');
 //Mixins
 var CurrentUserState = require('./mixins/currentUserState'),
     UserActions = require('./actions/userActions'),
@@ -28,6 +28,7 @@ var App = React.createClass({
         <NavBar />
         <p>body content</p>
         {this.props.children}
+        <MusicBar />
       </div>
     );
   }

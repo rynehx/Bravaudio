@@ -60,11 +60,17 @@ var LoginModal = React.createClass({
   		});
 
   	},
+    showErrors: function(){
 
+      if (this.props.errors != "null"){
+        return this.props.errors;
+      }
+
+    },
     render: function() {
       return (
         <div>
-        <button onClick={this.openModal}>{this.props.userAction}</button>
+        <button className={this.props.userAction + "-button"} onClick={this.openModal}>{this.props.userAction}</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -74,7 +80,7 @@ var LoginModal = React.createClass({
 
 
           <h2>{this.props.userAction}</h2>
-          <p>{this.props.errors}</p>
+          <p>{this.showErrors()}</p>
           <form>
             <input type="text" valueLink={this.linkState("username")}/>
             <input type="password" valueLink={this.linkState("password")}/>

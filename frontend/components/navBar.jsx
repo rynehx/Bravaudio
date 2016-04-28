@@ -15,12 +15,11 @@ var NavBar = React.createClass({
 		return (
 			<div>
 				<h2>Hi, {UserStore.fetchCurrentUser().username}!</h2>
-				<input type="submit" value="logout" onClick={this.logout}/>
 			</div>
 		);
 	},
 	errors: function(){
-		if (!UserStore.fetchError()){
+		if (UserStore.fetchError() === "null"){
 			return;
 		}
 		var self = this;
@@ -31,17 +30,35 @@ var NavBar = React.createClass({
 			})
 		}
 		</ul>);
-	},logout: function(e){
+	},
+
+  logout: function(e){
 		e.preventDefault();
 		UserActions.logout();
 	},
+
+  loginButtons: function(){
+
+    if(!UserStore.fetchCurrentUser()){
+
+      return (
+        <section>
+        <LoginModal userAction = "signup" errors = {this.errors()} />
+        <LoginModal userAction = "login" errors = {this.errors()}/>
+        </section>
+      );
+    }else{
+
+      return (<input type="button" value="logout" onClick={this.logout}/>);
+    }
+
+  },
 render: function(){
+
   return (
-    <div className = "navBar">
+    <div className = "navBar clearfix">
       {this.greeting()}
-      {this.errors()}
-      <LoginModal userAction = "signup" errors = {this.errors()} />
-      <LoginModal userAction = "login" errors = {this.errors()}/>
+      {this.loginButtons()}
     </div>
   );
 }
