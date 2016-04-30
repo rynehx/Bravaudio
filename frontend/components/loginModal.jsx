@@ -1,9 +1,9 @@
 var React = require('react'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     Modal = require('react-modal'),
-    UserActions = require("../actions/userActions"),
-    UserStore = require("../stores/userStore"),
-    CurrentUserState = require("../mixins/currentUserState");
+    SessionActions = require("../actions/sessionActions"),
+    SessionStore = require("../stores/sessionStore"),
+    CurrentSessionState = require("../mixins/currentSessionState");
 var style = {
   overlay : {
     position        : 'fixed',
@@ -36,7 +36,7 @@ var LoginModal = React.createClass({
        Modal.setAppElement(container);
     },
     componentWillUpdate: function(){
-      if(UserStore.fetchCurrentUser() && this.state.modalIsOpen){
+      if(SessionStore.fetchCurrentUser() && this.state.modalIsOpen){
         this.closeModal();
       }
     },
@@ -54,7 +54,7 @@ var LoginModal = React.createClass({
     },
     handleSubmit: function(e){
   		e.preventDefault();
-  		UserActions[this.props.userAction]({
+  		SessionActions[this.props.sessionAction]({
   			username: this.state.username,
   			password: this.state.password
   		});
@@ -70,7 +70,7 @@ var LoginModal = React.createClass({
     render: function() {
       return (
         <div>
-        <button className={this.props.userAction + "-button"} onClick={this.openModal}>{this.props.userAction}</button>
+        <button className={this.props.sessionAction + "-button"} onClick={this.openModal}>{this.props.sessionAction}</button>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
@@ -79,7 +79,7 @@ var LoginModal = React.createClass({
 
 
 
-          <h2>{this.props.userAction}</h2>
+          <h2>{this.props.sessionAction}</h2>
           <p>{this.showErrors()}</p>
           <form>
             <input type="text" valueLink={this.linkState("username")} placeholder="username"/>

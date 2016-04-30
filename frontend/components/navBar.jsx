@@ -3,32 +3,31 @@ var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 
 //Components
-var LoginForm = require('./loginForm');
 var LoginModal = require('./loginModal');
 //Mixins
-var UserStore = require('../stores/userStore'),
-    UserActions = require('../actions/userActions');
+var SessionStore = require('../stores/sessionStore'),
+    SessionActions = require('../actions/sessionActions');
 
 var NavBar = React.createClass({
   greeting: function(){
-		if (!UserStore.fetchCurrentUser()) {
+		if (!SessionStore.fetchCurrentUser()) {
 			return;
 		}
 		return (
 			<div>
-				<h2>Hi, {UserStore.fetchCurrentUser().username}!</h2>
+				<h2>Hi, {SessionStore.fetchCurrentUser().username}!</h2>
 			</div>
 		);
 	},
 	errors: function(){
-		if (UserStore.fetchError() === null){
+		if (SessionStore.fetchError() === null){
 			return;
 		}
 		var self = this;
 		return (<ul>
 		{
-			Object.keys(UserStore.fetchError()).map(function(key, i){
-				return (<li key={i}>{UserStore.fetchError()[key]}</li>);
+			Object.keys(SessionStore.fetchError()).map(function(key, i){
+				return (<li key={i}>{SessionStore.fetchError()[key]}</li>);
 			})
 		}
 		</ul>);
@@ -36,17 +35,17 @@ var NavBar = React.createClass({
 
   logout: function(e){
 		e.preventDefault();
-		UserActions.logout();
+		SessionActions.logout();
 	},
 
   loginButtons: function(){
 
-    if(!UserStore.fetchCurrentUser()){
+    if(!SessionStore.fetchCurrentUser()){
 
       return (
         <section>
-        <LoginModal userAction = "signup" errors = {this.errors()} />
-        <LoginModal userAction = "login" errors = {this.errors()}/>
+        <LoginModal sessionAction = "signup" errors = {this.errors()} />
+        <LoginModal sessionAction = "login" errors = {this.errors()}/>
         </section>
       );
     }else{

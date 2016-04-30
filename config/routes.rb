@@ -17,7 +17,7 @@ Rails.application.routes.draw do
     # resources :playlists, only: [:show] do
     #   resources :tracks, only: [:index, :show, :create]
     # end
-    get "username/:username", to: "users#username"
+    get ":username", to: "users#username"
 
 
   end

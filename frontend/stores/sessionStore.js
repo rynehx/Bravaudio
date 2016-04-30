@@ -1,61 +1,60 @@
 var AppDispatcher = require('../dispatcher/dispatcher.js'),
     Store = require('flux/utils').Store,
-    userConstants = require('../constants/userConstants'),
+    SessionConstants = require('../constants/sessionConstants'),
     hashHistory = require('react-router').hashHistory;
 
-var UserStore = new Store(AppDispatcher);
+var SessionStore = new Store(AppDispatcher);
 
 var myLocStorage = localStorage;
 
  var _currentUser=null, _authErrors=null;
 
-UserStore.fetchCurrentUser = function(){
+SessionStore.fetchCurrentUser = function(){
 
   return JSON.parse(myLocStorage.getItem("currentUser"));
 };
 
-UserStore.login = function(user){
+SessionStore.login = function(user){
   myLocStorage.setItem("currentUser",JSON.stringify(user));
     hashHistory.push("/home");
 };
 
 
 
-UserStore.logout = function(){
+SessionStore.logout = function(){
   myLocStorage.setItem("currentUser",null);
-  debugger
   hashHistory.push("/");
 };
 
 
-UserStore.updateError = function(errors){
+SessionStore.updateError = function(errors){
 
   _authErrors = errors;
   myLocStorage.setItem("currentUser",null);
 };
 
-UserStore.fetchError = function(){
+SessionStore.fetchError = function(){
 
   return _authErrors;
 };
 
-UserStore.__onDispatch = function(payload){
+SessionStore.__onDispatch = function(payload){
 
   switch(payload.actionType){
-    case userConstants.LOGIN:
-    UserStore.login(payload.user);
+    case SessionConstants.LOGIN:
+    SessionStore.login(payload.user);
       break;
-    case userConstants.LOGOUT:
+    case SessionConstants.LOGOUT:
 
-      UserStore.logout();
+      SessionStore.logout();
       break;
-    case userConstants.ERROR:
-      UserStore.updateError(payload.errors);
+    case SessionConstants.ERROR:
+      SessionStore.updateError(payload.errors);
       break;
   }
 
 
-  UserStore.__emitChange();
+  SessionStore.__emitChange();
 };
 
-module.exports = UserStore;
+module.exports = SessionStore;

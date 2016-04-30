@@ -1,22 +1,20 @@
 var React = require('react'),
-    UserStore = require('../stores/userStore'),
+    SessionStore = require('../stores/sessionStore'),
     hashHistory = require('react-router').hashHistory;
 
 var UploadPage = React.createClass({
 
-  // componentDidMount: function(){
-  //   this.userStoreListener = UserStore.addListener(this._onChange);
-  // },
-  // componentWillUnMount: function(){
-  //   this.userStoreListener.remove();
-  // },
-  //
-  // _onChange: function(){
-  //   this.setState({user:UserStore.getCurrentUser()});
-  //   if(!this.state.user){
-  //     hashHistory.push("/");
-  //   }
-  // },
+  componentWillMount: function(){
+    if(!SessionStore.fetchCurrentUser()){
+      hashHistory.push("/");
+    }
+  },
+
+  componentWillUpdate: function(){
+    if(!SessionStore.fetchCurrentUser()){
+      hashHistory.push("/");
+    }
+  },
 
 
   render: function(){

@@ -4,7 +4,7 @@ var React = require('react'),
 
 
 //Stores
-var UserStore = require('../../stores/userStore'),
+var SessionStore = require('../../stores/sessionStore'),
     TrackStore = require('../../stores/trackStore'),
     MusicStore = require('../../stores/musicStore');
 

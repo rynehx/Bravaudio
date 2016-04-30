@@ -1,5 +1,5 @@
 var React = require('react'),
-    UserStore = require('../stores/userStore'),
+    SessionStore = require('../stores/sessionStore'),
     hashHistory = require('react-router').hashHistory;
 
 //Components
@@ -9,16 +9,17 @@ var HomeContent = require('./homePage/homeContent'),
 
 var HomePage = React.createClass({
   componentWillMount: function(){
-    if(!UserStore.fetchCurrentUser()){
+    if(!SessionStore.fetchCurrentUser()){
       hashHistory.push("/");
     }
   },
 
   componentWillUpdate: function(){
-    if(!UserStore.fetchCurrentUser()){
+    if(!SessionStore.fetchCurrentUser()){
       hashHistory.push("/");
     }
   },
+
 
 
   render: function(){

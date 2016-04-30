@@ -4,7 +4,7 @@ var React = require('react'),
 
 
 //Stores
-var UserStore = require('../stores/userStore'),
+var SessionStore = require('../stores/sessionStore'),
     TrackStore = require('../stores/trackStore'),
     MusicStore = require('../stores/musicStore');
 
@@ -18,7 +18,7 @@ var AudioPlayer = require('./musicBar/audioPlayer'),
 var MusicBar = React.createClass({
 
   renderMusicBar: function(){
-    if(UserStore.fetchCurrentUser()){
+    if(SessionStore.fetchCurrentUser()){
       return (
         <div className = "musicbar">
           <div className = "audio-components">

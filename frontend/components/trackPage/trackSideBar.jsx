@@ -1,5 +1,5 @@
 var React = require('react'),
-    UserStore = require('../../stores/userStore'),
+    SessionStore = require('../../stores/sessionStore'),
     TrackStore = require('../../stores/TrackStore'),
     hashHistory = require('react-router').hashHistory;
 

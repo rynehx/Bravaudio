@@ -1,5 +1,5 @@
 var React = require('react'),
-    UserStore = require('../stores/userStore'),
+    SessionStore = require('../stores/sessionStore'),
     hashHistory = require('react-router').hashHistory,
     TrackContent = require('./trackPage/trackContent'),
     TrackSideBar = require('./trackPage/trackSideBar'),

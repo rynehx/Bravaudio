@@ -14,17 +14,17 @@ var NavBar = require('./components/navBar'),
     UploadPage = require('./components/uploadPage'),
     TrackPage = require('./components/trackPage');
 //Mixins
-var CurrentUserState = require('./mixins/currentUserState'),
-    UserActions = require('./actions/userActions'),
-    UserStore = require('./stores/userStore');
+var CurrentSessionState = require('./mixins/currentSessionState'),
+    SessionActions = require('./actions/sessionActions'),
+    SessionStore = require('./stores/sessionStore');
 
-
+//need listener to update store
 
 var App = React.createClass({
-  mixins: [CurrentUserState],
+  mixins: [CurrentSessionState],
   componentWillMount: function(){
     if (!this.state.currentUser){
-      UserActions.fetchCurrentUser();
+      SessionActions.fetchCurrentUser();
     }
   },
   render: function(){
@@ -45,11 +45,11 @@ var App = React.createClass({
 var AppRouter = (
   <Router history={hashHistory}>
     <Route path="/" components={App}>
-      <Route path="home" components={HomePage}>
+      <Route path="home" components={HomePage}/>
+      <Route path="upload" components={UploadPage}/>
+      <Route path=":user" components={TrackPage}>
         <Route path=":track" components={TrackPage}/>
       </Route>
-      <Route path="upload" components={UploadPage}/>
-      <Route path="user/:user" components={TrackPage}/>
 
     </Route>
   </Router>
