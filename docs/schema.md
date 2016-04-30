@@ -8,7 +8,7 @@ title       | string    | not null
 description | text      |
 author_id   | integer   | not null, foreign key (references users), indexed
 image_url   | string    | not null
-music_url   | string    | not null
+audio_url   | string    | not null
 times_played| integer   | not null, initial 0
 
 ## playlists
@@ -68,6 +68,13 @@ location_country    | string    | not null
 profile_picture_url | string    |  
 password_digest     | string    | not null
 session_token       | string    | not null, indexed, unique
+
+
+##following
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+user_id     | integer   | foreign key , indexed, unique [user_id]
 
 ## reposts
 column name | data type | details

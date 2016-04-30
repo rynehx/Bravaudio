@@ -16,12 +16,31 @@ ActiveRecord::Schema.define(version: 20160426175844) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "tracks", force: :cascade do |t|
+    t.string   "title",                    null: false
+    t.string   "description"
+    t.string   "image_url"
+    t.string   "audio_url",                null: false
+    t.integer  "times_played", default: 0
+    t.integer  "author_id",                null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "tracks", ["author_id"], name: "index_tracks_on_author_id", using: :btree
+  add_index "tracks", ["times_played"], name: "index_tracks_on_times_played", using: :btree
+
   create_table "users", force: :cascade do |t|
-    t.string   "username",        null: false
-    t.string   "password_digest", null: false
-    t.string   "session_token",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.string   "username",            null: false
+    t.string   "password_digest",     null: false
+    t.string   "session_token",       null: false
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.string   "profile_picture_url"
+    t.string   "name"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree

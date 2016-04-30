@@ -82,8 +82,8 @@ var LoginModal = React.createClass({
           <h2>{this.props.userAction}</h2>
           <p>{this.showErrors()}</p>
           <form>
-            <input type="text" valueLink={this.linkState("username")}/>
-            <input type="password" valueLink={this.linkState("password")}/>
+            <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
+            <input type="password" valueLink={this.linkState("password")} placeholder="password"/>
             <button onClick={this.handleSubmit}>submit</button>
             <button onClick={this.closeModal}>close</button>
           </form>

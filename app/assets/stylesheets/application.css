@@ -16,9 +16,18 @@
 
 
 .navBar {
+  top: 0;
+  position: fixed;
+  width: 100%;
   height: 30px;
   background-color: #262e33;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#content {
+  margin-top: 40px;
 }
 
 body {
@@ -41,19 +50,129 @@ body {
   margin: 5px 10px;
 }
 
-.musicBar {
-   position: absolute;
-   bottom: 0;
-   width: 100%;
-   height: 60px;
-   background: silver;
- }
+.logout-button {
+  float: right;
+  background-color: gold;
+  display: block;
+  width: 75px;
+  margin: 5px 10px;
+}
 
- .clearfix:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
-	}
+
+.musicBar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background: silver;
+}
+
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: "";
+  clear: both;
+  height: 0;
+}
+
+.home {
+  height: 6000px;
+  width: auto;
+  margin: 40px 30px;
+  background-color: lightgrey;
+
+  background-size: 100%;
+
+}
+
+.trendingTracks{
+  width: 200px;
+  height: 200px;
+  margin: 10px;
+}
+
+.sideBar{
+
+}
+
+.upload-button{
+  float: right;
+  background-color: gold;
+  display: block;
+  width: 75px;
+  margin: 5px 10px;
+}
+
+.home-button{
+  float: right;
+  background-color: gold;
+  display: block;
+  width: 75px;
+  margin: 5px 10px;
+}
+
+.upload-box{
+  width: 600px;
+  height:600px;
+  background-color: lightblue;
+}
+
+.musicbar-circle {
+  display: flex;
+	width: 50px;
+	height: 50px;
+	background: darkgrey;
+	-moz-border-radius: 25px;
+	-webkit-border-radius:25px;
+	border-radius: 25px;
+  margin-top:4px;
+}
+
+
+.musicbar-audioplayer {
+display: flex;
+
+}
+
+.musicbar-play {
+  width: 0;
+  height: 0;
+  border-top: 15px solid transparent;
+  border-left: 30px solid black;
+  border-bottom: 15px solid transparent;
+  margin: 10px 10px 10px 10px;
+
+}
+
+.musicbar-pause {
+  width: 5;
+  height: 30;
+  margin: 5px;
+  background-color: black;
+}
+
+.musicbar-pause:first-child {
+
+  margin-left: 13px;
+}
+
+.musicbar-button {
+
+  background-color: transparent;
+  margin: 0px 50px 0px 300px;
+}
+
+.musicbar-time{
+  text-align: center;
+  width: 100px;
+  height: 40px;
+margin: 0px 50px 0px 20px;
+background-color: lime;
+}
+
+.musicbar-progressbar{
+  margin: 0px 20px 0px 50px;
+
+}

@@ -1,5 +1,7 @@
 //react
-var React = require('react');
+var React = require('react'),
+    hashHistory = require('react-router').hashHistory;
+
 //Components
 var LoginForm = require('./loginForm');
 var LoginModal = require('./loginModal');
@@ -34,6 +36,7 @@ var NavBar = React.createClass({
 
   logout: function(e){
 		e.preventDefault();
+    console.log(UserStore.fetchCurrentUser());
 		UserActions.logout();
 	},
 
@@ -48,20 +51,28 @@ var NavBar = React.createClass({
         </section>
       );
     }else{
-
-      return (<input type="button" value="logout" onClick={this.logout}/>);
+      return (
+        <section>
+        <button className = "logout-button" onClick={this.logout}>logout</button>
+        <button className = "upload-button" onClick={function(){hashHistory.push('upload');}}>upload</button>
+        <button className = "home-button" onClick={function(){hashHistory.push('home');}}>home</button>
+        </section>
+      );
     }
 
   },
-render: function(){
 
-  return (
-    <div className = "navBar clearfix">
-      {this.greeting()}
-      {this.loginButtons()}
-    </div>
-  );
-}
+
+
+  render: function(){
+
+    return (
+      <div className = "navBar">
+        {this.greeting()}
+        {this.loginButtons()}
+      </div>
+    );
+    }
 
 });
 

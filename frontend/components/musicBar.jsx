@@ -5,14 +5,26 @@ var React = require('react');
 //Mixins
 var UserStore = require('../stores/userStore');
 
-var MusicBar = React.createClass({
-  render: function(){
-    return (
-      <div className = "musicBar">
-        
+//components
+var MusicBarPlay = require('./musicBar/musicBarPlay');
 
-      </div>
-    );
+var MusicBar = React.createClass({
+
+  renderMusicBar: function(){
+    if(UserStore.fetchCurrentUser()){
+      return (
+        <div className = "musicBar">
+        <MusicBarPlay/ >
+
+        </div>);
+    }else{
+      return (<div>
+      </div>);
+    }
+  },
+
+  render: function(){
+    return ( this.renderMusicBar());
   }
 });
 

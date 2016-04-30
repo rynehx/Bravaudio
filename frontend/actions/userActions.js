@@ -11,7 +11,7 @@ var UserActions = {
 	signup: function(user){
 
 		UserApiUtil.post({
-			url: "/api/user",
+			url: "/api/users",
 			user: user,
 			success: UserActions.receiveCurrentUser,
 			error: UserActions.handleError
@@ -29,7 +29,7 @@ var UserActions = {
 		UserActions.login({username: "guest", password: "password"});
 	},
 	receiveCurrentUser: function(user){
-  
+
 		AppDispatcher.dispatch({
 			actionType: UserConstants.LOGIN,
 			user: user
@@ -42,11 +42,13 @@ var UserActions = {
 		});
 	},
 	removeCurrentUser: function(){
+
 		AppDispatcher.dispatch({
 			actionType: UserConstants.LOGOUT,
 		});
 	},
 	logout: function(){
+
 		UserApiUtil.logout(UserActions.removeCurrentUser, UserActions.handleError);
 	}
 };

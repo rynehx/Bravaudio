@@ -55,7 +55,10 @@
 	    hashHistory = ReactRouter.hashHistory;
 	//Components
 	var NavBar = __webpack_require__(218),
-	    MusicBar = __webpack_require__(272);
+	    MusicBar = __webpack_require__(271),
+	    HomePage = __webpack_require__(277),
+	    UploadPage = __webpack_require__(283),
+	    TrackPage = __webpack_require__(284);
 	//Mixins
 	var CurrentUserState = __webpack_require__(249),
 	    UserActions = __webpack_require__(224),
@@ -75,11 +78,6 @@
 	      'div',
 	      null,
 	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'p',
-	        null,
-	        'body content'
-	      ),
 	      this.props.children,
 	      React.createElement(MusicBar, null)
 	    );
@@ -89,11 +87,20 @@
 	var AppRouter = React.createElement(
 	  Router,
 	  { history: hashHistory },
-	  React.createElement(Route, { path: '/', components: App })
+	  React.createElement(
+	    Route,
+	    { path: '/', components: App },
+	    React.createElement(
+	      Route,
+	      { path: 'home', components: HomePage },
+	      React.createElement(Route, { path: ':track', components: TrackPage })
+	    ),
+	    React.createElement(Route, { path: 'upload', components: UploadPage }),
+	    React.createElement(Route, { path: 'user/:user', components: TrackPage })
+	  )
 	);
 
 	document.addEventListener('DOMContentLoaded', function () {
-	  // debugger;
 	  var root = document.getElementById('content');
 	  ReactDOM.render(AppRouter, root);
 	});
@@ -25119,7 +25126,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
 	//Components
 	var LoginForm = __webpack_require__(219);
 	var LoginModal = __webpack_require__(250);
@@ -25128,71 +25137,94 @@
 	    UserActions = __webpack_require__(224);
 
 	var NavBar = React.createClass({
-		displayName: 'NavBar',
+	  displayName: 'NavBar',
 
-		greeting: function () {
-			if (!UserStore.fetchCurrentUser()) {
-				return;
-			}
-			return React.createElement(
-				'div',
-				null,
-				React.createElement(
-					'h2',
-					null,
-					'Hi, ',
-					UserStore.fetchCurrentUser().username,
-					'!'
-				)
-			);
-		},
-		errors: function () {
-			if (UserStore.fetchError() === "null") {
-				return;
-			}
-			var self = this;
-			return React.createElement(
-				'ul',
-				null,
-				Object.keys(UserStore.fetchError()).map(function (key, i) {
-					return React.createElement(
-						'li',
-						{ key: i },
-						UserStore.fetchError()[key]
-					);
-				})
-			);
-		},
+	  greeting: function () {
+	    if (!UserStore.fetchCurrentUser()) {
+	      return;
+	    }
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Hi, ',
+	        UserStore.fetchCurrentUser().username,
+	        '!'
+	      )
+	    );
+	  },
+	  errors: function () {
+	    if (UserStore.fetchError() === "null") {
+	      return;
+	    }
+	    var self = this;
+	    return React.createElement(
+	      'ul',
+	      null,
+	      Object.keys(UserStore.fetchError()).map(function (key, i) {
+	        return React.createElement(
+	          'li',
+	          { key: i },
+	          UserStore.fetchError()[key]
+	        );
+	      })
+	    );
+	  },
 
-		logout: function (e) {
-			e.preventDefault();
-			UserActions.logout();
-		},
+	  logout: function (e) {
+	    e.preventDefault();
+	    console.log(UserStore.fetchCurrentUser());
+	    UserActions.logout();
+	  },
 
-		loginButtons: function () {
+	  loginButtons: function () {
 
-			if (!UserStore.fetchCurrentUser()) {
+	    if (!UserStore.fetchCurrentUser()) {
 
-				return React.createElement(
-					'section',
-					null,
-					React.createElement(LoginModal, { userAction: 'signup', errors: this.errors() }),
-					React.createElement(LoginModal, { userAction: 'login', errors: this.errors() })
-				);
-			} else {
+	      return React.createElement(
+	        'section',
+	        null,
+	        React.createElement(LoginModal, { userAction: 'signup', errors: this.errors() }),
+	        React.createElement(LoginModal, { userAction: 'login', errors: this.errors() })
+	      );
+	    } else {
+	      return React.createElement(
+	        'section',
+	        null,
+	        React.createElement(
+	          'button',
+	          { className: 'logout-button', onClick: this.logout },
+	          'logout'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'upload-button', onClick: function () {
+	              hashHistory.push('upload');
+	            } },
+	          'upload'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'home-button', onClick: function () {
+	              hashHistory.push('home');
+	            } },
+	          'home'
+	        )
+	      );
+	    }
+	  },
 
-				return React.createElement('input', { type: 'button', value: 'logout', onClick: this.logout });
-			}
-		},
-		render: function () {
+	  render: function () {
 
-			return React.createElement(
-				'div',
-				{ className: 'navBar clearfix' },
-				this.greeting(),
-				this.loginButtons()
-			);
-		}
+	    return React.createElement(
+	      'div',
+	      { className: 'navBar' },
+	      this.greeting(),
+	      this.loginButtons()
+	    );
+	  }
 
 	});
 
@@ -25570,7 +25602,7 @@
 		signup: function (user) {
 
 			UserApiUtil.post({
-				url: "/api/user",
+				url: "/api/users",
 				user: user,
 				success: UserActions.receiveCurrentUser,
 				error: UserActions.handleError
@@ -25601,11 +25633,13 @@
 			});
 		},
 		removeCurrentUser: function () {
+
 			AppDispatcher.dispatch({
 				actionType: UserConstants.LOGOUT
 			});
 		},
 		logout: function () {
+
 			UserApiUtil.logout(UserActions.removeCurrentUser, UserActions.handleError);
 		}
 	};
@@ -25979,7 +26013,8 @@
 
 	var AppDispatcher = __webpack_require__(225),
 	    Store = __webpack_require__(232).Store,
-	    userConstants = __webpack_require__(229);
+	    userConstants = __webpack_require__(229),
+	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserStore = new Store(AppDispatcher);
 
@@ -25988,20 +26023,25 @@
 	// var _currentUser, _authErrors;
 
 	UserStore.fetchCurrentUser = function () {
+
 	  return JSON.parse(myLocStorage.getItem("currentUser"));
 	};
 
 	UserStore.login = function (user) {
 	  myLocStorage.setItem("currentUser", JSON.stringify(user));
+	  hashHistory.push("/home");
 	};
 
 	UserStore.logout = function () {
-	  return myLocStorage.setItem("currentUser", null);
+	  myLocStorage.setItem("currentUser", null);
+	  debugger;
+	  hashHistory.push("/");
 	};
 
 	UserStore.updateError = function (errors) {
 
 	  myLocStorage.setItem("authErrors", errors);
+	  myLocStorage.setItem("currentUser", null);
 	};
 
 	UserStore.fetchError = function () {
@@ -26010,11 +26050,13 @@
 	};
 
 	UserStore.__onDispatch = function (payload) {
+
 	  switch (payload.actionType) {
 	    case userConstants.LOGIN:
 	      UserStore.login(payload.user);
 	      break;
 	    case userConstants.LOGOUT:
+
 	      UserStore.logout();
 	      break;
 	    case userConstants.ERROR:
@@ -32603,8 +32645,8 @@
 	        React.createElement(
 	          'form',
 	          null,
-	          React.createElement('input', { type: 'text', valueLink: this.linkState("username") }),
-	          React.createElement('input', { type: 'password', valueLink: this.linkState("password") }),
+	          React.createElement('input', { type: 'text', valueLink: this.linkState("username"), placeholder: 'username' }),
+	          React.createElement('input', { type: 'password', valueLink: this.linkState("password"), placeholder: 'password' }),
 	          React.createElement(
 	            'button',
 	            { onClick: this.handleSubmit },
@@ -34572,8 +34614,7 @@
 
 
 /***/ },
-/* 271 */,
-/* 272 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -34583,15 +34624,710 @@
 	//Mixins
 	var UserStore = __webpack_require__(231);
 
+	//components
+	var MusicBarPlay = __webpack_require__(272);
+
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
 
+
+	  renderMusicBar: function () {
+	    if (UserStore.fetchCurrentUser()) {
+	      return React.createElement(
+	        'div',
+	        { className: 'musicBar' },
+	        React.createElement(MusicBarPlay, null)
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+
 	  render: function () {
-	    return React.createElement('div', { className: 'musicBar' });
+	    return this.renderMusicBar();
 	  }
 	});
 
 	module.exports = MusicBar;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(273),
+	    MusicStore = __webpack_require__(275),
+	    hashHistory = __webpack_require__(159).hashHistory,
+	    AudioPlayer = __webpack_require__(276);
+
+	var MusicBarPlay = React.createClass({
+	    displayName: 'MusicBarPlay',
+
+
+	    render: function () {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(AudioPlayer, { audioUrl: 'http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3' })
+	        );
+	    }
+
+	});
+
+	module.exports = MusicBarPlay;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225),
+	    Store = __webpack_require__(232).Store,
+	    TrackConstants = __webpack_require__(274);
+
+	var _tracks = {};
+	var _displayingTrack;
+	var TrackStore = new Store(AppDispatcher);
+
+	TrackStore.all = function () {
+	  var res = [];
+	  for (var key in _tracks) {
+	    if (_tracks.hasOwnProperty(key)) {
+	      res.push(_tracks[key]);
+	    }
+	  }
+	  return res;
+	};
+
+	TrackStore.DisplayingTrack = function () {
+	  return _displayingTrack;
+	};
+
+	TrackStore.recieveTracks = function (tracks) {
+	  _tracks = {};
+
+	  for (var key in tracks) {
+	    if (tracks.hasOwnProperty(key)) {
+	      _tracks[key] = tracks[key];
+	    }
+	  }
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.recieveDisplayTrack = function (track) {
+	  _displayingTrack = track;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case TrackConstants.RECEIVETRACKS:
+	      TrackStore.recieveTracks(payload.tracks);
+	      break;
+	    case TrackConstants.RECEIVEDISPLAYINGTRACK:
+	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	  }
+	};
+
+	module.exports = TrackStore;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  RECEIVETRACKS: "RECEIVETRACKS"
+	};
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225),
+	    Store = __webpack_require__(232).Store,
+	    trackConstants = __webpack_require__(274);
+
+	var _music = {},
+	    _currentTrack = { url: "http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3" };
+
+	var MusicStore = new Store(AppDispatcher);
+
+	MusicStore.play = function (track) {
+	  _currentTrack = track;
+
+	  // _currentPlayingSong = _music[song.id];
+	  // if(_currentPlayingSong){
+	  //   return _currentPlayingSong;
+	  // }else{
+	  //   _music[song.id] = song;
+	  //   _currentPlayingSong = song;
+	  // return _currentPlayingSong;
+	  // }
+	};
+
+	MusicStore.currentTrack = function () {
+	  return _currentTrack;
+	};
+
+	MusicStore.__onDispatch = function () {};
+
+	module.exports = MusicStore;
+
+/***/ },
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    classNames = __webpack_require__(289);
+
+	var actionButton;
+	var clickdown = false;
+
+	var numberToTime = function (num) {
+	  // var hour = Math.floor(num/3600);
+	  // num = num%3600;
+	  var minute = Math.floor(num / 60);
+	  var second = Math.floor(num % 60);
+
+	  // return (hour > 9 ? "" + hour: "0" + hour) + ":" +
+	  return (minute > 9 ? "" + minute : "0" + minute) + ":" + (second > 9 ? "" + second : "0" + second);
+	};
+
+	var AudioPlayer = React.createClass({
+	  displayName: 'AudioPlayer',
+
+	  getInitialState: function () {
+	    return { audioAction: "play", track: "", playlist: "" };
+	  },
+
+	  componentDidMount: function () {
+	    this.refs["audioDom"].ontimeupdate = this.updateTimer;
+	  },
+
+	  audioActionButton: function () {
+	    if (this.state.audioAction === "play") {
+	      this.refs["audioDom"].play();
+	      // document.getElementById('demo').pause();
+	      this.setState({ audioAction: "pause" });
+	    } else {
+	      this.refs["audioDom"].pause();
+	      // document.getElementById('demo').play();
+	      this.setState({ audioAction: "play" });
+	    }
+	  },
+	  updateTimer: function () {
+	    this.refs["displaytime"].innerHTML = numberToTime(this.refs["audioDom"].currentTime) + ' / ' + numberToTime(this.refs["audioDom"].duration);
+
+	    this.refs["displayprogress"].value = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration;
+	  },
+
+	  updateProgress: function (e) {
+	    if (clickdown) {
+	      var selectedtime = (e.clientX - 8 - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
+	      this.refs["audioDom"].currentTime = selectedtime;
+	    }
+	    // var pos_x = event.offsetX ? (event.offsetX):event.pageX - this.refs["displayprogress"].offsetLeft;
+	    // var pos_y = event.offsetY?(event.offsetY):event.pageY-document.getElementById("pointer_div").offsetTop;
+	    // document.getElementById("cross").style.left = (pos_x-1) ;
+	    // document.getElementById("cross").style.top = (pos_y-15) ;
+	    // document.getElementById("cross").style.visibility = "visible" ;
+	    // document.pointform.form_x.value = pos_x;
+	    // document.pointform.form_y.value = pos_y;
+	  },
+
+	  render: function () {
+
+	    if (this.state.audioAction === "play") {
+	      actionButton = React.createElement(
+	        'div',
+	        { className: 'musicbar-circle' },
+	        React.createElement('div', { className: 'musicbar-play' })
+	      );
+	    } else {
+
+	      actionButton = React.createElement(
+	        'div',
+	        { className: 'musicbar-circle' },
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-pause' },
+	          'P'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-pause' },
+	          'P'
+	        )
+	      );
+	    }
+
+	    return React.createElement(
+	      'div',
+	      { className: 'musicbar-audioplayer' },
+	      React.createElement(
+	        'audio',
+	        { ref: 'audioDom',
+	          src: this.props.audioUrl },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Your browser does not support the audio element'
+	        )
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'musicbar-button',
+	          onClick: this.audioActionButton },
+	        actionButton
+	      ),
+	      React.createElement(
+	        'section',
+	        { ref: 'displaytime', className: 'musicbar-time' },
+	        '00:00 / 00:00'
+	      ),
+	      React.createElement('progress', { ref: 'displayprogress', className: 'musicbar-progressbar',
+	        value: '0', max: '1', style: { width: '200px' },
+	        onClick: function (e) {
+	          clickdown = true;
+	          this.updateProgress(e);
+	          clickdown = false;
+	        }.bind(this),
+	        onMouseDown: function () {
+	          clickdown = true;
+	        },
+	        onMouseUp: function () {
+	          clickdown = false;
+	        },
+	        onMouseMove: this.updateProgress,
+	        onMouseLeave: function () {
+	          clickdown = false;
+	        } })
+	    );
+	  }
+	});
+
+	module.exports = AudioPlayer;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	//Components
+	var HomeContent = __webpack_require__(278),
+	    HomeSideBar = __webpack_require__(282);
+
+	var HomePage = React.createClass({
+	  displayName: 'HomePage',
+
+	  componentWillMount: function () {
+	    if (!UserStore.fetchCurrentUser()) {
+	      hashHistory.push("/");
+	    }
+	  },
+
+	  componentWillUpdate: function () {
+	    if (!UserStore.fetchCurrentUser()) {
+	      hashHistory.push("/");
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'home' },
+	      this.props.children,
+	      React.createElement(HomeContent, null),
+	      React.createElement(HomeSideBar, null)
+	    );
+	  }
+
+	});
+
+	module.exports = HomePage;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    TrackStore = __webpack_require__(273),
+	    TrackClientActions = __webpack_require__(279);
+
+	var HomeContent = React.createClass({
+	  displayName: 'HomeContent',
+
+	  getInitialState: function () {
+	    return { tracks: [] };
+	  },
+
+	  componentDidMount: function () {
+	    TrackClientActions.fetchTopChart();
+	    this.listener = TrackStore.addListener(this._onChange);
+	  },
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ tracks: TrackStore.all() });
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.tracks.map(function (track) {
+
+	        return React.createElement('img', { className: 'trendingTracks', key: track.id, src: track.image_url });
+	      })
+	    );
+	  }
+
+	});
+
+	module.exports = HomeContent;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackApiUtil = __webpack_require__(280);
+
+	var TrackClientActions = {
+	  fetchTopChart: function () {
+	    TrackApiUtil.fetchTracks({
+	      url: "api/tracks"
+	    });
+	  },
+
+	  fetchDisplayingTrack: function (options) {
+	    //options = {username: , track:   }
+
+	  },
+
+	  fetchUserTracks: function (user) {},
+
+	  fetchPlaylistTracks: function (playlist) {}
+
+	};
+
+	module.exports = TrackClientActions;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackServerActions = __webpack_require__(281);
+
+	var TrackApiUtil = {
+
+	  fetchTracks: function (options) {
+	    var request = {
+	      type: "GET",
+	      url: options.url,
+	      success: TrackServerActions.receiveTracks,
+	      error: function () {
+	        console.log("track fetch failed");
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+
+	};
+
+	// fetchTrack: function(options){
+	//   var request = {
+	//     type: options.type,
+	//     url: options.url,
+	//     success: options.success,
+	//     error: options.error
+	//   };
+	//
+	//   $.ajax(request);
+	// }
+
+	module.exports = TrackApiUtil;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(225),
+	    trackConstants = __webpack_require__(274);
+
+	var TrackServerActions = {
+	  receiveTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.RECEIVETRACKS,
+	      tracks: tracks
+	    });
+	  }
+
+	};
+
+	module.exports = TrackServerActions;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var HomeSideBar = React.createClass({
+	  displayName: "HomeSideBar",
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      "Side Barrr"
+	    );
+	  }
+
+	});
+
+	module.exports = HomeSideBar;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var UploadPage = React.createClass({
+	  displayName: 'UploadPage',
+
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('section', { className: 'upload-box' })
+	    );
+	  }
+	});
+
+	module.exports = UploadPage;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    hashHistory = __webpack_require__(159).hashHistory,
+	    TrackContent = __webpack_require__(285),
+	    TrackSideBar = __webpack_require__(287),
+	    TrackForeground = __webpack_require__(288),
+	    TrackClientActions = __webpack_require__(279),
+	    TrackStore = __webpack_require__(273);
+
+	var TrackPage = React.createClass({
+	  displayName: 'TrackPage',
+
+
+	  componentDidMount: function () {
+	    TrackStore.addListener(this._onChange);
+	    TrackClientActions.fetchDisplayingTrack();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ DisplayingTrack: TrackStore.DisplayingTrack() });
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'HI'
+	    );
+	  }
+	});
+
+	module.exports = TrackPage;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(286),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackContent = React.createClass({
+	    displayName: 'TrackContent',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackContent;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225),
+	    Store = __webpack_require__(232).Store,
+	    TrackConstants = __webpack_require__(274);
+
+	var _tracks = {};
+	var _displayingTrack;
+	var TrackStore = new Store(AppDispatcher);
+
+	TrackStore.all = function () {
+	  var res = [];
+	  for (var key in _tracks) {
+	    if (_tracks.hasOwnProperty(key)) {
+	      res.push(_tracks[key]);
+	    }
+	  }
+	  return res;
+	};
+
+	TrackStore.DisplayingTrack = function () {
+	  return _displayingTrack;
+	};
+
+	TrackStore.recieveTracks = function (tracks) {
+	  _tracks = {};
+
+	  for (var key in tracks) {
+	    if (tracks.hasOwnProperty(key)) {
+	      _tracks[key] = tracks[key];
+	    }
+	  }
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.recieveDisplayTrack = function (track) {
+	  _displayingTrack = track;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case TrackConstants.RECEIVETRACKS:
+	      TrackStore.recieveTracks(payload.tracks);
+	      break;
+	    case TrackConstants.RECEIVEDISPLAYINGTRACK:
+	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	  }
+	};
+
+	module.exports = TrackStore;
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(286),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackSideBar = React.createClass({
+	    displayName: 'TrackSideBar',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackSideBar;
+
+/***/ },
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(286),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackForeground = React.createClass({
+	    displayName: 'TrackForeground',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackForeground;
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ }
 /******/ ]);

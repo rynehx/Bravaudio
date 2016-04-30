@@ -9,11 +9,16 @@ var Router = ReactRouter.Router,
     hashHistory = ReactRouter.hashHistory;
 //Components
 var NavBar = require('./components/navBar'),
-    MusicBar = require('./components/musicBar');
+    MusicBar = require('./components/musicBar'),
+    HomePage = require('./components/homePage'),
+    UploadPage = require('./components/uploadPage'),
+    TrackPage = require('./components/trackPage');
 //Mixins
 var CurrentUserState = require('./mixins/currentUserState'),
     UserActions = require('./actions/userActions'),
     UserStore = require('./stores/userStore');
+
+
 
 var App = React.createClass({
   mixins: [CurrentUserState],
@@ -26,7 +31,6 @@ var App = React.createClass({
     return (
       <div>
         <NavBar />
-        <p>body content</p>
         {this.props.children}
         <MusicBar />
       </div>
@@ -41,7 +45,11 @@ var App = React.createClass({
 var AppRouter = (
   <Router history={hashHistory}>
     <Route path="/" components={App}>
-
+      <Route path="home" components={HomePage}>
+        <Route path=":track" components={TrackPage}/>
+      </Route>
+      <Route path="upload" components={UploadPage}/>
+      <Route path="user/:user" components={TrackPage}/>
 
     </Route>
   </Router>
@@ -49,7 +57,6 @@ var AppRouter = (
 
 
 document.addEventListener('DOMContentLoaded',function(){
-  // debugger;
   var root = document.getElementById('content');
   ReactDOM.render(
     AppRouter,
