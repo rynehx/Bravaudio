@@ -56,9 +56,9 @@
 	//Components
 	var NavBar = __webpack_require__(218),
 	    MusicBar = __webpack_require__(271),
-	    HomePage = __webpack_require__(277),
-	    UploadPage = __webpack_require__(283),
-	    TrackPage = __webpack_require__(284);
+	    HomePage = __webpack_require__(272),
+	    UploadPage = __webpack_require__(280),
+	    TrackPage = __webpack_require__(281);
 	//Mixins
 	var CurrentUserState = __webpack_require__(249),
 	    UserActions = __webpack_require__(224),
@@ -25156,7 +25156,7 @@
 	    );
 	  },
 	  errors: function () {
-	    if (UserStore.fetchError() === "null") {
+	    if (UserStore.fetchError() === null) {
 	      return;
 	    }
 	    var self = this;
@@ -25175,7 +25175,6 @@
 
 	  logout: function (e) {
 	    e.preventDefault();
-	    console.log(UserStore.fetchCurrentUser());
 	    UserActions.logout();
 	  },
 
@@ -26020,7 +26019,8 @@
 
 	var myLocStorage = localStorage;
 
-	// var _currentUser, _authErrors;
+	var _currentUser = null,
+	    _authErrors = null;
 
 	UserStore.fetchCurrentUser = function () {
 
@@ -26040,13 +26040,13 @@
 
 	UserStore.updateError = function (errors) {
 
-	  myLocStorage.setItem("authErrors", errors);
+	  _authErrors = errors;
 	  myLocStorage.setItem("currentUser", null);
 	};
 
 	UserStore.fetchError = function () {
 
-	  return myLocStorage.getItem("authErrors");
+	  return _authErrors;
 	};
 
 	UserStore.__onDispatch = function (payload) {
@@ -34618,14 +34618,17 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
-	var React = __webpack_require__(1);
-	//Components
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
 
-	//Mixins
-	var UserStore = __webpack_require__(231);
+	//Stores
+	var UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(274),
+	    MusicStore = __webpack_require__(286);
 
 	//components
-	var MusicBarPlay = __webpack_require__(272);
+	var AudioPlayer = __webpack_require__(287),
+	    AudioDisplay = __webpack_require__(290);
 
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
@@ -34635,8 +34638,13 @@
 	    if (UserStore.fetchCurrentUser()) {
 	      return React.createElement(
 	        'div',
-	        { className: 'musicBar' },
-	        React.createElement(MusicBarPlay, null)
+	        { className: 'musicbar' },
+	        React.createElement(
+	          'div',
+	          { className: 'audio-components' },
+	          React.createElement(AudioPlayer, { track: { url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3" } }),
+	          React.createElement(AudioDisplay, { className: 'audiodisplay', track: { url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899234/AtLongLastASAPCover_ncw4ac.jpg", title: "Wild for da night" } })
+	        )
 	      );
 	    } else {
 	      return React.createElement('div', null);
@@ -34656,34 +34664,92 @@
 
 	var React = __webpack_require__(1),
 	    UserStore = __webpack_require__(231),
-	    TrackStore = __webpack_require__(273),
-	    MusicStore = __webpack_require__(275),
-	    hashHistory = __webpack_require__(159).hashHistory,
-	    AudioPlayer = __webpack_require__(276);
+	    hashHistory = __webpack_require__(159).hashHistory;
 
-	var MusicBarPlay = React.createClass({
-	    displayName: 'MusicBarPlay',
+	//Components
+	var HomeContent = __webpack_require__(273),
+	    HomeSideBar = __webpack_require__(279);
 
+	var HomePage = React.createClass({
+	  displayName: 'HomePage',
 
-	    render: function () {
-	        return React.createElement(
-	            'div',
-	            null,
-	            React.createElement(AudioPlayer, { audioUrl: 'http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3' })
-	        );
+	  componentWillMount: function () {
+	    if (!UserStore.fetchCurrentUser()) {
+	      hashHistory.push("/");
 	    }
+	  },
+
+	  componentWillUpdate: function () {
+	    if (!UserStore.fetchCurrentUser()) {
+	      hashHistory.push("/");
+	    }
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'home' },
+	      this.props.children,
+	      React.createElement(HomeContent, null),
+	      React.createElement(HomeSideBar, null)
+	    );
+	  }
 
 	});
 
-	module.exports = MusicBarPlay;
+	module.exports = HomePage;
 
 /***/ },
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1),
+	    TrackStore = __webpack_require__(274),
+	    TrackClientActions = __webpack_require__(276);
+
+	var HomeContent = React.createClass({
+	  displayName: 'HomeContent',
+
+	  getInitialState: function () {
+	    return { tracks: [] };
+	  },
+
+	  componentDidMount: function () {
+	    TrackClientActions.fetchTopChart();
+	    this.trackStoreListener = TrackStore.addListener(this._onChange);
+	  },
+	  componentWillUnmount: function () {
+	    this.trackStoreListener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ tracks: TrackStore.all() });
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      this.state.tracks.map(function (track) {
+
+	        return React.createElement('img', { className: 'trendingTracks', key: track.id, src: track.image_url });
+	      })
+	    );
+	  }
+
+	});
+
+	module.exports = HomeContent;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var AppDispatcher = __webpack_require__(225),
 	    Store = __webpack_require__(232).Store,
-	    TrackConstants = __webpack_require__(274);
+	    TrackConstants = __webpack_require__(275);
 
 	var _tracks = {};
 	var _displayingTrack;
@@ -34733,7 +34799,7 @@
 	module.exports = TrackStore;
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -34741,12 +34807,307 @@
 	};
 
 /***/ },
-/* 275 */
+/* 276 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackApiUtil = __webpack_require__(277);
+
+	var TrackClientActions = {
+	  fetchTopChart: function () {
+	    TrackApiUtil.fetchTracks({
+	      url: "api/tracks"
+	    });
+	  },
+
+	  fetchDisplayingTrack: function (options) {
+	    //options = {username: , track:   }
+
+	  },
+
+	  fetchUserTracks: function (user) {},
+
+	  fetchPlaylistTracks: function (playlist) {}
+
+	};
+
+	module.exports = TrackClientActions;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackServerActions = __webpack_require__(278);
+
+	var TrackApiUtil = {
+
+	  fetchTracks: function (options) {
+	    var request = {
+	      type: "GET",
+	      url: options.url,
+	      success: TrackServerActions.receiveTracks,
+	      error: function () {
+	        console.log("track fetch failed");
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+
+	};
+
+	// fetchTrack: function(options){
+	//   var request = {
+	//     type: options.type,
+	//     url: options.url,
+	//     success: options.success,
+	//     error: options.error
+	//   };
+	//
+	//   $.ajax(request);
+	// }
+
+	module.exports = TrackApiUtil;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(225),
+	    trackConstants = __webpack_require__(275);
+
+	var TrackServerActions = {
+	  receiveTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.RECEIVETRACKS,
+	      tracks: tracks
+	    });
+	  }
+
+	};
+
+	module.exports = TrackServerActions;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var HomeSideBar = React.createClass({
+	  displayName: "HomeSideBar",
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      null,
+	      "Side Barrr"
+	    );
+	  }
+
+	});
+
+	module.exports = HomeSideBar;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var UploadPage = React.createClass({
+	  displayName: 'UploadPage',
+
+
+	  // componentDidMount: function(){
+	  //   this.userStoreListener = UserStore.addListener(this._onChange);
+	  // },
+	  // componentWillUnMount: function(){
+	  //   this.userStoreListener.remove();
+	  // },
+	  //
+	  // _onChange: function(){
+	  //   this.setState({user:UserStore.getCurrentUser()});
+	  //   if(!this.state.user){
+	  //     hashHistory.push("/");
+	  //   }
+	  // },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('section', { className: 'upload-box' })
+	    );
+	  }
+	});
+
+	module.exports = UploadPage;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    hashHistory = __webpack_require__(159).hashHistory,
+	    TrackContent = __webpack_require__(282),
+	    TrackSideBar = __webpack_require__(284),
+	    TrackForeground = __webpack_require__(285),
+	    TrackClientActions = __webpack_require__(276),
+	    TrackStore = __webpack_require__(274);
+
+	var TrackPage = React.createClass({
+	  displayName: 'TrackPage',
+
+
+	  componentDidMount: function () {
+	    TrackStore.addListener(this._onChange);
+	    TrackClientActions.fetchDisplayingTrack();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ DisplayingTrack: TrackStore.DisplayingTrack() });
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'HI'
+	    );
+	  }
+	});
+
+	module.exports = TrackPage;
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(283),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackContent = React.createClass({
+	    displayName: 'TrackContent',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackContent;
+
+/***/ },
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(225),
 	    Store = __webpack_require__(232).Store,
-	    trackConstants = __webpack_require__(274);
+	    TrackConstants = __webpack_require__(275);
+
+	var _tracks = {};
+	var _displayingTrack;
+	var TrackStore = new Store(AppDispatcher);
+
+	TrackStore.all = function () {
+	  var res = [];
+	  for (var key in _tracks) {
+	    if (_tracks.hasOwnProperty(key)) {
+	      res.push(_tracks[key]);
+	    }
+	  }
+	  return res;
+	};
+
+	TrackStore.DisplayingTrack = function () {
+	  return _displayingTrack;
+	};
+
+	TrackStore.recieveTracks = function (tracks) {
+	  _tracks = {};
+
+	  for (var key in tracks) {
+	    if (tracks.hasOwnProperty(key)) {
+	      _tracks[key] = tracks[key];
+	    }
+	  }
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.recieveDisplayTrack = function (track) {
+	  _displayingTrack = track;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case TrackConstants.RECEIVETRACKS:
+	      TrackStore.recieveTracks(payload.tracks);
+	      break;
+	    case TrackConstants.RECEIVEDISPLAYINGTRACK:
+	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	  }
+	};
+
+	module.exports = TrackStore;
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(283),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackSideBar = React.createClass({
+	    displayName: 'TrackSideBar',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackSideBar;
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(283),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var TrackForeground = React.createClass({
+	    displayName: 'TrackForeground',
+
+
+	    render: function () {
+	        return React.createElement('div', null);
+	    }
+
+	});
+
+	module.exports = TrackForeground;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225),
+	    Store = __webpack_require__(232).Store,
+	    trackConstants = __webpack_require__(275);
 
 	var _music = {},
 	    _currentTrack = { url: "http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3" };
@@ -34775,11 +35136,11 @@
 	module.exports = MusicStore;
 
 /***/ },
-/* 276 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(289);
+	    classNames = __webpack_require__(288);
 
 	var actionButton;
 	var clickdown = false;
@@ -34817,7 +35178,9 @@
 	    }
 	  },
 	  updateTimer: function () {
-	    this.refs["displaytime"].innerHTML = numberToTime(this.refs["audioDom"].currentTime) + ' / ' + numberToTime(this.refs["audioDom"].duration);
+	    this.refs["displaytime-current"].innerHTML = numberToTime(this.refs["audioDom"].currentTime);
+
+	    this.refs["displaytime-end"].innerHTML = numberToTime(this.refs["audioDom"].duration);
 
 	    this.refs["displayprogress"].value = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration;
 	  },
@@ -34827,13 +35190,6 @@
 	      var selectedtime = (e.clientX - 8 - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
 	      this.refs["audioDom"].currentTime = selectedtime;
 	    }
-	    // var pos_x = event.offsetX ? (event.offsetX):event.pageX - this.refs["displayprogress"].offsetLeft;
-	    // var pos_y = event.offsetY?(event.offsetY):event.pageY-document.getElementById("pointer_div").offsetTop;
-	    // document.getElementById("cross").style.left = (pos_x-1) ;
-	    // document.getElementById("cross").style.top = (pos_y-15) ;
-	    // document.getElementById("cross").style.visibility = "visible" ;
-	    // document.pointform.form_x.value = pos_x;
-	    // document.pointform.form_y.value = pos_y;
 	  },
 
 	  render: function () {
@@ -34845,7 +35201,6 @@
 	        React.createElement('div', { className: 'musicbar-play' })
 	      );
 	    } else {
-
 	      actionButton = React.createElement(
 	        'div',
 	        { className: 'musicbar-circle' },
@@ -34868,7 +35223,7 @@
 	      React.createElement(
 	        'audio',
 	        { ref: 'audioDom',
-	          src: this.props.audioUrl },
+	          src: this.props.track.url },
 	        React.createElement(
 	          'p',
 	          null,
@@ -34883,11 +35238,12 @@
 	      ),
 	      React.createElement(
 	        'section',
-	        { ref: 'displaytime', className: 'musicbar-time' },
-	        '00:00 / 00:00'
+	        { ref: 'displaytime-current',
+	          className: 'musicbar-time' },
+	        '00:00'
 	      ),
 	      React.createElement('progress', { ref: 'displayprogress', className: 'musicbar-progressbar',
-	        value: '0', max: '1', style: { width: '200px' },
+	        value: '0', max: '1', style: { width: '400px' },
 	        onClick: function (e) {
 	          clickdown = true;
 	          this.updateProgress(e);
@@ -34902,7 +35258,13 @@
 	        onMouseMove: this.updateProgress,
 	        onMouseLeave: function () {
 	          clickdown = false;
-	        } })
+	        } }),
+	      React.createElement(
+	        'section',
+	        { ref: 'displaytime-end',
+	          className: 'musicbar-time' },
+	        '00:00'
+	      )
 	    );
 	  }
 	});
@@ -34910,373 +35272,7 @@
 	module.exports = AudioPlayer;
 
 /***/ },
-/* 277 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	//Components
-	var HomeContent = __webpack_require__(278),
-	    HomeSideBar = __webpack_require__(282);
-
-	var HomePage = React.createClass({
-	  displayName: 'HomePage',
-
-	  componentWillMount: function () {
-	    if (!UserStore.fetchCurrentUser()) {
-	      hashHistory.push("/");
-	    }
-	  },
-
-	  componentWillUpdate: function () {
-	    if (!UserStore.fetchCurrentUser()) {
-	      hashHistory.push("/");
-	    }
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'home' },
-	      this.props.children,
-	      React.createElement(HomeContent, null),
-	      React.createElement(HomeSideBar, null)
-	    );
-	  }
-
-	});
-
-	module.exports = HomePage;
-
-/***/ },
-/* 278 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(273),
-	    TrackClientActions = __webpack_require__(279);
-
-	var HomeContent = React.createClass({
-	  displayName: 'HomeContent',
-
-	  getInitialState: function () {
-	    return { tracks: [] };
-	  },
-
-	  componentDidMount: function () {
-	    TrackClientActions.fetchTopChart();
-	    this.listener = TrackStore.addListener(this._onChange);
-	  },
-	  componentWillUnmount: function () {
-	    this.listener.remove();
-	  },
-
-	  _onChange: function () {
-
-	    this.setState({ tracks: TrackStore.all() });
-	  },
-
-	  render: function () {
-
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.state.tracks.map(function (track) {
-
-	        return React.createElement('img', { className: 'trendingTracks', key: track.id, src: track.image_url });
-	      })
-	    );
-	  }
-
-	});
-
-	module.exports = HomeContent;
-
-/***/ },
-/* 279 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var TrackApiUtil = __webpack_require__(280);
-
-	var TrackClientActions = {
-	  fetchTopChart: function () {
-	    TrackApiUtil.fetchTracks({
-	      url: "api/tracks"
-	    });
-	  },
-
-	  fetchDisplayingTrack: function (options) {
-	    //options = {username: , track:   }
-
-	  },
-
-	  fetchUserTracks: function (user) {},
-
-	  fetchPlaylistTracks: function (playlist) {}
-
-	};
-
-	module.exports = TrackClientActions;
-
-/***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var TrackServerActions = __webpack_require__(281);
-
-	var TrackApiUtil = {
-
-	  fetchTracks: function (options) {
-	    var request = {
-	      type: "GET",
-	      url: options.url,
-	      success: TrackServerActions.receiveTracks,
-	      error: function () {
-	        console.log("track fetch failed");
-	      }
-	    };
-
-	    $.ajax(request);
-	  }
-
-	};
-
-	// fetchTrack: function(options){
-	//   var request = {
-	//     type: options.type,
-	//     url: options.url,
-	//     success: options.success,
-	//     error: options.error
-	//   };
-	//
-	//   $.ajax(request);
-	// }
-
-	module.exports = TrackApiUtil;
-
-/***/ },
-/* 281 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(225),
-	    trackConstants = __webpack_require__(274);
-
-	var TrackServerActions = {
-	  receiveTracks: function (tracks) {
-	    Dispatcher.dispatch({
-	      actionType: trackConstants.RECEIVETRACKS,
-	      tracks: tracks
-	    });
-	  }
-
-	};
-
-	module.exports = TrackServerActions;
-
-/***/ },
-/* 282 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-
-	var HomeSideBar = React.createClass({
-	  displayName: "HomeSideBar",
-
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      "Side Barrr"
-	    );
-	  }
-
-	});
-
-	module.exports = HomeSideBar;
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	var UploadPage = React.createClass({
-	  displayName: 'UploadPage',
-
-
-	  render: function () {
-
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement('section', { className: 'upload-box' })
-	    );
-	  }
-	});
-
-	module.exports = UploadPage;
-
-/***/ },
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    hashHistory = __webpack_require__(159).hashHistory,
-	    TrackContent = __webpack_require__(285),
-	    TrackSideBar = __webpack_require__(287),
-	    TrackForeground = __webpack_require__(288),
-	    TrackClientActions = __webpack_require__(279),
-	    TrackStore = __webpack_require__(273);
-
-	var TrackPage = React.createClass({
-	  displayName: 'TrackPage',
-
-
-	  componentDidMount: function () {
-	    TrackStore.addListener(this._onChange);
-	    TrackClientActions.fetchDisplayingTrack();
-	  },
-
-	  _onChange: function () {
-	    this.setState({ DisplayingTrack: TrackStore.DisplayingTrack() });
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'HI'
-	    );
-	  }
-	});
-
-	module.exports = TrackPage;
-
-/***/ },
-/* 285 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    TrackStore = __webpack_require__(286),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	var TrackContent = React.createClass({
-	    displayName: 'TrackContent',
-
-
-	    render: function () {
-	        return React.createElement('div', null);
-	    }
-
-	});
-
-	module.exports = TrackContent;
-
-/***/ },
-/* 286 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(225),
-	    Store = __webpack_require__(232).Store,
-	    TrackConstants = __webpack_require__(274);
-
-	var _tracks = {};
-	var _displayingTrack;
-	var TrackStore = new Store(AppDispatcher);
-
-	TrackStore.all = function () {
-	  var res = [];
-	  for (var key in _tracks) {
-	    if (_tracks.hasOwnProperty(key)) {
-	      res.push(_tracks[key]);
-	    }
-	  }
-	  return res;
-	};
-
-	TrackStore.DisplayingTrack = function () {
-	  return _displayingTrack;
-	};
-
-	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = {};
-
-	  for (var key in tracks) {
-	    if (tracks.hasOwnProperty(key)) {
-	      _tracks[key] = tracks[key];
-	    }
-	  }
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.recieveDisplayTrack = function (track) {
-	  _displayingTrack = track;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case TrackConstants.RECEIVETRACKS:
-	      TrackStore.recieveTracks(payload.tracks);
-	      break;
-	    case TrackConstants.RECEIVEDISPLAYINGTRACK:
-	      TrackStore.recieveDisplayTrack(payload.track);
-	      break;
-	  }
-	};
-
-	module.exports = TrackStore;
-
-/***/ },
-/* 287 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    TrackStore = __webpack_require__(286),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	var TrackSideBar = React.createClass({
-	    displayName: 'TrackSideBar',
-
-
-	    render: function () {
-	        return React.createElement('div', null);
-	    }
-
-	});
-
-	module.exports = TrackSideBar;
-
-/***/ },
 /* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(231),
-	    TrackStore = __webpack_require__(286),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	var TrackForeground = React.createClass({
-	    displayName: 'TrackForeground',
-
-
-	    render: function () {
-	        return React.createElement('div', null);
-	    }
-
-	});
-
-	module.exports = TrackForeground;
-
-/***/ },
-/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35328,6 +35324,39 @@
 		}
 	}());
 
+
+/***/ },
+/* 289 */,
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	//Stores
+	var UserStore = __webpack_require__(231),
+	    TrackStore = __webpack_require__(274),
+	    MusicStore = __webpack_require__(286);
+
+	var AudioDisplay = React.createClass({
+	  displayName: 'AudioDisplay',
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'musicbar-audiodisplay' },
+	      React.createElement(
+	        'div',
+	        { className: 'musicbar-track-title' },
+	        this.props.track.title
+	      ),
+	      React.createElement('img', { className: 'musicbar-track-image', src: this.props.track.url })
+	    );
+	  }
+	});
+
+	module.exports = AudioDisplay;
 
 /***/ }
 /******/ ]);

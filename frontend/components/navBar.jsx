@@ -21,7 +21,7 @@ var NavBar = React.createClass({
 		);
 	},
 	errors: function(){
-		if (UserStore.fetchError() === "null"){
+		if (UserStore.fetchError() === null){
 			return;
 		}
 		var self = this;
@@ -36,7 +36,6 @@ var NavBar = React.createClass({
 
   logout: function(e){
 		e.preventDefault();
-    console.log(UserStore.fetchCurrentUser());
 		UserActions.logout();
 	},
 

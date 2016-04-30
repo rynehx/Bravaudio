@@ -4,13 +4,28 @@ var React = require('react'),
 
 var UploadPage = React.createClass({
 
+  // componentDidMount: function(){
+  //   this.userStoreListener = UserStore.addListener(this._onChange);
+  // },
+  // componentWillUnMount: function(){
+  //   this.userStoreListener.remove();
+  // },
+  //
+  // _onChange: function(){
+  //   this.setState({user:UserStore.getCurrentUser()});
+  //   if(!this.state.user){
+  //     hashHistory.push("/");
+  //   }
+  // },
+
+
   render: function(){
 
 
     return (
       <div>
         <section className = "upload-box">
-          
+
         </section>
       </div>
     );

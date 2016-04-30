@@ -7,7 +7,7 @@ var UserStore = new Store(AppDispatcher);
 
 var myLocStorage = localStorage;
 
-// var _currentUser, _authErrors;
+ var _currentUser=null, _authErrors=null;
 
 UserStore.fetchCurrentUser = function(){
 
@@ -30,13 +30,13 @@ UserStore.logout = function(){
 
 UserStore.updateError = function(errors){
 
-  myLocStorage.setItem("authErrors",errors);
+  _authErrors = errors;
   myLocStorage.setItem("currentUser",null);
 };
 
 UserStore.fetchError = function(){
 
-  return myLocStorage.getItem("authErrors");
+  return _authErrors;
 };
 
 UserStore.__onDispatch = function(payload){

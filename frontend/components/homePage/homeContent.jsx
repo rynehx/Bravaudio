@@ -11,10 +11,10 @@ var HomeContent = React.createClass({
 
   componentDidMount: function(){
     TrackClientActions.fetchTopChart();
-    this.listener = TrackStore.addListener(this._onChange);
+    this.trackStoreListener = TrackStore.addListener(this._onChange);
   },
   componentWillUnmount: function(){
-    this.listener.remove();
+    this.trackStoreListener.remove();
   }
   ,
   _onChange: function(){
