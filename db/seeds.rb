@@ -59,15 +59,19 @@
     author_id: 1});
 
   Playlist.create([
-    {title: "drake", author_id: 2}
+    {title: "drake", author_id: 2},{title: "soundgarden", author_id:2}
     ])
 
 
   PlaylistTrackJoining.create([{
-    track_id: 1, playlist_id: 1
+      track_id: 1, playlist_id: 1
     },{
       track_id: 7, playlist_id: 1
-      }])
+    },{
+      track_id: 4, playlist_id: 2
+    },{
+      track_id: 5, playlist_id: 2
+    }])
 
 
   # Track.create({title: "", description: "infooo",

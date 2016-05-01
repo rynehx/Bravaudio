@@ -12,15 +12,24 @@ PlaylistStore.displayPlaylist = function(){
 
 PlaylistStore.receiveDisplayPlaylist = function(playlist){
   _displayPlaylist = playlist;
+  this.__emitChange();
+};
+
+PlaylistStore.receivedNoPlaylist = function(){
+  _displayPlaylist = null;
+  this.__emitChange();
 };
 
 PlaylistStore.__onDispatch = function(payload){
 
   switch(payload.actionType){
-    case PlaylistConstants.RECEIVETRACKS:
-      PlaylistStore.receiveDisplayPlaylist(payload.paylist);
-
+    case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
+      PlaylistStore.receiveDisplayPlaylist(payload.playlist);
+      break;
+    case PlaylistConstants.RECEIVEDNOPLAYLIST:
+      PlaylistStore.receivedNoPlaylist();
+      break;
   }
 };
 
-module.exports = PlaylistStore = new Store(AppDispatcher);
+module.exports = PlaylistStore;

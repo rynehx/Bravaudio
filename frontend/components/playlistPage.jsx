@@ -17,19 +17,20 @@ var PlaylistPage = React.createClass({
     return { playlist: { } };
   },
 
-  // componentDidMount: function(){
-  //   this.playliststorelistener = PlaylistStore.addListener(this._onChange);
-  //   PlaylistClientActions.fetchDisplayPlaylist(this.props.params.user,
-  //     this.props.params.playlist);
-  // },
-  //
-  // componentWillUnmount: function(){
-  //   this.playliststorelistener.remove();
-  // },
-  //
-  // _onChange: function(){
-  //   this.setState({playlist: PlaylistStore.displayPlaylist()});
-  // },
+  componentDidMount: function(){
+    this.playliststorelistener = PlaylistStore.addListener(this._onChange);
+    PlaylistClientActions.fetchDisplayPlaylist(this.props.params.user,
+      this.props.params.playlist);
+  },
+
+  componentWillUnmount: function(){
+    this.playliststorelistener.remove();
+  },
+
+  _onChange: function(){
+  
+    this.setState({playlist: PlaylistStore.displayPlaylist()});
+  },
 
   render: function(){
 

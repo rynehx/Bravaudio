@@ -7,7 +7,7 @@ var PlaylistNotFound = React.createClass({
 render: function(){
 return(
   <div>
-    sidebar
+    {this.props.notFoundPlaylist} playlist not found
   </div>
 );
 }

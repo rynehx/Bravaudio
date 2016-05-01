@@ -7,7 +7,7 @@ var PlaylistForeground = React.createClass({
 render: function(){
 return(
   <div>
-    foregorund
+    {this.props.playlist.title}
   </div>
 );
 }

@@ -34904,7 +34904,7 @@
 
 	var React = __webpack_require__(1),
 	    TrackStore = __webpack_require__(271),
-	    TrackClientActions = __webpack_require__(309);
+	    TrackClientActions = __webpack_require__(279);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -34943,11 +34943,35 @@
 	module.exports = HomeContent;
 
 /***/ },
-/* 279 */,
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackApiUtil = __webpack_require__(280);
+
+	var TrackClientActions = {
+	  fetchTopChart: function () {
+	    TrackApiUtil.fetchTracks({
+	      url: "api/tracks"
+	    });
+	  },
+
+	  fetchDisplayTrack: function (user, track) {
+	    TrackApiUtil.fetchDisplayTrack(user, track);
+	  },
+
+	  fetchUserTracks: function (user) {},
+
+	  fetchPlaylistTracks: function (playlist) {}
+
+	};
+
+	module.exports = TrackClientActions;
+
+/***/ },
 /* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackServerActions = __webpack_require__(310);
+	var TrackServerActions = __webpack_require__(281);
 
 	var TrackApiUtil = {
 
@@ -34987,7 +35011,41 @@
 	module.exports = TrackApiUtil;
 
 /***/ },
-/* 281 */,
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(245),
+	    trackConstants = __webpack_require__(272);
+
+	var TrackServerActions = {
+	  receiveTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.RECEIVETRACKS,
+	      tracks: tracks
+	    });
+	  },
+	  receiveDisplayTrack: function (track) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.RECEIVEDISPLAYTRACK,
+	      track: track
+	    });
+	  },
+	  didNotFindTrack: function (errors) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.DIDNOTFINDTRACK
+	    });
+	  },
+	  didNotFetchTracks: function (errors) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.DIDNOTFETCHTRACKS
+	    });
+	  }
+
+	};
+
+	module.exports = TrackServerActions;
+
+/***/ },
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35055,7 +35113,7 @@
 	var SessionStore = __webpack_require__(251),
 	    TrackStore = __webpack_require__(271);
 	//actions
-	var TrackClientActions = __webpack_require__(309);
+	var TrackClientActions = __webpack_require__(279);
 	//components
 	var TrackContent = __webpack_require__(285),
 	    TrackSideBar = __webpack_require__(287),
@@ -35522,12 +35580,12 @@
 	var SessionStore = __webpack_require__(251),
 	    PlaylistStore = __webpack_require__(301);
 	//actions
-	var PlaylistClientActions = __webpack_require__(307);
+	var PlaylistClientActions = __webpack_require__(303);
 	//components
-	var PlaylistContent = __webpack_require__(303),
-	    PlaylistSideBar = __webpack_require__(304),
-	    PlaylistForeground = __webpack_require__(305),
-	    PlaylistNotFound = __webpack_require__(306);
+	var PlaylistContent = __webpack_require__(305),
+	    PlaylistSideBar = __webpack_require__(306),
+	    PlaylistForeground = __webpack_require__(307),
+	    PlaylistNotFound = __webpack_require__(308);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -35536,19 +35594,19 @@
 	    return { playlist: {} };
 	  },
 
-	  // componentDidMount: function(){
-	  //   this.playliststorelistener = PlaylistStore.addListener(this._onChange);
-	  //   PlaylistClientActions.fetchDisplayPlaylist(this.props.params.user,
-	  //     this.props.params.playlist);
-	  // },
-	  //
-	  // componentWillUnmount: function(){
-	  //   this.playliststorelistener.remove();
-	  // },
-	  //
-	  // _onChange: function(){
-	  //   this.setState({playlist: PlaylistStore.displayPlaylist()});
-	  // },
+	  componentDidMount: function () {
+	    this.playliststorelistener = PlaylistStore.addListener(this._onChange);
+	    PlaylistClientActions.fetchDisplayPlaylist(this.props.params.user, this.props.params.playlist);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.playliststorelistener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ playlist: PlaylistStore.displayPlaylist() });
+	  },
 
 	  render: function () {
 
@@ -35589,27 +35647,78 @@
 
 	PlaylistStore.receiveDisplayPlaylist = function (playlist) {
 	  _displayPlaylist = playlist;
+	  this.__emitChange();
+	};
+
+	PlaylistStore.receivedNoPlaylist = function () {
+	  _displayPlaylist = null;
+	  this.__emitChange();
 	};
 
 	PlaylistStore.__onDispatch = function (payload) {
 
 	  switch (payload.actionType) {
-	    case PlaylistConstants.RECEIVETRACKS:
-	      PlaylistStore.receiveDisplayPlaylist(payload.paylist);
-
+	    case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
+	      PlaylistStore.receiveDisplayPlaylist(payload.playlist);
+	      break;
+	    case PlaylistConstants.RECEIVEDNOPLAYLIST:
+	      PlaylistStore.receivedNoPlaylist();
+	      break;
 	  }
 	};
 
-	module.exports = PlaylistStore = new Store(AppDispatcher);
+	module.exports = PlaylistStore;
 
 /***/ },
 /* 302 */
 /***/ function(module, exports) {
 
-	module.exports = {};
+	module.exports = {
+	  RECEIVEDISPLAYPLAYLIST: "RECEIVEDISPLAYPLAYLIST",
+	  RECEIVEDNOPLAYLIST: "RECEIVEDNOPLAYLIST"
+	};
 
 /***/ },
 /* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PlaylistApiUtil = __webpack_require__(304);
+
+	var PlaylistClientActions = {
+	  fetchDisplayPlaylist: function (user, playlist) {
+	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
+	  }
+	};
+
+	module.exports = PlaylistClientActions;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PlaylistServerActions = __webpack_require__(310);
+
+	var PlaylistApiUtil = {
+	  fetchDisplayPlaylist: function (user, playlist) {
+	    var request = {
+	      type: "get",
+	      url: "api/" + user + "/playlist/" + playlist,
+	      success: function (data) {
+	        PlaylistServerActions.receiveDisplayPlaylist(data);
+	      },
+	      error: function (error) {
+	        PlaylistServerActions.receiveNoPlaylist(error);
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = PlaylistApiUtil;
+
+/***/ },
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35633,7 +35742,7 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35657,7 +35766,7 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35672,7 +35781,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      'foregorund'
+	      this.props.playlist.title
 	    );
 	  }
 
@@ -35681,7 +35790,7 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35696,7 +35805,8 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      'sidebar'
+	      this.props.notFoundPlaylist,
+	      ' playlist not found'
 	    );
 	  }
 
@@ -35705,84 +35815,28 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 307 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var PlaylistApiUtil = __webpack_require__(308);
-
-	var PlaylistClientActions = {};
-
-	module.exports = PlaylistClientActions;
-
-/***/ },
-/* 308 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(245);
-
-	var PlaylistApiUtil = {};
-
-	module.exports = PlaylistApiUtil;
-
-/***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var TrackApiUtil = __webpack_require__(280);
-
-	var TrackClientActions = {
-	  fetchTopChart: function () {
-	    TrackApiUtil.fetchTracks({
-	      url: "api/tracks"
-	    });
-	  },
-
-	  fetchDisplayTrack: function (user, track) {
-	    TrackApiUtil.fetchDisplayTrack(user, track);
-	  },
-
-	  fetchUserTracks: function (user) {},
-
-	  fetchPlaylistTracks: function (playlist) {}
-
-	};
-
-	module.exports = TrackClientActions;
-
-/***/ },
+/* 309 */,
 /* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    trackConstants = __webpack_require__(272);
+	    PlaylistConstants = __webpack_require__(302);
 
-	var TrackServerActions = {
-	  receiveTracks: function (tracks) {
+	var PlaylistServerActions = {
+	  receiveDisplayPlaylist: function (playlist) {
 	    Dispatcher.dispatch({
-	      actionType: trackConstants.RECEIVETRACKS,
-	      tracks: tracks
+	      actionType: PlaylistConstants.RECEIVEDISPLAYPLAYLIST,
+	      playlist: playlist
 	    });
 	  },
-	  receiveDisplayTrack: function (track) {
+	  receiveNoPlaylist: function () {
 	    Dispatcher.dispatch({
-	      actionType: trackConstants.RECEIVEDISPLAYTRACK,
-	      track: track
-	    });
-	  },
-	  didNotFindTrack: function (errors) {
-	    Dispatcher.dispatch({
-	      actionType: trackConstants.DIDNOTFINDTRACK
-	    });
-	  },
-	  didNotFetchTracks: function (errors) {
-	    Dispatcher.dispatch({
-	      actionType: trackConstants.DIDNOTFETCHTRACKS
+	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
 	    });
 	  }
-
 	};
 
-	module.exports = TrackServerActions;
+	module.exports = PlaylistServerActions;
 
 /***/ }
 /******/ ]);
