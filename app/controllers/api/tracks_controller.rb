@@ -13,11 +13,14 @@ def index
 end
 
 def show
-  @track = Track.find(params[:id])
-
-  #@tracks = [@tracks] unless @tracks.class == Array
-  render 'api/tracks/show'
-
+  author_id = User.find_by(username: params[:username])
+  @track = Track.find_by(title: params[:title], author_id: author_id)
+  if @track
+    render "api/tracks/show"
+  else
+    @errors = ['track not found']
+    render "api/shared/error", status: 404
+  end
 end
 
 # def show

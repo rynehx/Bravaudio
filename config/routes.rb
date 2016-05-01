@@ -12,13 +12,13 @@ Rails.application.routes.draw do
     #   resources :users, only: [:show]
     # end
 
-    resources :tracks, only: [:show,:index]
+    resources :tracks, only: [:index]
 
     # resources :playlists, only: [:show] do
     #   resources :tracks, only: [:index, :show, :create]
     # end
     get ":username", to: "users#username"
-
+    get ":username/:title", to: "tracks#show"
 
   end
 

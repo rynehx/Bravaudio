@@ -1,29 +1,56 @@
+//react
 var React = require('react'),
-    SessionStore = require('../stores/sessionStore'),
-    hashHistory = require('react-router').hashHistory,
-    TrackContent = require('./trackPage/trackContent'),
+    hashHistory = require('react-router').hashHistory;
+//stores
+var SessionStore = require('../stores/sessionStore'),
+    TrackStore = require('../stores/trackStore');
+//actions
+var TrackClientActions = require('../actions/trackClientAction');
+//components
+var TrackContent = require('./trackPage/trackContent'),
     TrackSideBar = require('./trackPage/trackSideBar'),
     TrackForeground = require('./trackPage/trackForeground'),
-    TrackClientActions = require('../actions/trackClientAction'),
-    TrackStore = require('../stores/trackStore');
+    TrackNotFound = require('./trackPage/trackNotFound');
+
+
 
 var TrackPage = React.createClass({
 
+  getInitialState: function () {
+    return { track: {title:"", audio_url: "", image_url: "" } };
+  },
+
   componentDidMount: function(){
-    TrackStore.addListener(this._onChange);
-    TrackClientActions.fetchDisplayingTrack();
+    this.trackstorelistener = TrackStore.addListener(this._onChange);
+    TrackClientActions.fetchDisplayTrack(this.props.params.user,
+      this.props.params.track);
+  },
+
+  componentWillUnmount: function(){
+    this.trackstorelistener.remove();
   },
 
   _onChange: function(){
-    this.setState({DisplayingTrack: TrackStore.DisplayingTrack()});
+    this.setState({track: TrackStore.displayTrack()});
   },
 
   render: function(){
-    return(
-      <div>
-        HI
-      </div>
-    );
+
+    if(this.state.track === null){
+      return(
+        <div>
+          <TrackNotFound notFoundTrack = {this.props.params.track} />
+        </div>
+      );
+    }else{
+      return(
+        <div>
+          <TrackForeground track = {this.state.track}/>
+          <TrackContent track = {this.state.track}/>
+          <TrackSideBar track = {this.state.track}/>
+        </div>
+      );
+    }
   }
 });
 

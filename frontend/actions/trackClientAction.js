@@ -7,11 +7,8 @@ var TrackClientActions = {
     });
   },
 
-  fetchDisplayingTrack: function(options){
-//options = {username: , track:   }
-  
-
-
+  fetchDisplayTrack: function(user,track){
+    TrackApiUtil.fetchDisplayTrack(user,track);
   },
 
   fetchUserTracks: function(user){

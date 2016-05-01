@@ -9,14 +9,6 @@ var MusicStore = new Store(AppDispatcher);
 MusicStore.play = function(track){
   _currentTrack = track;
 
-  // _currentPlayingSong = _music[song.id];
-  // if(_currentPlayingSong){
-  //   return _currentPlayingSong;
-  // }else{
-  //   _music[song.id] = song;
-  //   _currentPlayingSong = song;
-  // return _currentPlayingSong;
-  // }
 };
 
 

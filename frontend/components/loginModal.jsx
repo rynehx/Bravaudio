@@ -80,7 +80,7 @@ var LoginModal = React.createClass({
 
 
           <h2>{this.props.sessionAction}</h2>
-          <p>{this.showErrors()}</p>
+          <section>{this.showErrors()}</section>
           <form>
             <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
             <input type="password" valueLink={this.linkState("password")} placeholder="password"/>

@@ -7,12 +7,21 @@ var TrackApiUtil = {
       type: "GET",
       url: options.url,
       success: TrackServerActions.receiveTracks,
-      error: function(){console.log("track fetch failed");}
+      error: TrackServerActions.didNotFetchTrack
     };
 
     $.ajax(request);
   },
-
+  fetchDisplayTrack: function(user,track){
+    var request = {
+      type:"GET",
+      url: "api/"+user + "/" + track,
+      success: TrackServerActions.receiveDisplayTrack,
+      error: TrackServerActions.didNotFindTrack
+    };
+    
+    $.ajax(request);
+  }
   // fetchTrack: function(options){
   //   var request = {
   //     type: options.type,
