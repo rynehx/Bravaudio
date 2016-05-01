@@ -1,6 +1,6 @@
 var React = require("react"),
     TrackStore = require('../../stores/trackStore'),
-    TrackClientActions = require('../../actions/trackClientAction');
+    TrackClientActions = require('../../actions/trackClientActions');
 
 
 var HomeContent = React.createClass({

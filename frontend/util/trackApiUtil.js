@@ -1,4 +1,4 @@
-var TrackServerActions = require('../actions/trackServerAction');
+var TrackServerActions = require('../actions/trackServerActions');
 
 var TrackApiUtil = {
 
@@ -15,11 +15,11 @@ var TrackApiUtil = {
   fetchDisplayTrack: function(user,track){
     var request = {
       type:"GET",
-      url: "api/"+user + "/" + track,
+      url: "api/"+user + "/track/" + track,
       success: TrackServerActions.receiveDisplayTrack,
       error: TrackServerActions.didNotFindTrack
     };
-    
+
     $.ajax(request);
   }
   // fetchTrack: function(options){

@@ -18,7 +18,8 @@ Rails.application.routes.draw do
     #   resources :tracks, only: [:index, :show, :create]
     # end
     get ":username", to: "users#username"
-    get ":username/:title", to: "tracks#show"
+    get ":username/track/:title", to: "tracks#show"
+    get ":username/playlist/:title", to: "playlists#show"
 
   end
 

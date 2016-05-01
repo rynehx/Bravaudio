@@ -13,7 +13,8 @@ var NavBar = require('./components/navBar'),
     HomePage = require('./components/homePage'),
     UploadPage = require('./components/uploadPage'),
     TrackPage = require('./components/trackPage'),
-    UserPage = require('./components/userPage');
+    UserPage = require('./components/userPage'),
+    PlaylistPage = require('./components/playlistPage');
 //Mixins
 var CurrentSessionState = require('./mixins/currentSessionState'),
     SessionActions = require('./actions/sessionActions'),
@@ -49,8 +50,8 @@ var AppRouter = (
       <Route path="home" components={HomePage}/>
       <Route path="upload" components={UploadPage}/>
       <Route path=":user" components={UserPage}/>
-      <Route path=":user/:track" components={TrackPage}/>
-
+      <Route path=":user/track/:track" components={TrackPage}/>
+      <Route path=":user/playlist/:playlist" components={PlaylistPage}/>
 
     </Route>
   </Router>

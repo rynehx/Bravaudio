@@ -18,8 +18,15 @@ id          | integer   | not null, primary key
 author_id   | integer   | not null, foreign key (references users), indexed
 title       | string    | not null
 description | string    |
-track_id    | string    |
 image_url   | string    |
+
+## playlist_track_joining
+column name | data type | details
+------------|-----------|-----------------------
+id          | integer   | not null, primary key
+track_id    | integer   | not null,
+playlist_id | integer   |     
+
 
 ## comments
 column name | data type | details

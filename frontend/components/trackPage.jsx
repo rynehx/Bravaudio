@@ -5,7 +5,7 @@ var React = require('react'),
 var SessionStore = require('../stores/sessionStore'),
     TrackStore = require('../stores/trackStore');
 //actions
-var TrackClientActions = require('../actions/trackClientAction');
+var TrackClientActions = require('../actions/trackClientActions');
 //components
 var TrackContent = require('./trackPage/trackContent'),
     TrackSideBar = require('./trackPage/trackSideBar'),

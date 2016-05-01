@@ -1,8 +1,8 @@
 var React = require('react'),
-    TrackStore = require('../../stores/TrackStore'),
+    PlaylistStore = require('../../stores/playlistStore'),
     hashHistory = require('react-router').hashHistory;
 
-var TrackSideBar = React.createClass({
+var PlaylistSideBar = React.createClass({
 
 render: function(){
 return(
@@ -14,4 +14,4 @@ return(
 
 });
 
-module.exports = TrackSideBar;
+module.exports = PlaylistSideBar;

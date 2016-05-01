@@ -58,7 +58,16 @@
     audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899076/07-kid_cudi-day_n_nite_jzvdvj.mp3",
     author_id: 1});
 
+  Playlist.create([
+    {title: "drake", author_id: 2}
+    ])
 
+
+  PlaylistTrackJoining.create([{
+    track_id: 1, playlist_id: 1
+    },{
+      track_id: 7, playlist_id: 1
+      }])
 
 
   # Track.create({title: "", description: "infooo",
