@@ -31,7 +31,7 @@ var App = React.createClass({
   },
   render: function(){
     return (
-      <div>
+      <div className = "outer-container">
         <NavBar />
         {this.props.children}
         <MusicBar />

@@ -20,7 +20,7 @@ var numberToTime = function(num) {
 
 var AudioPlayer = React.createClass({
   getInitialState: function () {
-    return { audioAction: "play" , track: "", playlist:"" };
+    return { audioAction: "play"  };
   },
 
   componentDidMount: function(){
@@ -61,8 +61,7 @@ var AudioPlayer = React.createClass({
   },
   trackEndedAction: function(){
     console.log("test");
-  }
-  ,
+  },
 
 
 
@@ -83,7 +82,7 @@ var AudioPlayer = React.createClass({
     return (
       <div className = "musicbar-audioplayer">
         <audio ref = "audioDom"
-          src={this.props.track.url}
+          src={this.props.track.audio_url}
           onEnded = {this.trackEndedAction}>
           <p>Your browser does not support the audio element</p>
         </audio>

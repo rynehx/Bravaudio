@@ -1,6 +1,7 @@
 var React = require("react"),
     TrackStore = require('../../stores/trackStore'),
-    TrackClientActions = require('../../actions/trackClientActions');
+    TrackClientActions = require('../../actions/trackClientActions'),
+    HomeTracks = require('./homeTracks');
 
 
 var HomeContent = React.createClass({
@@ -15,12 +16,13 @@ var HomeContent = React.createClass({
   },
   componentWillUnmount: function(){
     this.trackStoreListener.remove();
-  }
-  ,
+  },
   _onChange: function(){
 
     this.setState({tracks: TrackStore.all()});
   },
+
+
 
   render: function(){
 
@@ -28,12 +30,14 @@ var HomeContent = React.createClass({
     return (
 
       <div>
-        {
-          this.state.tracks.map(function(track){
+        <div className = "home-container">
+          {
+            this.state.tracks.map(function(track){
 
-            return <img className = "trendingTracks" key={track.id} src={track.image_url} />;
-          })
-        }
+              return (<HomeTracks key = {track.id} track={track} playlist = {null} />);
+            })
+          }
+        </div>
       </div>
     );
   }

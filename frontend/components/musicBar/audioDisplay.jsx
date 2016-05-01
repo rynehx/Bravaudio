@@ -12,10 +12,11 @@ var SessionStore = require('../../stores/sessionStore'),
 var AudioDisplay = React.createClass({
   render: function(){
     return (
-      <div className="musicbar-audiodisplay">
+      <div className="musicbar-audio-display">
 
         <div className = "musicbar-track-title" >{this.props.track.title}</div>
-        <img className = "musicbar-track-image" src={this.props.track.url}/>
+        <div className = "musicbar-playlist-title" >{this.props.playlist.title}</div>
+        <img className = "musicbar-track-image" src={this.props.track.image_url}/>
 
       </div>
     );

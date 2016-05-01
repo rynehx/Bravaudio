@@ -1,0 +1,25 @@
+
+.home-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+}
+
+
+.home-tracks{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 600px;
+  height: 220px;
+  border-width: 10px;
+  border-color: black;
+  margin: 10px 50px ;
+}
+
+.home-tracks-image{
+  width: 200px;
+  height: 200px;
+  margin-left: 4%;
+}

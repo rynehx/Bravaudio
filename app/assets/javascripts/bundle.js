@@ -80,7 +80,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'outer-container' },
 	      React.createElement(NavBar, null),
 	      this.props.children,
 	      React.createElement(MusicBar, null)
@@ -34505,6 +34505,25 @@
 	  displayName: 'MusicBar',
 
 
+	  getInitialState: function () {
+	    return { track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
+	  },
+
+	  componentDidMount: function () {
+	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+	  },
+
+	  componentWillUnmount: function () {
+	    this.musicstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+	  },
+
 	  renderMusicBar: function () {
 	    if (SessionStore.fetchCurrentUser()) {
 	      return React.createElement(
@@ -34513,8 +34532,9 @@
 	        React.createElement(
 	          'div',
 	          { className: 'audio-components' },
-	          React.createElement(AudioPlayer, { track: { url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3" } }),
-	          React.createElement(AudioDisplay, { className: 'audiodisplay', track: { url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899234/AtLongLastASAPCover_ncw4ac.jpg", title: "Wild for da night" } })
+	          React.createElement(AudioPlayer, { className: 'audio-player', track: this.state.track }),
+	          React.createElement(AudioDisplay, { className: 'audio-display', track: this.state.track,
+	            playlist: this.state.playlist })
 	        )
 	      );
 	    } else {
@@ -34614,20 +34634,53 @@
 	    Store = __webpack_require__(252).Store,
 	    trackConstants = __webpack_require__(272);
 
-	var _music = {},
-	    _currentTrack = { url: "" };
+	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
+	    _currentTrack = { title: "", audio_url: "", image_url: "" };
 
 	var MusicStore = new Store(AppDispatcher);
 
-	MusicStore.play = function (track) {
-	  _currentTrack = track;
-	};
+	MusicStore.play = function (track) {};
 
 	MusicStore.currentTrack = function () {
 	  return _currentTrack;
 	};
 
-	MusicStore.__onDispatch = function () {};
+	MusicStore.currentPlaylist = function () {
+	  return _currentPlaylist;
+	};
+
+	MusicStore.setMusic = function (track, playlist) {
+
+	  AppDispatcher.dispatch({
+	    actionType: "UPDATEMUSICBAR",
+	    music: { track: track, playlist: playlist }
+	  });
+	};
+
+	MusicStore.__onDispatch = function (payload) {
+
+	  switch (payload.actionType) {
+	    case "UPDATEMUSICBAR":
+	      MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
+	  }
+	};
+
+	MusicStore.updateMusicBar = function (track, playlist) {
+
+	  if (!track) {
+	    _currentTrack = playlist.tracks[0];
+	  } else {
+	    _currentTrack = track;
+	  }
+
+	  if (playlist) {
+	    _currentPlaylist = playlist;
+	  } else {
+	    _currentPlaylist = {};
+	  }
+
+	  this.__emitChange();
+	};
 
 	module.exports = MusicStore;
 
@@ -34655,7 +34708,7 @@
 	  displayName: 'AudioPlayer',
 
 	  getInitialState: function () {
-	    return { audioAction: "play", track: "", playlist: "" };
+	    return { audioAction: "play" };
 	  },
 
 	  componentDidMount: function () {
@@ -34722,7 +34775,7 @@
 	      React.createElement(
 	        'audio',
 	        { ref: 'audioDom',
-	          src: this.props.track.url,
+	          src: this.props.track.audio_url,
 	          onEnded: this.trackEndedAction },
 	        React.createElement(
 	          'p',
@@ -34844,13 +34897,18 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'musicbar-audiodisplay' },
+	      { className: 'musicbar-audio-display' },
 	      React.createElement(
 	        'div',
 	        { className: 'musicbar-track-title' },
 	        this.props.track.title
 	      ),
-	      React.createElement('img', { className: 'musicbar-track-image', src: this.props.track.url })
+	      React.createElement(
+	        'div',
+	        { className: 'musicbar-playlist-title' },
+	        this.props.playlist.title
+	      ),
+	      React.createElement('img', { className: 'musicbar-track-image', src: this.props.track.image_url })
 	    );
 	  }
 	});
@@ -34904,7 +34962,8 @@
 
 	var React = __webpack_require__(1),
 	    TrackStore = __webpack_require__(271),
-	    TrackClientActions = __webpack_require__(279);
+	    TrackClientActions = __webpack_require__(279),
+	    HomeTracks = __webpack_require__(311);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -34920,7 +34979,6 @@
 	  componentWillUnmount: function () {
 	    this.trackStoreListener.remove();
 	  },
-
 	  _onChange: function () {
 
 	    this.setState({ tracks: TrackStore.all() });
@@ -34931,10 +34989,14 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      this.state.tracks.map(function (track) {
+	      React.createElement(
+	        'div',
+	        { className: 'home-container' },
+	        this.state.tracks.map(function (track) {
 
-	        return React.createElement('img', { className: 'trendingTracks', key: track.id, src: track.image_url });
-	      })
+	          return React.createElement(HomeTracks, { key: track.id, track: track, playlist: null });
+	        })
+	      )
 	    );
 	  }
 
@@ -35837,6 +35899,38 @@
 	};
 
 	module.exports = PlaylistServerActions;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    MusicStore = __webpack_require__(273);
+
+	var HomeTracks = React.createClass({
+	  displayName: 'HomeTracks',
+
+
+	  addToMusicBar: function () {
+	    MusicStore.setMusic(this.props.track, undefined);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'home-tracks' },
+	      React.createElement('img', { className: 'home-tracks-image', onClick: this.addToMusicBar, src: this.props.track.image_url }),
+	      React.createElement(
+	        'section',
+	        null,
+	        this.props.track.title
+	      )
+	    );
+	  }
+
+	});
+
+	module.exports = HomeTracks;
 
 /***/ }
 /******/ ]);

@@ -17,18 +17,38 @@ var AudioPlayer = require('./musicBar/audioPlayer'),
 
 var MusicBar = React.createClass({
 
+  getInitialState: function () {
+    return { track: {title:"",audio_url: "", image_url:""}, playlist: {} };
+  },
+
+  componentDidMount: function(){
+    this.musicstorelistener = MusicStore.addListener(this._onChange);
+    this.setState({track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+  },
+
+  componentWillUnmount: function(){
+    this.musicstorelistener.remove();
+  },
+
+  _onChange: function(){
+    this.setState({track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+  },
+
   renderMusicBar: function(){
     if(SessionStore.fetchCurrentUser()){
       return (
         <div className = "musicbar">
           <div className = "audio-components">
-        <AudioPlayer track={{url:"http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3"}} / >
-        <AudioDisplay className = "audiodisplay" track = {{url:"http://res.cloudinary.com/bravaudio/image/upload/v1461899234/AtLongLastASAPCover_ncw4ac.jpg",title:"Wild for da night"}} />
+            <AudioPlayer className = "audio-player" track={this.state.track} / >
+            <AudioDisplay className = "audio-display" track ={this.state.track}
+               playlist={this.state.playlist}  />
           </div>
         </div>);
     }else{
       return (<div>
-      </div>);
+        </div>);
     }
   },
 

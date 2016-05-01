@@ -43,10 +43,6 @@
   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3",
   author_id: 4});
 
-  Track.create({title: "Legend", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899374/square_drakequote_agp7y0.png",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899800/01-01_-_Legend_oh32so.flac",
-  author_id: 1});
 
   Track.create({title: "Trap Queen", description: "infooo",
   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899190/82f7a2ef_axhjwk.jpg",
@@ -66,7 +62,7 @@
   PlaylistTrackJoining.create([{
       track_id: 1, playlist_id: 1
     },{
-      track_id: 7, playlist_id: 1
+      track_id: 6, playlist_id: 1
     },{
       track_id: 4, playlist_id: 2
     },{
