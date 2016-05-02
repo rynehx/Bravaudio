@@ -57,10 +57,10 @@
 	var NavBar = __webpack_require__(218),
 	    MusicBar = __webpack_require__(270),
 	    HomePage = __webpack_require__(277),
-	    UploadPage = __webpack_require__(283),
-	    TrackPage = __webpack_require__(284),
-	    UserPage = __webpack_require__(290),
-	    PlaylistPage = __webpack_require__(300);
+	    UploadPage = __webpack_require__(284),
+	    TrackPage = __webpack_require__(285),
+	    UserPage = __webpack_require__(291),
+	    PlaylistPage = __webpack_require__(301);
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -34494,35 +34494,15 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(251),
-	    TrackStore = __webpack_require__(271),
-	    MusicStore = __webpack_require__(273);
+	    TrackStore = __webpack_require__(271);
 
 	//components
-	var AudioPlayer = __webpack_require__(274),
+	var AudioPlayer = __webpack_require__(273),
 	    AudioDisplay = __webpack_require__(276);
 
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
 
-
-	  getInitialState: function () {
-	    return { track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
-	  },
-
-	  componentDidMount: function () {
-	    this.musicstorelistener = MusicStore.addListener(this._onChange);
-	    this.setState({ track: MusicStore.currentTrack(),
-	      playlist: MusicStore.currentPlaylist() });
-	  },
-
-	  componentWillUnmount: function () {
-	    this.musicstorelistener.remove();
-	  },
-
-	  _onChange: function () {
-	    this.setState({ track: MusicStore.currentTrack(),
-	      playlist: MusicStore.currentPlaylist() });
-	  },
 
 	  renderMusicBar: function () {
 	    if (SessionStore.fetchCurrentUser()) {
@@ -34532,9 +34512,8 @@
 	        React.createElement(
 	          'div',
 	          { className: 'audio-components' },
-	          React.createElement(AudioPlayer, { className: 'audio-player', track: this.state.track }),
-	          React.createElement(AudioDisplay, { className: 'audio-display', track: this.state.track,
-	            playlist: this.state.playlist })
+	          React.createElement(AudioPlayer, null),
+	          React.createElement(AudioDisplay, null)
 	        )
 	      );
 	    } else {
@@ -34630,66 +34609,12 @@
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(245),
-	    Store = __webpack_require__(252).Store,
-	    trackConstants = __webpack_require__(272);
-
-	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
-	    _currentTrack = { title: "", audio_url: "", image_url: "" };
-
-	var MusicStore = new Store(AppDispatcher);
-
-	MusicStore.play = function (track) {};
-
-	MusicStore.currentTrack = function () {
-	  return _currentTrack;
-	};
-
-	MusicStore.currentPlaylist = function () {
-	  return _currentPlaylist;
-	};
-
-	MusicStore.setMusic = function (track, playlist) {
-
-	  AppDispatcher.dispatch({
-	    actionType: "UPDATEMUSICBAR",
-	    music: { track: track, playlist: playlist }
-	  });
-	};
-
-	MusicStore.__onDispatch = function (payload) {
-
-	  switch (payload.actionType) {
-	    case "UPDATEMUSICBAR":
-	      MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
-	  }
-	};
-
-	MusicStore.updateMusicBar = function (track, playlist) {
-
-	  if (!track) {
-	    _currentTrack = playlist.tracks[0];
-	  } else {
-	    _currentTrack = track;
-	  }
-
-	  if (playlist) {
-	    _currentPlaylist = playlist;
-	  } else {
-	    _currentPlaylist = {};
-	  }
-
-	  this.__emitChange();
-	};
-
-	module.exports = MusicStore;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
+	//react
 	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(275);
+	    classNames = __webpack_require__(274);
+
+	//stores
+	var MusicStore = __webpack_require__(275);
 
 	var actionButton;
 	var clickdown = false;
@@ -34701,18 +34626,33 @@
 	  var second = Math.floor(num % 60);
 
 	  // return (hour > 9 ? "" + hour: "0" + hour) + ":" +
-	  return (minute > 9 ? "" + minute : "0" + minute) + ":" + (second > 9 ? "" + second : "0" + second);
+	  return (minute > 9 ? "" + minute : minute) + ":" + (second > 9 ? "" + second : "0" + second);
 	};
 
 	var AudioPlayer = React.createClass({
 	  displayName: 'AudioPlayer',
 
 	  getInitialState: function () {
-	    return { audioAction: "play" };
+	    return { audioAction: "play", initial: "0:00", track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
 	  },
 
 	  componentDidMount: function () {
+
+	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+
 	    this.refs["audioDom"].ontimeupdate = this.updateTimer;
+	  },
+
+	  componentWillUnmount: function () {
+	    this.musicstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ audioAction: "pause", initial: "0:00", track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
 	  },
 
 	  audioActionButton: function () {
@@ -34727,21 +34667,42 @@
 	    }
 	  },
 	  updateTimer: function () {
+
 	    this.refs["displaytime-current"].innerHTML = numberToTime(this.refs["audioDom"].currentTime);
 
-	    this.refs["displaytime-end"].innerHTML = numberToTime(this.refs["audioDom"].duration);
+	    if (this.refs["audioDom"].duration === this.refs["audioDom"].duration) {
+	      this.refs["displaytime-end"].innerHTML = numberToTime(this.refs["audioDom"].duration);
+	    } else {
+	      this.refs["displaytime-end"].innerHTML = "0:00";
+	    }
 
-	    this.refs["displayprogress"].value = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration;
+	    this.refs["displayprogress-inner"].style.width = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration * 400 + "px";
 	  },
 
 	  updateProgress: function (e) {
 	    if (clickdown) {
-	      var selectedtime = (e.clientX - 8 - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
+	      var selectedtime = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
 	      this.refs["audioDom"].currentTime = selectedtime;
+
+	      this.refs["displayprogress-inner"].style.width = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * 400 + 'px';
 	    }
 	  },
 	  trackEndedAction: function () {
-	    console.log("test");
+	    MusicStore.nextTrack();
+	  },
+
+	  nextTrack: function () {
+	    MusicStore.nextTrack();
+	  },
+
+	  rewindTrack: function () {
+	    this.refs["audioDom"].currentTime = 0;
+	    this.refs["displayprogress-inner"].style.width = 0 + "px";
+	  },
+
+	  previousTrack: function () {
+
+	    MusicStore.previousTrack();
 	  },
 
 	  render: function () {
@@ -34749,23 +34710,17 @@
 	    if (this.state.audioAction === "play") {
 	      actionButton = React.createElement(
 	        'div',
-	        { className: 'musicbar-circle' },
+	        { onClick: this.audioActionButton,
+	          className: 'musicbar-button' },
 	        React.createElement('div', { className: 'musicbar-play' })
 	      );
 	    } else {
 	      actionButton = React.createElement(
 	        'div',
-	        { className: 'musicbar-circle' },
-	        React.createElement(
-	          'div',
-	          { className: 'musicbar-pause' },
-	          'P'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'musicbar-pause' },
-	          'P'
-	        )
+	        { onClick: this.audioActionButton,
+	          className: 'musicbar-button' },
+	        React.createElement('div', { className: 'musicbar-pause' }),
+	        React.createElement('div', { className: 'musicbar-pause' })
 	      );
 	    }
 
@@ -34774,9 +34729,9 @@
 	      { className: 'musicbar-audioplayer' },
 	      React.createElement(
 	        'audio',
-	        { ref: 'audioDom',
-	          src: this.props.track.audio_url,
-	          onEnded: this.trackEndedAction },
+	        { ref: 'audioDom', id: 'audioDom',
+	          src: this.state.track.audio_url,
+	          onEnded: this.trackEndedAction, autoPlay: true },
 	        React.createElement(
 	          'p',
 	          null,
@@ -34784,39 +34739,62 @@
 	        )
 	      ),
 	      React.createElement(
-	        'button',
-	        { className: 'musicbar-button',
-	          onClick: this.audioActionButton },
+	        'div',
+	        { className: 'music-ffrw',
+	          onDoubleClick: this.previousTrack,
+	          onClick: this.rewindTrack },
+	        React.createElement('div', { className: 'musicbar-ff-bar' }),
+	        React.createElement('div', { className: 'musicbar-ff' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
 	        actionButton
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'music-ffrw',
+	          onClick: this.nextTrack },
+	        React.createElement('div', { className: 'musicbar-rw' }),
+	        React.createElement('div', { className: 'musicbar-rw-bar' })
 	      ),
 	      React.createElement(
 	        'section',
 	        { ref: 'displaytime-current',
 	          className: 'musicbar-time' },
-	        '00:00'
+	        this.state.initial
 	      ),
-	      React.createElement('progress', { ref: 'displayprogress', className: 'musicbar-progressbar',
-	        value: '0', max: '1', style: { width: '400px' },
-	        onClick: function (e) {
-	          clickdown = true;
-	          this.updateProgress(e);
-	          clickdown = false;
-	        }.bind(this),
-	        onMouseDown: function () {
-	          clickdown = true;
-	        },
-	        onMouseUp: function () {
-	          clickdown = false;
-	        },
-	        onMouseMove: this.updateProgress,
-	        onMouseLeave: function () {
-	          clickdown = false;
-	        } }),
+	      React.createElement(
+	        'div',
+	        { ref: 'displayprogress', className: 'musicbar-progressbar',
+	          style: { width: '400px' },
+	          onClick: function (e) {
+	            clickdown = true;
+	            this.updateProgress(e);
+	            clickdown = false;
+	          }.bind(this),
+	          onMouseDown: function () {
+	            clickdown = true;
+	          },
+	          onMouseUp: function () {
+	            clickdown = false;
+	          },
+	          onMouseMove: this.updateProgress,
+	          onMouseLeave: function () {
+	            clickdown = false;
+	          } },
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-progressbar-inner-base' },
+	          React.createElement('div', { ref: 'displayprogress-inner',
+	            className: 'musicbar-progressbar-inner', style: { width: '0px' } })
+	        )
+	      ),
 	      React.createElement(
 	        'section',
 	        { ref: 'displaytime-end',
 	          className: 'musicbar-time' },
-	        '00:00'
+	        this.state.initial
 	      )
 	    );
 	  }
@@ -34825,7 +34803,7 @@
 	module.exports = AudioPlayer;
 
 /***/ },
-/* 275 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -34879,6 +34857,130 @@
 
 
 /***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(245),
+	    Store = __webpack_require__(252).Store,
+	    trackConstants = __webpack_require__(272);
+
+	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
+	    _currentTrack = { title: "", audio_url: "", image_url: "" },
+	    _playedTracks = {},
+	    _onRepeat = true;
+
+	var MusicStore = new Store(AppDispatcher);
+
+	MusicStore.play = function (track) {};
+
+	MusicStore.toggleRepeat = function () {
+	  if (_onRepeat) {
+	    _onRepeat = false;
+	  } else {
+	    _onRepeat = true;
+	  }
+	};
+
+	MusicStore.repeat = function () {
+	  return _onRepeat;
+	};
+
+	MusicStore.currentTrack = function () {
+	  return _currentTrack;
+	};
+
+	MusicStore.currentPlaylist = function () {
+	  return _currentPlaylist;
+	};
+
+	MusicStore.setMusic = function (track, playlist) {
+	  AppDispatcher.dispatch({
+	    actionType: "UPDATEMUSICBAR",
+	    music: { track: track, playlist: playlist }
+	  });
+	};
+
+	MusicStore.nextTrack = function () {
+	  AppDispatcher.dispatch({
+	    actionType: "NEXTTRACK"
+	  });
+	};
+
+	MusicStore.previousTrack = function () {
+	  AppDispatcher.dispatch({
+	    actionType: "PREVIOUSTRACK"
+	  });
+	};
+
+	MusicStore.updateMusicBar = function (track, playlist) {
+	  // _currentTrack.currentTime = (document.getElementById("audioDom").currentTime);
+	  // _playedTracks[_currentTrack.id] = _currentTrack;
+
+	  if (track) {
+	    _currentTrack = track;
+	  } else {
+	    _currentTrack = playlist.tracks[0];
+	  }
+
+	  if (playlist) {
+	    _currentPlaylist = playlist;
+	  } else {
+	    _currentPlaylist = { tracks: [track] };
+	  }
+	};
+
+	MusicStore.updateToPreviousTrack = function (action) {
+
+	  // _currentTrack.currentTime = (document.getElementById("audioDom").currentTime);
+	  // _playedTracks[_currentTrack.id] = _currentTrack;
+	  var toBase = _currentPlaylist.tracks.indexOf(_currentTrack) <= 0;
+
+	  if (toBase) {
+	    _currentTrack = _currentPlaylist.tracks[0];
+	  } else {
+	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) - 1];
+	  }
+	};
+
+	MusicStore.updateToNextTrack = function () {
+	  // _currentTrack.currentTime = (document.getElementById("audioDom").currentTime);
+	  // _playedTracks[_currentTrack.id] = _currentTrack;
+
+	  var toRepeat = _currentPlaylist.tracks.indexOf(_currentTrack) + 1 >= _currentPlaylist.tracks.length;
+
+	  if (_onRepeat) {
+
+	    if (toRepeat) {
+	      _currentTrack = _currentPlaylist.tracks[0];
+	      console.log("only one track");
+	    } else {
+	      _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
+	    }
+	  } else {
+	    //repeat off
+	    console.log("check");
+	  }
+	};
+
+	MusicStore.__onDispatch = function (payload) {
+
+	  switch (payload.actionType) {
+	    case "UPDATEMUSICBAR":
+	      MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
+	      break;
+	    case "PREVIOUSTRACK":
+	      MusicStore.updateToPreviousTrack();
+	      break;
+	    case "NEXTTRACK":
+	      MusicStore.updateToNextTrack();
+	      break;
+	  }
+	  this.__emitChange();
+	};
+
+	module.exports = MusicStore;
+
+/***/ },
 /* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -34889,26 +34991,50 @@
 	//Stores
 	var SessionStore = __webpack_require__(251),
 	    TrackStore = __webpack_require__(271),
-	    MusicStore = __webpack_require__(273);
+	    MusicStore = __webpack_require__(275);
 
 	var AudioDisplay = React.createClass({
 	  displayName: 'AudioDisplay',
+
+	  getInitialState: function () {
+	    return { track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
+	  },
+
+	  componentDidMount: function () {
+	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+	  },
+
+	  componentWillUnmount: function () {
+	    this.musicstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+	  },
 
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'musicbar-audio-display' },
+	      React.createElement('img', { className: 'musicbar-track-image', src: this.state.track.image_url }),
 	      React.createElement(
 	        'div',
-	        { className: 'musicbar-track-title' },
-	        this.props.track.title
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'musicbar-playlist-title' },
-	        this.props.playlist.title
-	      ),
-	      React.createElement('img', { className: 'musicbar-track-image', src: this.props.track.image_url })
+	        { className: 'musicbar-text' },
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-track-title' },
+	          this.state.track.title
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-playlist-title' },
+	          this.state.playlist.title
+	        )
+	      )
 	    );
 	  }
 	});
@@ -34925,7 +35051,7 @@
 
 	//Components
 	var HomeContent = __webpack_require__(278),
-	    HomeSideBar = __webpack_require__(282);
+	    HomeSideBar = __webpack_require__(283);
 
 	var HomePage = React.createClass({
 	  displayName: 'HomePage',
@@ -34963,7 +35089,7 @@
 	var React = __webpack_require__(1),
 	    TrackStore = __webpack_require__(271),
 	    TrackClientActions = __webpack_require__(279),
-	    HomeTracks = __webpack_require__(311);
+	    HomeTracks = __webpack_require__(282);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -35111,6 +35237,38 @@
 /* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1),
+	    MusicStore = __webpack_require__(275);
+
+	var HomeTracks = React.createClass({
+	  displayName: 'HomeTracks',
+
+
+	  addToMusicBar: function () {
+	    MusicStore.setMusic(this.props.track, null);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'home-tracks' },
+	      React.createElement('img', { className: 'home-tracks-image', onClick: this.addToMusicBar, src: this.props.track.image_url }),
+	      React.createElement(
+	        'section',
+	        null,
+	        this.props.track.title
+	      )
+	    );
+	  }
+
+	});
+
+	module.exports = HomeTracks;
+
+/***/ },
+/* 283 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 
 	var HomeSideBar = React.createClass({
@@ -35129,7 +35287,7 @@
 	module.exports = HomeSideBar;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35165,7 +35323,7 @@
 	module.exports = UploadPage;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35177,10 +35335,10 @@
 	//actions
 	var TrackClientActions = __webpack_require__(279);
 	//components
-	var TrackContent = __webpack_require__(285),
-	    TrackSideBar = __webpack_require__(287),
-	    TrackForeground = __webpack_require__(288),
-	    TrackNotFound = __webpack_require__(289);
+	var TrackContent = __webpack_require__(286),
+	    TrackSideBar = __webpack_require__(288),
+	    TrackForeground = __webpack_require__(289),
+	    TrackNotFound = __webpack_require__(290);
 
 	var TrackPage = React.createClass({
 	  displayName: 'TrackPage',
@@ -35226,11 +35384,11 @@
 	module.exports = TrackPage;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(286),
+	    TrackStore = __webpack_require__(287),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackContent = React.createClass({
@@ -35250,7 +35408,7 @@
 	module.exports = TrackContent;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
@@ -35316,11 +35474,11 @@
 	module.exports = TrackStore;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(286),
+	    TrackStore = __webpack_require__(287),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackSideBar = React.createClass({
@@ -35340,11 +35498,11 @@
 	module.exports = TrackSideBar;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(286),
+	    TrackStore = __webpack_require__(287),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackForeground = React.createClass({
@@ -35364,7 +35522,7 @@
 	module.exports = TrackForeground;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35386,21 +35544,21 @@
 	module.exports = TrackNotFound;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(291);
+	var UserStore = __webpack_require__(292);
 	//actions
-	var UserClientActions = __webpack_require__(293);
+	var UserClientActions = __webpack_require__(294);
 	//components
-	var UserContent = __webpack_require__(296),
-	    UserForeground = __webpack_require__(297),
-	    UserSideBar = __webpack_require__(298),
-	    UserNotFound = __webpack_require__(299);
+	var UserContent = __webpack_require__(297),
+	    UserForeground = __webpack_require__(298),
+	    UserSideBar = __webpack_require__(299),
+	    UserNotFound = __webpack_require__(300);
 
 	var page;
 
@@ -35444,12 +35602,12 @@
 	module.exports = UserPage;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    UserConstants = __webpack_require__(292);
+	    UserConstants = __webpack_require__(293);
 
 	var _displayUser = null;
 
@@ -35484,7 +35642,7 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35493,10 +35651,10 @@
 	};
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(294);
+	var UserApiUtil = __webpack_require__(295);
 
 	var UserClientActions = {
 	  fetchDisplayUser: function (username) {
@@ -35507,10 +35665,10 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserServerActions = __webpack_require__(295);
+	var UserServerActions = __webpack_require__(296);
 
 	var UserApiUtil = {
 	  fetchDisplayUser: function (username) {
@@ -35533,11 +35691,11 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    UserConstants = __webpack_require__(292);
+	    UserConstants = __webpack_require__(293);
 
 	var UserServerActions = {
 	  receivedDisplayUser: function (user) {
@@ -35556,11 +35714,11 @@
 	module.exports = UserServerActions;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(291),
+	    UserStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserContent = React.createClass({
@@ -35574,11 +35732,11 @@
 	module.exports = UserContent;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(291),
+	    UserStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserForeground = React.createClass({
@@ -35592,11 +35750,11 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(291),
+	    UserStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserSideBar = React.createClass({
@@ -35610,7 +35768,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35632,7 +35790,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35640,14 +35798,14 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(251),
-	    PlaylistStore = __webpack_require__(301);
+	    PlaylistStore = __webpack_require__(302);
 	//actions
-	var PlaylistClientActions = __webpack_require__(303);
+	var PlaylistClientActions = __webpack_require__(304);
 	//components
-	var PlaylistContent = __webpack_require__(305),
-	    PlaylistSideBar = __webpack_require__(306),
-	    PlaylistForeground = __webpack_require__(307),
-	    PlaylistNotFound = __webpack_require__(308);
+	var PlaylistContent = __webpack_require__(307),
+	    PlaylistSideBar = __webpack_require__(308),
+	    PlaylistForeground = __webpack_require__(309),
+	    PlaylistNotFound = __webpack_require__(310);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -35693,12 +35851,12 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    PlaylistConstants = __webpack_require__(302);
+	    PlaylistConstants = __webpack_require__(303);
 
 	var _displayPlaylist;
 	var PlaylistStore = new Store(AppDispatcher);
@@ -35732,7 +35890,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35741,10 +35899,10 @@
 	};
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(304);
+	var PlaylistApiUtil = __webpack_require__(305);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -35755,10 +35913,10 @@
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(310);
+	var PlaylistServerActions = __webpack_require__(306);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -35780,11 +35938,34 @@
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 305 */
+/* 306 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(245),
+	    PlaylistConstants = __webpack_require__(303);
+
+	var PlaylistServerActions = {
+	  receiveDisplayPlaylist: function (playlist) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEDISPLAYPLAYLIST,
+	      playlist: playlist
+	    });
+	  },
+	  receiveNoPlaylist: function () {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
+	    });
+	  }
+	};
+
+	module.exports = PlaylistServerActions;
+
+/***/ },
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistContent = React.createClass({
@@ -35804,11 +35985,11 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistSideBar = React.createClass({
@@ -35828,11 +36009,11 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistForeground = React.createClass({
@@ -35852,11 +36033,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -35875,62 +36056,6 @@
 	});
 
 	module.exports = PlaylistNotFound;
-
-/***/ },
-/* 309 */,
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(245),
-	    PlaylistConstants = __webpack_require__(302);
-
-	var PlaylistServerActions = {
-	  receiveDisplayPlaylist: function (playlist) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.RECEIVEDISPLAYPLAYLIST,
-	      playlist: playlist
-	    });
-	  },
-	  receiveNoPlaylist: function () {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
-	    });
-	  }
-	};
-
-	module.exports = PlaylistServerActions;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    MusicStore = __webpack_require__(273);
-
-	var HomeTracks = React.createClass({
-	  displayName: 'HomeTracks',
-
-
-	  addToMusicBar: function () {
-	    MusicStore.setMusic(this.props.track, undefined);
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'home-tracks' },
-	      React.createElement('img', { className: 'home-tracks-image', onClick: this.addToMusicBar, src: this.props.track.image_url }),
-	      React.createElement(
-	        'section',
-	        null,
-	        this.props.track.title
-	      )
-	    );
-	  }
-
-	});
-
-	module.exports = HomeTracks;
 
 /***/ }
 /******/ ]);

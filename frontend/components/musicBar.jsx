@@ -5,8 +5,7 @@ var React = require('react'),
 
 //Stores
 var SessionStore = require('../stores/sessionStore'),
-    TrackStore = require('../stores/trackStore'),
-    MusicStore = require('../stores/musicStore');
+    TrackStore = require('../stores/trackStore');
 
 //components
 var AudioPlayer = require('./musicBar/audioPlayer'),
@@ -17,33 +16,14 @@ var AudioPlayer = require('./musicBar/audioPlayer'),
 
 var MusicBar = React.createClass({
 
-  getInitialState: function () {
-    return { track: {title:"",audio_url: "", image_url:""}, playlist: {} };
-  },
-
-  componentDidMount: function(){
-    this.musicstorelistener = MusicStore.addListener(this._onChange);
-    this.setState({track: MusicStore.currentTrack(),
-      playlist: MusicStore.currentPlaylist()});
-  },
-
-  componentWillUnmount: function(){
-    this.musicstorelistener.remove();
-  },
-
-  _onChange: function(){
-    this.setState({track: MusicStore.currentTrack(),
-      playlist: MusicStore.currentPlaylist()});
-  },
 
   renderMusicBar: function(){
     if(SessionStore.fetchCurrentUser()){
       return (
         <div className = "musicbar">
           <div className = "audio-components">
-            <AudioPlayer className = "audio-player" track={this.state.track} / >
-            <AudioDisplay className = "audio-display" track ={this.state.track}
-               playlist={this.state.playlist}  />
+            <AudioPlayer />
+            <AudioDisplay />
           </div>
         </div>);
     }else{

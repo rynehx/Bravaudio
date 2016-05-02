@@ -1,5 +1,9 @@
+//react
 var React = require('react'),
     classNames = require('classnames');
+
+//stores
+var MusicStore = require('../../stores/musicStore');
 
 var actionButton;
 var clickdown = false;
@@ -13,18 +17,35 @@ var numberToTime = function(num) {
 
 
 	// return (hour > 9 ? "" + hour: "0" + hour) + ":" +
-    return (minute > 9 ? "" + minute: "0" + minute) + ":" +
+    return (minute > 9 ? "" + minute:  minute) + ":" +
     (second > 9 ? "" + second: "0" + second);
 };
 
 
 var AudioPlayer = React.createClass({
   getInitialState: function () {
-    return { audioAction: "play"  };
+    return { audioAction: "play" ,initial: "0:00", track: {title:"",audio_url: "", image_url:""}, playlist: {} };
   },
 
   componentDidMount: function(){
+
+    this.musicstorelistener = MusicStore.addListener(this._onChange);
+    this.setState({track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+
     this.refs["audioDom"].ontimeupdate = this.updateTimer;
+  },
+
+  componentWillUnmount: function(){
+    this.musicstorelistener.remove();
+  },
+
+  _onChange: function(){
+
+      this.setState({audioAction: "pause" ,initial: "0:00", track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+
+
   },
 
 
@@ -40,63 +61,103 @@ var AudioPlayer = React.createClass({
     }
   },
   updateTimer: function(){
+
     this.refs["displaytime-current"].innerHTML =
     numberToTime(this.refs["audioDom"].currentTime);
 
-    this.refs["displaytime-end"].innerHTML =
-    numberToTime(this.refs["audioDom"].duration);
+    if(this.refs["audioDom"].duration === this.refs["audioDom"].duration){
+      this.refs["displaytime-end"].innerHTML =
+      numberToTime(this.refs["audioDom"].duration);
+    }else{
+      this.refs["displaytime-end"].innerHTML =
+      "0:00";
+    }
 
-    this.refs["displayprogress"].value =
-    (this.refs["audioDom"].currentTime/this.refs["audioDom"].duration);
+    this.refs["displayprogress-inner"].style.width =
+    (this.refs["audioDom"].currentTime/this.refs["audioDom"].duration)*400 + "px";
   },
 
   updateProgress: function(e){
     if(clickdown){
-      var selectedtime=(((e.clientX-8-this.refs["displayprogress"].offsetLeft)/
+      var selectedtime=(((e.clientX-this.refs["displayprogress"].offsetLeft)/
         this.refs["displayprogress"].offsetWidth)*
         this.refs["audioDom"].duration);
         this.refs["audioDom"].currentTime = selectedtime;
+
+
+        this.refs["displayprogress-inner"].style.width=
+        ((e.clientX-this.refs["displayprogress"].offsetLeft)/
+          this.refs["displayprogress"].offsetWidth)*400 + 'px';
      }
 
   },
   trackEndedAction: function(){
-    console.log("test");
+    MusicStore.nextTrack();
   },
 
+  nextTrack: function(){
+    MusicStore.nextTrack();
+  },
 
+  rewindTrack: function(){
+    this.refs["audioDom"].currentTime = 0;
+    this.refs["displayprogress-inner"].style.width = 0 + "px";
+  },
+
+  previousTrack: function(){
+
+    MusicStore.previousTrack();
+  },
 
   render: function(){
 
 
     if(this.state.audioAction === "play"){
-      actionButton = <div className = "musicbar-circle">
+      actionButton = <div onClick={this.audioActionButton}
+        className = "musicbar-button">
         <div className = "musicbar-play"></div>
       </div>;
     }else{
-      actionButton = <div className = "musicbar-circle">
-        <div className = "musicbar-pause">P</div>
-        <div className = "musicbar-pause">P</div>
+      actionButton = <div  onClick={this.audioActionButton}
+        className = "musicbar-button">
+        <div className = "musicbar-pause"></div>
+        <div className = "musicbar-pause"></div>
       </div>;
     }
 
     return (
       <div className = "musicbar-audioplayer">
-        <audio ref = "audioDom"
-          src={this.props.track.audio_url}
-          onEnded = {this.trackEndedAction}>
+        <audio ref = "audioDom" id="audioDom"
+          src={this.state.track.audio_url}
+          onEnded = {this.trackEndedAction} autoPlay>
           <p>Your browser does not support the audio element</p>
         </audio>
 
-        <button className = "musicbar-button"
-          onClick={this.audioActionButton}>
+        <div className = "music-ffrw"
+          onDoubleClick={this.previousTrack}
+          onClick = {this.rewindTrack}>
+
+          <div  className = "musicbar-ff-bar"/>
+          <div className = "musicbar-ff"/>
+        </div>
+
+        <div>
           {actionButton}
-        </button>
+        </div>
+
+        <div className = "music-ffrw"
+          onClick={this.nextTrack}>
+            <div  className = "musicbar-rw"/>
+            <div  className = "musicbar-rw-bar"/>
+
+        </div>
 
         <section ref = "displaytime-current"
-          className = "musicbar-time">00:00</section>
+          className = "musicbar-time">{this.state.initial}</section>
 
-        <progress ref = "displayprogress" className = "musicbar-progressbar"
-          value="0" max="1" style={{width:'400px'}}
+
+        <div ref = "displayprogress" className = "musicbar-progressbar"
+          style={{width:'400px'}}
           onClick = {function(e){
             clickdown = true;
             this.updateProgress(e);
@@ -106,10 +167,18 @@ var AudioPlayer = React.createClass({
           onMouseUp = {function(){clickdown = false;}}
           onMouseMove = {this.updateProgress}
           onMouseLeave ={function(){clickdown = false;}} >
-        </progress>
+          <div className = "musicbar-progressbar-inner-base" >
+            <div ref = "displayprogress-inner"
+              className = "musicbar-progressbar-inner" style={{width:'0px'}}>
+            </div>
+          </div>
+
+
+
+        </div>
 
         <section ref = "displaytime-end"
-          className = "musicbar-time">00:00</section>
+          className = "musicbar-time">{this.state.initial}</section>
       </div>
     );
   }

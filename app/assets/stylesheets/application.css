@@ -82,13 +82,6 @@ body {
 }
 
 
-.musicbar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  background: silver;
-}
 
 
 .clearfix:after {
@@ -104,7 +97,7 @@ body {
 
   width: auto;
   margin: 40px 30px;
-  background-color: lightgrey;
+  background-color: white;
 
 
 
@@ -140,89 +133,4 @@ body {
   width: 600px;
   height:600px;
   background-color: lightblue;
-}
-
-
-.audiodisplay{
-  float: left;
-}
-
-
-
-.musicbar-circle {
-  display: flex;
-	width: 50px;
-	height: 50px;
-	background: darkgrey;
-	-moz-border-radius: 25px;
-	-webkit-border-radius:25px;
-	border-radius: 25px;
-  margin-top:4px;
-}
-
-
-.musicbar-audioplayer {
-display: flex;
-width: 500px;
-
-}
-
-
-.audio-components{
-  display: flex;
-}
-
-.musicbar-audiodisplay{
-  display: flex;
-}
-
-.musicbar-play {
-  width: 0;
-  height: 0;
-  border-top: 15px solid transparent;
-  border-left: 30px solid black;
-  border-bottom: 15px solid transparent;
-  margin: 10px 10px 10px 10px;
-
-}
-
-.musicbar-pause {
-  width: 5;
-  height: 30;
-  margin: 5px;
-  background-color: black;
-}
-
-.musicbar-pause:first-child {
-
-  margin-left: 13px;
-}
-
-.musicbar-button {
-
-  background-color: transparent;
-  margin: 0px 50px 0px 50px;
-}
-
-.musicbar-time{
-  text-align: center;
-  width: 100px;
-  height: 40px;
-margin: 0px 20px 0px 20px;
-background-color: lime;
-}
-
-.musicbar-progressbar{
-  margin: 0px 20px 0px 20px;
-
-}
-
-.musicbar-track-title{
-
-  height: 20px;
-}
-
-.musicbar-track-image{
-  height: 30px;
-  width: 30px;
 }

@@ -10,13 +10,38 @@ var SessionStore = require('../../stores/sessionStore'),
 
 
 var AudioDisplay = React.createClass({
+  getInitialState: function () {
+    return { track: {title:"",audio_url: "", image_url:""}, playlist: {} };
+  },
+
+  componentDidMount: function(){
+    this.musicstorelistener = MusicStore.addListener(this._onChange);
+    this.setState({track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+  },
+
+  componentWillUnmount: function(){
+    this.musicstorelistener.remove();
+  },
+
+  _onChange: function(){
+
+    this.setState({track: MusicStore.currentTrack(),
+      playlist: MusicStore.currentPlaylist()});
+  },
+
+
   render: function(){
     return (
       <div className="musicbar-audio-display">
 
-        <div className = "musicbar-track-title" >{this.props.track.title}</div>
-        <div className = "musicbar-playlist-title" >{this.props.playlist.title}</div>
-        <img className = "musicbar-track-image" src={this.props.track.image_url}/>
+
+        <img className = "musicbar-track-image" src={this.state.track.image_url}/>
+
+      <div className = "musicbar-text">
+        <div className = "musicbar-track-title" >{this.state.track.title}</div>
+        <div className = "musicbar-playlist-title" >{this.state.playlist.title}</div>
+      </div>
 
       </div>
     );

@@ -5,7 +5,7 @@ var React = require('react'),
 var HomeTracks = React.createClass({
 
   addToMusicBar: function(){
-    MusicStore.setMusic(this.props.track,undefined);
+    MusicStore.setMusic(this.props.track,null);
   },
 
   render: function(){
