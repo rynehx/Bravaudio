@@ -37,8 +37,12 @@ var UserPage = React.createClass({
     this.userStoreListener.remove();
   },
 
+  componentWillReceiveProps: function(newprops){
+    UserClientActions.fetchDisplayUser(newprops.params.user);
+  },
+
   _onChange: function(){
-    this.setState({user:UserStore.currentDisplayUser()});
+    this.setState({user:UserStore.currentDisplayUser(),tabtype: this.initialTabSet()});
   },
 
   tabbed: function(type){
@@ -75,20 +79,19 @@ var UserPage = React.createClass({
 
               <div className = {"user-content-tabitems" + this.tabbed("all")}
                 onClick={
-                  function(){this.pushTabs("all");
-                    this.setState({tabtype:"all"});}.bind(this)}>
+                  function(){this.pushTabs("all");}.bind(this)}>
 
                 All</div>
               <div className = {"user-content-tabitems" + this.tabbed("tracks")}
                 onClick={
                   function(){this.pushTabs("tracks");
-                    this.setState({tabtype:"tracks"});}.bind(this)}>
+                    }.bind(this)}>
                 Tracks</div>
 
               <div className ={"user-content-tabitems"+this.tabbed("playlists")}
                 onClick={
                   function(){this.pushTabs("playlists");
-                    this.setState({tabtype:"playlists"});}.bind(this)} >
+                    }.bind(this)} >
                 Playlists</div>
 
             </div>

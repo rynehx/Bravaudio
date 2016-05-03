@@ -47,6 +47,12 @@ var UserContentTab = React.createClass({
     this.setState({playlists: PlaylistStore.displayUserPlaylists()});
   },
 
+  componentWillReceiveProps: function(newprops){
+    PlaylistClientActions.fetchUserPlaylists(newprops.params.user);
+    TrackClientActions.fetchUserTracks(newprops.params.user);
+  },
+
+
   componentWillUnmount: function(){
      this.trackstorelistener.remove();
      this.playliststorelistener.remove();
@@ -56,14 +62,15 @@ var UserContentTab = React.createClass({
   }
   ,
   renderType: function(){
-     if(this.props.params.tabtype === "tracks"){
-      return this.state.tracks.map(function(track){return <UserContentItem item = {track}/>;});
+    if(this.props.params.tabtype === "tracks"){
+      return this.state.tracks.map(function(track){return <UserContentItem key={track.id + "t"} item = {track}/>;});
     }else if(this.props.params.tabtype === "playlists"){
-      return this.state.playlists.map(function(playlist){return <UserContentItem item = {playlist}/>;});
+      return this.state.playlists.map(function(playlist){return <UserContentItem playlist={playlist.id + "p"}  item = {playlist}/>;});
     }else{
-      return this.allSorter(this.state.tracks,this.state.playlists).map(function(item){return <UserContentItem item = {item}/>;});
+      return this.allSorter(this.state.tracks,this.state.playlists).map(function(item){
+        return <UserContentItem key={ ((item.tracks)? item.id : item.id)
+         + "m"   }  item = {item}/>;});
     }
-
   },
 
   render: function(){

@@ -35666,8 +35666,12 @@
 	    this.userStoreListener.remove();
 	  },
 
+	  componentWillReceiveProps: function (newprops) {
+	    UserClientActions.fetchDisplayUser(newprops.params.user);
+	  },
+
 	  _onChange: function () {
-	    this.setState({ user: UserStore.currentDisplayUser() });
+	    this.setState({ user: UserStore.currentDisplayUser(), tabtype: this.initialTabSet() });
 	  },
 
 	  tabbed: function (type) {
@@ -35710,7 +35714,6 @@
 	                { className: "user-content-tabitems" + this.tabbed("all"),
 	                  onClick: function () {
 	                    this.pushTabs("all");
-	                    this.setState({ tabtype: "all" });
 	                  }.bind(this) },
 	                'All'
 	              ),
@@ -35719,7 +35722,6 @@
 	                { className: "user-content-tabitems" + this.tabbed("tracks"),
 	                  onClick: function () {
 	                    this.pushTabs("tracks");
-	                    this.setState({ tabtype: "tracks" });
 	                  }.bind(this) },
 	                'Tracks'
 	              ),
@@ -35728,7 +35730,6 @@
 	                { className: "user-content-tabitems" + this.tabbed("playlists"),
 	                  onClick: function () {
 	                    this.pushTabs("playlists");
-	                    this.setState({ tabtype: "playlists" });
 	                  }.bind(this) },
 	                'Playlists'
 	              )
@@ -36319,6 +36320,11 @@
 	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
 	  },
 
+	  componentWillReceiveProps: function (newprops) {
+	    PlaylistClientActions.fetchUserPlaylists(newprops.params.user);
+	    TrackClientActions.fetchUserTracks(newprops.params.user);
+	  },
+
 	  componentWillUnmount: function () {
 	    this.trackstorelistener.remove();
 	    this.playliststorelistener.remove();
@@ -36330,15 +36336,15 @@
 	  renderType: function () {
 	    if (this.props.params.tabtype === "tracks") {
 	      return this.state.tracks.map(function (track) {
-	        return React.createElement(UserContentItem, { item: track });
+	        return React.createElement(UserContentItem, { key: track.id + "t", item: track });
 	      });
 	    } else if (this.props.params.tabtype === "playlists") {
 	      return this.state.playlists.map(function (playlist) {
-	        return React.createElement(UserContentItem, { item: playlist });
+	        return React.createElement(UserContentItem, { playlist: playlist.id + "p", item: playlist });
 	      });
 	    } else {
 	      return this.allSorter(this.state.tracks, this.state.playlists).map(function (item) {
-	        return React.createElement(UserContentItem, { item: item });
+	        return React.createElement(UserContentItem, { key: (item.tracks ? item.id : item.id) + "m", item: item });
 	      });
 	    }
 	  },
@@ -36360,16 +36366,30 @@
 /* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1);
+	//stores
+	var MusicStore = __webpack_require__(275);
 
 	var UserContentItem = React.createClass({
 	  displayName: "UserContentItem",
+
+
+	  setMusic: function () {
+	    var item = this.props.item;
+	    if (item.tracks) {
+	      MusicStore.setMusic(undefined, item);
+	    } else {
+	      MusicStore.setMusic(item);
+	    }
+	  },
 
 	  render: function () {
 	    return React.createElement(
 	      "li",
 	      { className: "user-content-items" },
-	      React.createElement("img", { className: "user-content-items-images", src: this.props.item.image_url }),
+	      React.createElement("img", { className: "user-content-items-images", src: this.props.item.image_url,
+	        onClick: this.setMusic }),
 	      React.createElement(
 	        "div",
 	        { className: "user-content-items-info" },
