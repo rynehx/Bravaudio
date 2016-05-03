@@ -6,7 +6,9 @@ var React = require('react'),
 var UserSideBar = React.createClass({
   render: function(){
     return (
-      <div></div>
+      <div className = "user-sidebar">
+        sidebar
+      </div>
     );
   }
 });

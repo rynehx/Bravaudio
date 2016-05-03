@@ -22,6 +22,9 @@ var CurrentSessionState = require('./mixins/currentSessionState'),
 
 //need listener to update store
 
+var UserContentTab = require('./components/userPage/userContentTab');
+
+
 var App = React.createClass({
   mixins: [CurrentSessionState],
   componentWillMount: function(){
@@ -31,9 +34,11 @@ var App = React.createClass({
   },
   render: function(){
     return (
-      <div className = "outer-container">
+      <div className = "background">
         <NavBar />
-        {this.props.children}
+        <div className = "content-container">
+          {this.props.children}
+        </div>
         <MusicBar />
       </div>
     );
@@ -49,7 +54,11 @@ var AppRouter = (
     <Route path="/" components={App}>
       <Route path="home" components={HomePage}/>
       <Route path="upload" components={UploadPage}/>
-      <Route path=":user" components={UserPage}/>
+      <Route path=":user" components={UserPage}>
+        <Route path="all" components={UserContentTab}/>
+        <Route path="tracks" tabtype = "tracks" components={UserContentTab}/>
+        <Route path="playlists" components={UserContentTab}/>
+      </Route>
       <Route path=":user/track/:track" components={TrackPage}/>
       <Route path=":user/playlist/:playlist" components={PlaylistPage}/>
 

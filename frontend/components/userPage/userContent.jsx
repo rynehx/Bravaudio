@@ -1,12 +1,43 @@
 var React = require('react'),
-    UserStore = require('../../stores/userStore'),
     hashHistory = require('react-router').hashHistory;
 
 
+
+
 var UserContent = React.createClass({
+  getInitialState: function () {
+    return { tabtype: "all" };
+  },
+
+  tabbed: function(type){
+    if(type === this.state.tabtype){
+      return " tab-selected";
+    }
+    return "";
+  },
+
   render: function(){
     return (
-      <div></div>
+      <div className = "user-content">
+
+        <div className = "user-content-tabs">
+
+          <div className = {"user-content-tabitems" + this.tabbed("all")}
+            onClick={function(){this.setState({tabtype:"all"});}.bind(this)}>
+
+            All</div>
+          <div className = {"user-content-tabitems" + this.tabbed("tracks")}
+            onClick={function(){this.setState({tabtype:"tracks"});}.bind(this)}>
+            Tracks</div>
+
+          <div className = {"user-content-tabitems" + this.tabbed("playlists")}
+            onClick={function(){this.setState({tabtype:"playlists"});}.bind(this)}>
+            Playlists</div>
+
+        </div>
+
+        {this.props.children}
+      </div>
     );
   }
 });

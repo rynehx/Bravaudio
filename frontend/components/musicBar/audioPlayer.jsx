@@ -41,10 +41,14 @@ var AudioPlayer = React.createClass({
   },
 
   _onChange: function(){
-
       this.setState({audioAction: "pause" ,initial: "0:00", track: MusicStore.currentTrack(),
       playlist: MusicStore.currentPlaylist()});
-
+      //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
+      //also used to reset for slow audio fetching
+      this.refs["audioDom"].currentTime = 0;
+      this.refs["displaytime-current"].innerHTML ="0:00";
+      this.refs["displaytime-end"].innerHTML ="0:00";
+      this.refs["displayprogress-inner"].style.width="0px";
 
   },
 
@@ -78,6 +82,7 @@ var AudioPlayer = React.createClass({
   },
 
   updateProgress: function(e){
+
     if(clickdown){
       var selectedtime=(((e.clientX-this.refs["displayprogress"].offsetLeft)/
         this.refs["displayprogress"].offsetWidth)*
@@ -85,9 +90,14 @@ var AudioPlayer = React.createClass({
         this.refs["audioDom"].currentTime = selectedtime;
 
 
+        this.refs["displaytime-current"].innerHTML = numberToTime(selectedtime);
+
+
         this.refs["displayprogress-inner"].style.width=
         ((e.clientX-this.refs["displayprogress"].offsetLeft)/
           this.refs["displayprogress"].offsetWidth)*400 + 'px';
+
+
      }
 
   },
@@ -158,15 +168,30 @@ var AudioPlayer = React.createClass({
 
         <div ref = "displayprogress" className = "musicbar-progressbar"
           style={{width:'400px'}}
+
           onClick = {function(e){
             clickdown = true;
             this.updateProgress(e);
             clickdown = false;
           }.bind(this)}
-          onMouseDown = {function(){clickdown = true;}}
-          onMouseUp = {function(){clickdown = false;}}
+
+          onMouseDown = {
+            function(){clickdown = true;
+            this.refs["audioDom"].muted = true;
+          }.bind(this)}
+
           onMouseMove = {this.updateProgress}
-          onMouseLeave ={function(){clickdown = false;}} >
+
+          onMouseUp = {function(){
+            clickdown = false;
+            this.refs["audioDom"].muted = false;
+          }.bind(this)}
+
+          onMouseLeave ={function(){
+            clickdown = false;
+            this.refs["audioDom"].muted = false;
+          }.bind(this)} >
+
           <div className = "musicbar-progressbar-inner-base" >
             <div ref = "displayprogress-inner"
               className = "musicbar-progressbar-inner" style={{width:'0px'}}>

@@ -4,13 +4,9 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
 
 var _currentPlaylist = {title:"",audio_url: "", image_url:""},
     _currentTrack = {title:"",audio_url: "", image_url:""},
-    _playedTracks={}, _onRepeat = true;
+    _playedTracks={}, _onRepeat = true, _repeatedSong = false;
 
 var MusicStore = new Store(AppDispatcher);
-
-MusicStore.play = function(track){
-
-};
 
 MusicStore.toggleRepeat = function(){
   if (_onRepeat){
@@ -82,6 +78,7 @@ MusicStore.updateToPreviousTrack = function(action){
   var toBase = ((_currentPlaylist.tracks.indexOf(_currentTrack)) <=0 );
 
     if(toBase){
+      if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
       _currentTrack =  _currentPlaylist.tracks[0];
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)-1];
@@ -99,14 +96,13 @@ MusicStore.updateToNextTrack = function(){
    _currentPlaylist.tracks.length );
 
   if(_onRepeat){
-
     if(toRepeat){
+      if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
       _currentTrack =  _currentPlaylist.tracks[0];
-      console.log("only one track");
+
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
     }
-
   }else{ //repeat off
     console.log("check");
   }
@@ -118,15 +114,20 @@ MusicStore.__onDispatch = function(payload){
   switch(payload.actionType){
     case "UPDATEMUSICBAR":
       MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
+        this.__emitChange();
       break;
     case "PREVIOUSTRACK":
       MusicStore.updateToPreviousTrack();
+        this.__emitChange();
       break;
     case "NEXTTRACK":
       MusicStore.updateToNextTrack();
+        this.__emitChange();
       break;
+
   }
-  this.__emitChange();
+
+
 };
 
 

@@ -35,53 +35,24 @@
  }
 
 
-.navBar {
-  top: 0;
-  position: fixed;
-  width: 100%;
-  height: 30px;
-  background-color: #262e33;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+
 
 #content {
-  margin-top: 40px;
+
 }
 
+html{
+
+}
 
 
 body {
-  margin: 0px;
-  background-color: white;
+
 }
 
-.signup-button {
-  float: right;
-  background-color: gold;
-  display: block;
-  width: 75px;
-  margin: 5px 10px;
+.background{
+  background-color: #EDEDED;
 }
-
-.login-button {
-  float: right;
-  background-color: gold;
-  display: block;
-  width: 75px;
-  margin: 5px 10px;
-}
-
-.logout-button {
-  float: right;
-  background-color: gold;
-  display: block;
-  width: 75px;
-  margin: 5px 10px;
-}
-
-
 
 
 .clearfix:after {
@@ -99,8 +70,6 @@ body {
   margin: 40px 30px;
   background-color: white;
 
-
-
 }
 
 .trendingTracks{
@@ -109,28 +78,6 @@ body {
   margin: 10px;
 }
 
-.sideBar{
-
-}
-
-.upload-button{
-  float: right;
-  background-color: gold;
-  display: block;
-  width: 75px;
-  margin: 5px 10px;
-}
-
-.home-button{
-  float: right;
-  background-color: gold;
-  display: block;
-  width: 75px;
-  margin: 5px 10px;
-}
-
-.upload-box{
-  width: 600px;
-  height:600px;
-  background-color: lightblue;
+.content-container{
+  margin-top: 45px;
 }

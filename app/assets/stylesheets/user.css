@@ -1,0 +1,116 @@
+.userpage{
+  margin: 0 auto;
+  width: 90%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.user-bottom{
+  display: flex;
+
+}
+
+.user-foreground{
+  height: 250px;
+  background-color: grey;
+  display: flex;
+  align-items: center;
+}
+
+.user-content{
+  width: 65%;
+  min-height: 500px;
+  border: 1px;
+  border-color: lightgrey;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+
+.user-sidebar{
+  width: 35%;
+  min-height: 500px;
+  border: 1px;
+  border-color: lightgrey;
+  background-color: pink;
+
+}
+
+.user-profile-pic{
+  width: auto;
+  height: 200px;
+  margin-left: 35px;
+  border-radius: 50%;
+}
+
+
+
+.user-profile-info{
+  height: 200px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;;
+  flex-direction: column;
+  margin-left: 35px;
+}
+
+
+
+.user-profile-location {
+  font-size: 14px;
+  background-color: #16171F;
+  opacity: 0.85;
+  color: white;
+  padding: 2px 8px;
+  margin: 5px;
+  font-family: Arial;
+
+}
+
+.user-profile-username{
+  font-family: Arial;
+  font-size: 24px;
+  background-color: #16171F;
+  opacity: 0.85;
+  color: white;
+  padding: 2px 8px;
+  margin: 5px;
+}
+
+
+.user-content-tabs{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  border-style: solid;
+  border-width: 0px 0px 1px 0px;
+}
+
+.user-content-tabitems{
+  margin: 0px 10px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: black;
+  font-size: 16px;
+  font-family: Tahoma;
+  width: 70px;
+  justify-content: center;
+}
+
+.tab-selected{
+  color: orange;
+  border-bottom: 2px;
+}
+
+.user-content-tab-items{
+  display: flex;
+  flex-direction: column;
+}

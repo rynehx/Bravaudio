@@ -42,8 +42,12 @@ var UserPage = React.createClass({
       );
     }else{
       return(
-      <div>
-        {this.state.user.username}
+      <div className = "userpage">
+        <UserForeground user = {this.state.user}/>
+        <div className = "user-bottom">
+          <UserContent user = {this.state.user}/>
+          <UserSideBar user = {this.state.user}/>
+        </div>
       </div>
       );
     }

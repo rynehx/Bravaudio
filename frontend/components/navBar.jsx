@@ -43,18 +43,18 @@ var NavBar = React.createClass({
     if(!SessionStore.fetchCurrentUser()){
 
       return (
-        <section>
-        <LoginModal sessionAction = "signup" errors = {this.errors()} />
-        <LoginModal sessionAction = "login" errors = {this.errors()}/>
-        </section>
+        <div className = "logged-out-nav">
+          <LoginModal sessionAction = "signup" errors = {this.errors()} />
+          <LoginModal sessionAction = "login" errors = {this.errors()}/>
+        </div>
       );
     }else{
       return (
-        <section>
-        <button className = "logout-button" onClick={this.logout}>logout</button>
-        <button className = "upload-button" onClick={function(){hashHistory.push('upload');}}>upload</button>
-        <button className = "home-button" onClick={function(){hashHistory.push('home');}}>home</button>
-        </section>
+        <div className = "logged-in-nav">
+          <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
+          <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
+          <div className = "home-button nav-buttons" onClick={function(){hashHistory.push('home');}}>home</div>
+        </div>
       );
     }
 
@@ -66,8 +66,9 @@ var NavBar = React.createClass({
 
     return (
       <div className = "navBar">
-        {this.greeting()}
-        {this.loginButtons()}
+        <div className = "navBar-container">
+          {this.loginButtons()}
+        </div>
       </div>
     );
     }

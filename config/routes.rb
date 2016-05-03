@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     get ":username/track/:title", to: "tracks#show"
     get ":username/playlist/:title", to: "playlists#show"
 
+
   end
 
     root "static_pages#root"

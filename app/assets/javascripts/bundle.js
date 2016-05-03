@@ -68,6 +68,8 @@
 
 	//need listener to update store
 
+	var UserContentTab = __webpack_require__(313);
+
 	var App = React.createClass({
 	  displayName: 'App',
 
@@ -80,9 +82,13 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'outer-container' },
+	      { className: 'background' },
 	      React.createElement(NavBar, null),
-	      this.props.children,
+	      React.createElement(
+	        'div',
+	        { className: 'content-container' },
+	        this.props.children
+	      ),
 	      React.createElement(MusicBar, null)
 	    );
 	  }
@@ -96,7 +102,13 @@
 	    { path: '/', components: App },
 	    React.createElement(Route, { path: 'home', components: HomePage }),
 	    React.createElement(Route, { path: 'upload', components: UploadPage }),
-	    React.createElement(Route, { path: ':user', components: UserPage }),
+	    React.createElement(
+	      Route,
+	      { path: ':user', components: UserPage },
+	      React.createElement(Route, { path: 'all', components: UserContentTab }),
+	      React.createElement(Route, { path: 'tracks', tabtype: 'tracks', components: UserContentTab }),
+	      React.createElement(Route, { path: 'playlists', components: UserContentTab })
+	    ),
 	    React.createElement(Route, { path: ':user/track/:track', components: TrackPage }),
 	    React.createElement(Route, { path: ':user/playlist/:playlist', components: PlaylistPage })
 	  )
@@ -25184,30 +25196,30 @@
 	    if (!SessionStore.fetchCurrentUser()) {
 
 	      return React.createElement(
-	        'section',
-	        null,
+	        'div',
+	        { className: 'logged-out-nav' },
 	        React.createElement(LoginModal, { sessionAction: 'signup', errors: this.errors() }),
 	        React.createElement(LoginModal, { sessionAction: 'login', errors: this.errors() })
 	      );
 	    } else {
 	      return React.createElement(
-	        'section',
-	        null,
+	        'div',
+	        { className: 'logged-in-nav' },
 	        React.createElement(
-	          'button',
-	          { className: 'logout-button', onClick: this.logout },
+	          'div',
+	          { className: 'logout-button nav-buttons', onClick: this.logout },
 	          'logout'
 	        ),
 	        React.createElement(
-	          'button',
-	          { className: 'upload-button', onClick: function () {
+	          'div',
+	          { className: 'upload-button nav-buttons', onClick: function () {
 	              hashHistory.push('upload');
 	            } },
 	          'upload'
 	        ),
 	        React.createElement(
-	          'button',
-	          { className: 'home-button', onClick: function () {
+	          'div',
+	          { className: 'home-button nav-buttons', onClick: function () {
 	              hashHistory.push('home');
 	            } },
 	          'home'
@@ -25221,8 +25233,11 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'navBar' },
-	      this.greeting(),
-	      this.loginButtons()
+	      React.createElement(
+	        'div',
+	        { className: 'navBar-container' },
+	        this.loginButtons()
+	      )
 	    );
 	  }
 
@@ -25304,10 +25319,10 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'logged-out-nav' },
 	      React.createElement(
-	        'button',
-	        { className: this.props.sessionAction + "-button", onClick: this.openModal },
+	        'div',
+	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
 	        this.props.sessionAction
 	      ),
 	      React.createElement(
@@ -34538,8 +34553,10 @@
 
 	var _tracks = {};
 	var _displayTrack;
+	var _userTracks;
 	var TrackStore = new Store(AppDispatcher);
 
+	////Trending Page methods
 	TrackStore.all = function () {
 	  var res = [];
 	  for (var key in _tracks) {
@@ -34548,10 +34565,6 @@
 	    }
 	  }
 	  return res;
-	};
-
-	TrackStore.displayTrack = function () {
-	  return _displayTrack;
 	};
 
 	TrackStore.recieveTracks = function (tracks) {
@@ -34565,6 +34578,12 @@
 	  TrackStore.__emitChange();
 	};
 
+	/////////Track Display Page Methods
+
+	TrackStore.displayTrack = function () {
+	  return _displayTrack;
+	};
+
 	TrackStore.recieveDisplayTrack = function (track) {
 	  _displayTrack = track;
 	  TrackStore.__emitChange();
@@ -34574,6 +34593,16 @@
 	  _displayTrack = null;
 	  TrackStore.__emitChange();
 	};
+	///////User page tracklist methods
+	TrackStore.userTracks = function () {
+	  return _userTracks;
+	};
+
+	TrackStore.receiveUserTracks = function (tracks) {
+	  _userTracks = tracks;
+	};
+
+	///////
 
 	TrackStore.__onDispatch = function (payload) {
 
@@ -34583,6 +34612,9 @@
 	      break;
 	    case TrackConstants.RECEIVEDISPLAYTRACK:
 	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	    case TrackConstants.RECEIVEDUSERTRACKS:
+	      TrackStore.receiveUserTracks(payload.tracks);
 	      break;
 	    case TrackConstants.DIDNOTFINDTRACK:
 	      TrackStore.fetchedNoTrack();
@@ -34650,9 +34682,14 @@
 	  },
 
 	  _onChange: function () {
-
 	    this.setState({ audioAction: "pause", initial: "0:00", track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
+	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
+	    //also used to reset for slow audio fetching
+	    this.refs["audioDom"].currentTime = 0;
+	    this.refs["displaytime-current"].innerHTML = "0:00";
+	    this.refs["displaytime-end"].innerHTML = "0:00";
+	    this.refs["displayprogress-inner"].style.width = "0px";
 	  },
 
 	  audioActionButton: function () {
@@ -34680,9 +34717,12 @@
 	  },
 
 	  updateProgress: function (e) {
+
 	    if (clickdown) {
 	      var selectedtime = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
 	      this.refs["audioDom"].currentTime = selectedtime;
+
+	      this.refs["displaytime-current"].innerHTML = numberToTime(selectedtime);
 
 	      this.refs["displayprogress-inner"].style.width = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * 400 + 'px';
 	    }
@@ -34768,21 +34808,29 @@
 	        'div',
 	        { ref: 'displayprogress', className: 'musicbar-progressbar',
 	          style: { width: '400px' },
+
 	          onClick: function (e) {
 	            clickdown = true;
 	            this.updateProgress(e);
 	            clickdown = false;
 	          }.bind(this),
+
 	          onMouseDown: function () {
 	            clickdown = true;
-	          },
+	            this.refs["audioDom"].muted = true;
+	          }.bind(this),
+
+	          onMouseMove: this.updateProgress,
+
 	          onMouseUp: function () {
 	            clickdown = false;
-	          },
-	          onMouseMove: this.updateProgress,
+	            this.refs["audioDom"].muted = false;
+	          }.bind(this),
+
 	          onMouseLeave: function () {
 	            clickdown = false;
-	          } },
+	            this.refs["audioDom"].muted = false;
+	          }.bind(this) },
 	        React.createElement(
 	          'div',
 	          { className: 'musicbar-progressbar-inner-base' },
@@ -34867,11 +34915,10 @@
 	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
 	    _currentTrack = { title: "", audio_url: "", image_url: "" },
 	    _playedTracks = {},
-	    _onRepeat = true;
+	    _onRepeat = true,
+	    _repeatedSong = false;
 
 	var MusicStore = new Store(AppDispatcher);
-
-	MusicStore.play = function (track) {};
 
 	MusicStore.toggleRepeat = function () {
 	  if (_onRepeat) {
@@ -34936,6 +34983,9 @@
 	  var toBase = _currentPlaylist.tracks.indexOf(_currentTrack) <= 0;
 
 	  if (toBase) {
+	    if (_currentTrack === _currentPlaylist.tracks[0]) {
+	      _repeatedSong = true;
+	    }
 	    _currentTrack = _currentPlaylist.tracks[0];
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) - 1];
@@ -34949,10 +34999,11 @@
 	  var toRepeat = _currentPlaylist.tracks.indexOf(_currentTrack) + 1 >= _currentPlaylist.tracks.length;
 
 	  if (_onRepeat) {
-
 	    if (toRepeat) {
+	      if (_currentTrack === _currentPlaylist.tracks[0]) {
+	        _repeatedSong = true;
+	      }
 	      _currentTrack = _currentPlaylist.tracks[0];
-	      console.log("only one track");
 	    } else {
 	      _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
 	    }
@@ -34967,15 +35018,18 @@
 	  switch (payload.actionType) {
 	    case "UPDATEMUSICBAR":
 	      MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
+	      this.__emitChange();
 	      break;
 	    case "PREVIOUSTRACK":
 	      MusicStore.updateToPreviousTrack();
+	      this.__emitChange();
 	      break;
 	    case "NEXTTRACK":
 	      MusicStore.updateToNextTrack();
+	      this.__emitChange();
 	      break;
+
 	  }
-	  this.__emitChange();
 	};
 
 	module.exports = MusicStore;
@@ -35227,6 +35281,12 @@
 	    Dispatcher.dispatch({
 	      actionType: trackConstants.DIDNOTFETCHTRACKS
 	    });
+	  },
+	  receiveUserTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: trackConstants.RECEIVEDUSERTRACKS,
+	      tracks: tracks
+	    });
 	  }
 
 	};
@@ -35417,8 +35477,10 @@
 
 	var _tracks = {};
 	var _displayTrack;
+	var _userTracks;
 	var TrackStore = new Store(AppDispatcher);
 
+	////Trending Page methods
 	TrackStore.all = function () {
 	  var res = [];
 	  for (var key in _tracks) {
@@ -35427,10 +35489,6 @@
 	    }
 	  }
 	  return res;
-	};
-
-	TrackStore.displayTrack = function () {
-	  return _displayTrack;
 	};
 
 	TrackStore.recieveTracks = function (tracks) {
@@ -35444,6 +35502,12 @@
 	  TrackStore.__emitChange();
 	};
 
+	/////////Track Display Page Methods
+
+	TrackStore.displayTrack = function () {
+	  return _displayTrack;
+	};
+
 	TrackStore.recieveDisplayTrack = function (track) {
 	  _displayTrack = track;
 	  TrackStore.__emitChange();
@@ -35453,6 +35517,16 @@
 	  _displayTrack = null;
 	  TrackStore.__emitChange();
 	};
+	///////User page tracklist methods
+	TrackStore.userTracks = function () {
+	  return _userTracks;
+	};
+
+	TrackStore.receiveUserTracks = function (tracks) {
+	  _userTracks = tracks;
+	};
+
+	///////
 
 	TrackStore.__onDispatch = function (payload) {
 
@@ -35462,6 +35536,9 @@
 	      break;
 	    case TrackConstants.RECEIVEDISPLAYTRACK:
 	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	    case TrackConstants.RECEIVEDUSERTRACKS:
+	      TrackStore.receiveUserTracks(payload.tracks);
 	      break;
 	    case TrackConstants.DIDNOTFINDTRACK:
 	      TrackStore.fetchedNoTrack();
@@ -35592,8 +35669,14 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        null,
-	        this.state.user.username
+	        { className: 'userpage' },
+	        React.createElement(UserForeground, { user: this.state.user }),
+	        React.createElement(
+	          'div',
+	          { className: 'user-bottom' },
+	          React.createElement(UserContent, { user: this.state.user }),
+	          React.createElement(UserSideBar, { user: this.state.user })
+	        )
 	      );
 	    }
 	  }
@@ -35718,14 +35801,56 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserContent = React.createClass({
 	  displayName: 'UserContent',
 
+	  getInitialState: function () {
+	    return { tabtype: "all" };
+	  },
+
+	  tabbed: function (type) {
+	    if (type === this.state.tabtype) {
+	      return " tab-selected";
+	    }
+	    return "";
+	  },
+
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      { className: 'user-content' },
+	      React.createElement(
+	        'div',
+	        { className: 'user-content-tabs' },
+	        React.createElement(
+	          'div',
+	          { className: "user-content-tabitems" + this.tabbed("all"),
+	            onClick: function () {
+	              this.setState({ tabtype: "all" });
+	            }.bind(this) },
+	          'All'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: "user-content-tabitems" + this.tabbed("tracks"),
+	            onClick: function () {
+	              this.setState({ tabtype: "tracks" });
+	            }.bind(this) },
+	          'Tracks'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: "user-content-tabitems" + this.tabbed("playlists"),
+	            onClick: function () {
+	              this.setState({ tabtype: "playlists" });
+	            }.bind(this) },
+	          'Playlists'
+	        )
+	      ),
+	      this.props.children
+	    );
 	  }
 	});
 
@@ -35736,14 +35861,53 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var imgsrc = "http://assets.audiomack.com/crooklyn00/98fe3aaa11182c65006502a066f05840.jpeg";
 
 	var UserForeground = React.createClass({
 	  displayName: 'UserForeground',
 
+
+	  getInitialState: function () {
+
+	    return { posts: [] };
+	  },
+	  componentDidMount: function () {
+
+	    // var img = document.createElement('img');
+	    // img.setAttribute('src', imgsrc);
+	    //
+	    //
+	    // var lol = new Vibrant(img,3);
+
+	  },
+
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      { className: 'user-foreground' },
+	      React.createElement('img', { className: 'user-profile-pic', src: imgsrc, id: 'profile-image' }),
+	      React.createElement(
+	        'div',
+	        { className: 'user-profile-info' },
+	        React.createElement(
+	          'div',
+	          { className: 'user-profile-username' },
+	          this.props.user.username
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'user-profile-location' },
+	          'Henry Li'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'user-profile-location' },
+	          'City, State, Country'
+	        )
+	      )
+	    );
 	  }
 	});
 
@@ -35761,7 +35925,11 @@
 	  displayName: 'UserSideBar',
 
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      { className: 'user-sidebar' },
+	      'sidebar'
+	    );
 	  }
 	});
 
@@ -36056,6 +36224,50 @@
 	});
 
 	module.exports = PlaylistNotFound;
+
+/***/ },
+/* 311 */,
+/* 312 */,
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    UserStore = __webpack_require__(292);
+
+	var userContentTab = React.createClass({
+	  displayName: 'userContentTab',
+
+	  getInitialState: function () {
+	    return { contents: [] };
+	  },
+
+	  componentDidMount: function () {
+	    debugger;
+	    //   this.trackstorelistener = TrackStore.addListener(this._onChange);
+	    //   this.playliststorelistener = PlaylistStore.addListener(this._onChange);
+	  },
+	  _onChange: function () {
+	    // this.setState({tracks: , playlists: })
+
+	  },
+
+	  componentWillUnmount: function () {
+	    // this.trackstorelistener.remove();
+	    // this.playliststorelistener.remove();
+	  },
+
+	  componentWillReceiveProps: function () {},
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'user-content-tab-items' },
+	      this.props.tabtype
+	    );
+	  }
+	});
+
+	module.exports = userContentTab;
 
 /***/ }
 /******/ ]);

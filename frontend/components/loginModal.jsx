@@ -69,8 +69,8 @@ var LoginModal = React.createClass({
     },
     render: function() {
       return (
-        <div>
-        <button className={this.props.sessionAction + "-button"} onClick={this.openModal}>{this.props.sessionAction}</button>
+        <div className = "logged-out-nav">
+        <div className={this.props.sessionAction + "-button nav-buttons"} onClick={this.openModal}>{this.props.sessionAction}</div>
         <Modal
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
