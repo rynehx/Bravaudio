@@ -79,5 +79,7 @@ body {
 }
 
 .content-container{
-  margin-top: 45px;
+  margin: 42px auto 0px auto;
+  max-width: 1130px;
+  width: 87%;
 }

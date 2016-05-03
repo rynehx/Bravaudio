@@ -1,38 +1,79 @@
-var React = require('react'),
-    UserStore = require('../../stores/userStore');
+//react
+var React = require('react');
+//stores
+var UserStore = require('../../stores/userStore'),
+    TrackStore = require('../../stores/trackStore'),
+    PlaylistStore = require('../../stores/playlistStore'),
+    MusicStore = require('../../stores/musicStore');
+//actions
+var TrackClientActions = require('../../actions/trackClientActions'),
+    PlaylistClientActions = require('../../actions/playlistClientActions');
+//components
+var UserContentItem = require("./UserContentItem");
 
-var userContentTab = React.createClass({
+
+var dateComparator = function(time1,time2){
+  var t1 = new Date(time1.created_at);
+  var t2 = new Date(time2.created_at);
+
+  if(t1 < t2){
+    return (-1);
+  }else{
+    return (1);
+  }
+};
+
+
+var UserContentTab = React.createClass({
   getInitialState: function () {
-    return { contents: [] };
+
+    return { contents: [], tracks: [], playlists: [] };
   },
 
-  componentDidMount: function(){
-    debugger
-  //   this.trackstorelistener = TrackStore.addListener(this._onChange);
-  //   this.playliststorelistener = PlaylistStore.addListener(this._onChange);
-   },
-  _onChange: function(){
-    // this.setState({tracks: , playlists: })
 
+  componentDidMount: function(){
+
+    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
+    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
+    PlaylistClientActions.fetchUserPlaylists(this.props.params.user);
+    TrackClientActions.fetchUserTracks(this.props.params.user);
+   },
+
+  _onChangeTracks: function(){
+    this.setState({tracks:TrackStore.displayUserTracks()});
+  },
+
+  _onChangePlaylists: function(){
+    this.setState({playlists: PlaylistStore.displayUserPlaylists()});
   },
 
   componentWillUnmount: function(){
-    // this.trackstorelistener.remove();
-    // this.playliststorelistener.remove();
+     this.trackstorelistener.remove();
+     this.playliststorelistener.remove();
   },
-
-  componentWillReceiveProps: function(){
-
+  allSorter: function(arr1,arr2){
+    return (arr1.concat(arr2)).sort(dateComparator);
+  }
+  ,
+  renderType: function(){
+     if(this.props.params.tabtype === "tracks"){
+      return this.state.tracks.map(function(track){return <UserContentItem item = {track}/>;});
+    }else if(this.props.params.tabtype === "playlists"){
+      return this.state.playlists.map(function(playlist){return <UserContentItem item = {playlist}/>;});
+    }else{
+      return this.allSorter(this.state.tracks,this.state.playlists).map(function(item){return <UserContentItem item = {item}/>;});
+    }
 
   },
 
   render: function(){
+
     return (
-      <div className = "user-content-tab-items">
-        {this.props.tabtype}
-      </div>
+      <ul className = "user-content-tab-items">
+        {this.renderType()}
+      </ul>
     );
   }
 });
 
-module.exports = userContentTab;
+module.exports = UserContentTab;

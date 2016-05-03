@@ -30,6 +30,11 @@ var TrackPage = React.createClass({
     this.trackstorelistener.remove();
   },
 
+  componentWillReceiveProps: function(nextprops){
+    TrackClientActions.fetchDisplayTrack(nextprops.params.user,
+      nextprops.params.track);
+  },
+
   _onChange: function(){
     this.setState({track: TrackStore.displayTrack()});
   },

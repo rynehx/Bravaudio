@@ -27,7 +27,7 @@ var TrackServerActions = {
   },
   receiveUserTracks: function(tracks){
     Dispatcher.dispatch({
-      actionType: trackConstants.RECEIVEDUSERTRACKS,
+      actionType: trackConstants.RECEIVEUSERTRACKS,
       tracks: tracks
     });
   }

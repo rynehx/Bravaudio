@@ -12,7 +12,17 @@ class Api::PlaylistsController < ApplicationController
     end
   end
 
+  def user_playlists
+    author = User.find_by(username: params[:username])
+    @playlists = author.playlists.includes(:tracks)
+    if @playlists
+      render "api/playlists/index"
+    else
+      @errors = ['playlist not found']
+      render "api/shared/error", status: 404
+    end
 
+  end
 
 
 

@@ -11,9 +11,9 @@ var TrackClientActions = {
     TrackApiUtil.fetchDisplayTrack(user,track);
   },
 
-  fetchUserTracks: function(user){
 
-
+  fetchUserTracks: function(username){
+    TrackApiUtil.fetchUserTracks(username);
   },
 
   fetchPlaylistTracks: function(playlist){

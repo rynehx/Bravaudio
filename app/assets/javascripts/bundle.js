@@ -60,7 +60,7 @@
 	    UploadPage = __webpack_require__(284),
 	    TrackPage = __webpack_require__(285),
 	    UserPage = __webpack_require__(291),
-	    PlaylistPage = __webpack_require__(301);
+	    PlaylistPage = __webpack_require__(300);
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -68,7 +68,8 @@
 
 	//need listener to update store
 
-	var UserContentTab = __webpack_require__(313);
+	//userpage components
+	var UserContentTab = __webpack_require__(310);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -105,9 +106,8 @@
 	    React.createElement(
 	      Route,
 	      { path: ':user', components: UserPage },
-	      React.createElement(Route, { path: 'all', components: UserContentTab }),
-	      React.createElement(Route, { path: 'tracks', tabtype: 'tracks', components: UserContentTab }),
-	      React.createElement(Route, { path: 'playlists', components: UserContentTab })
+	      React.createElement(IndexRoute, { component: UserContentTab }),
+	      React.createElement(Route, { path: ':tabtype', components: UserContentTab })
 	    ),
 	    React.createElement(Route, { path: ':user/track/:track', components: TrackPage }),
 	    React.createElement(Route, { path: ':user/playlist/:playlist', components: PlaylistPage })
@@ -34558,23 +34558,11 @@
 
 	////Trending Page methods
 	TrackStore.all = function () {
-	  var res = [];
-	  for (var key in _tracks) {
-	    if (_tracks.hasOwnProperty(key)) {
-	      res.push(_tracks[key]);
-	    }
-	  }
-	  return res;
+	  return _tracks;
 	};
 
 	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = {};
-
-	  for (var key in tracks) {
-	    if (tracks.hasOwnProperty(key)) {
-	      _tracks[key] = tracks[key];
-	    }
-	  }
+	  _tracks = tracks;
 	  TrackStore.__emitChange();
 	};
 
@@ -34600,12 +34588,16 @@
 
 	TrackStore.receiveUserTracks = function (tracks) {
 	  _userTracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.displayUserTracks = function () {
+	  return _userTracks;
 	};
 
 	///////
 
 	TrackStore.__onDispatch = function (payload) {
-
 	  switch (payload.actionType) {
 	    case TrackConstants.RECEIVETRACKS:
 	      TrackStore.recieveTracks(payload.tracks);
@@ -34613,7 +34605,7 @@
 	    case TrackConstants.RECEIVEDISPLAYTRACK:
 	      TrackStore.recieveDisplayTrack(payload.track);
 	      break;
-	    case TrackConstants.RECEIVEDUSERTRACKS:
+	    case TrackConstants.RECEIVEUSERTRACKS:
 	      TrackStore.receiveUserTracks(payload.tracks);
 	      break;
 	    case TrackConstants.DIDNOTFINDTRACK:
@@ -34634,7 +34626,8 @@
 	  RECEIVETRACKS: "RECEIVETRACKS",
 	  RECEIVEDISPLAYTRACK: "RECEIVEDISPLAYTRACK",
 	  DIDNOTFINDTRACK: "DIDNOTFINDTRACK",
-	  DIDNOTFETCHTRACKS: "DIDNOTFETCHTRACKS"
+	  DIDNOTFETCHTRACKS: "DIDNOTFETCHTRACKS",
+	  RECEIVEUSERTRACKS: "RECEIVEUSERTRACKS"
 	};
 
 /***/ },
@@ -35201,7 +35194,9 @@
 	    TrackApiUtil.fetchDisplayTrack(user, track);
 	  },
 
-	  fetchUserTracks: function (user) {},
+	  fetchUserTracks: function (username) {
+	    TrackApiUtil.fetchUserTracks(username);
+	  },
 
 	  fetchPlaylistTracks: function (playlist) {}
 
@@ -35233,6 +35228,18 @@
 	      url: "api/" + user + "/track/" + track,
 	      success: TrackServerActions.receiveDisplayTrack,
 	      error: TrackServerActions.didNotFindTrack
+	    };
+
+	    $.ajax(request);
+	  },
+	  fetchUserTracks: function (user) {
+	    var request = {
+	      type: "GET",
+	      url: "api/" + user + "/tracks",
+	      success: TrackServerActions.receiveUserTracks,
+	      error: function () {
+	        console.log("did not retrieve user tracks");
+	      }
 	    };
 
 	    $.ajax(request);
@@ -35284,7 +35291,7 @@
 	  },
 	  receiveUserTracks: function (tracks) {
 	    Dispatcher.dispatch({
-	      actionType: trackConstants.RECEIVEDUSERTRACKS,
+	      actionType: trackConstants.RECEIVEUSERTRACKS,
 	      tracks: tracks
 	    });
 	  }
@@ -35417,6 +35424,10 @@
 	    this.trackstorelistener.remove();
 	  },
 
+	  componentWillReceiveProps: function (nextprops) {
+	    TrackClientActions.fetchDisplayTrack(nextprops.params.user, nextprops.params.track);
+	  },
+
 	  _onChange: function () {
 	    this.setState({ track: TrackStore.displayTrack() });
 	  },
@@ -35482,23 +35493,11 @@
 
 	////Trending Page methods
 	TrackStore.all = function () {
-	  var res = [];
-	  for (var key in _tracks) {
-	    if (_tracks.hasOwnProperty(key)) {
-	      res.push(_tracks[key]);
-	    }
-	  }
-	  return res;
+	  return _tracks;
 	};
 
 	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = {};
-
-	  for (var key in tracks) {
-	    if (tracks.hasOwnProperty(key)) {
-	      _tracks[key] = tracks[key];
-	    }
-	  }
+	  _tracks = tracks;
 	  TrackStore.__emitChange();
 	};
 
@@ -35524,12 +35523,16 @@
 
 	TrackStore.receiveUserTracks = function (tracks) {
 	  _userTracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.displayUserTracks = function () {
+	  return _userTracks;
 	};
 
 	///////
 
 	TrackStore.__onDispatch = function (payload) {
-
 	  switch (payload.actionType) {
 	    case TrackConstants.RECEIVETRACKS:
 	      TrackStore.recieveTracks(payload.tracks);
@@ -35537,7 +35540,7 @@
 	    case TrackConstants.RECEIVEDISPLAYTRACK:
 	      TrackStore.recieveDisplayTrack(payload.track);
 	      break;
-	    case TrackConstants.RECEIVEDUSERTRACKS:
+	    case TrackConstants.RECEIVEUSERTRACKS:
 	      TrackStore.receiveUserTracks(payload.tracks);
 	      break;
 	    case TrackConstants.DIDNOTFINDTRACK:
@@ -35632,10 +35635,9 @@
 	//actions
 	var UserClientActions = __webpack_require__(294);
 	//components
-	var UserContent = __webpack_require__(297),
-	    UserForeground = __webpack_require__(298),
-	    UserSideBar = __webpack_require__(299),
-	    UserNotFound = __webpack_require__(300);
+	var UserForeground = __webpack_require__(297),
+	    UserSideBar = __webpack_require__(298),
+	    UserNotFound = __webpack_require__(299);
 
 	var page;
 
@@ -35643,7 +35645,16 @@
 	  displayName: 'UserPage',
 
 	  getInitialState: function () {
-	    return { user: { username: "", name: "", city: "", country: "", state: "" } };
+	    return { user: { username: "", name: "", city: "",
+	        country: "", state: "" }, tabtype: this.initialTabSet() };
+	  },
+
+	  initialTabSet: function () {
+
+	    if (!this.props.params.tabtype) {
+	      return "all";
+	    }
+	    return this.props.params.tabtype;
 	  },
 
 	  componentDidMount: function () {
@@ -35657,6 +35668,20 @@
 
 	  _onChange: function () {
 	    this.setState({ user: UserStore.currentDisplayUser() });
+	  },
+
+	  tabbed: function (type) {
+	    if (type === this.state.tabtype) {
+	      return " tab-selected";
+	    }
+	    return "";
+	  },
+	  pushTabs: function (action) {
+	    if (action === "all") {
+	      hashHistory.push("/" + this.props.params.user + "/");
+	    } else {
+	      hashHistory.push("/" + this.props.params.user + "/" + action);
+	    }
 	  },
 
 	  render: function () {
@@ -35674,7 +35699,42 @@
 	        React.createElement(
 	          'div',
 	          { className: 'user-bottom' },
-	          React.createElement(UserContent, { user: this.state.user }),
+	          React.createElement(
+	            'div',
+	            { className: 'user-content' },
+	            React.createElement(
+	              'div',
+	              { className: 'user-content-tabs' },
+	              React.createElement(
+	                'div',
+	                { className: "user-content-tabitems" + this.tabbed("all"),
+	                  onClick: function () {
+	                    this.pushTabs("all");
+	                    this.setState({ tabtype: "all" });
+	                  }.bind(this) },
+	                'All'
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: "user-content-tabitems" + this.tabbed("tracks"),
+	                  onClick: function () {
+	                    this.pushTabs("tracks");
+	                    this.setState({ tabtype: "tracks" });
+	                  }.bind(this) },
+	                'Tracks'
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: "user-content-tabitems" + this.tabbed("playlists"),
+	                  onClick: function () {
+	                    this.pushTabs("playlists");
+	                    this.setState({ tabtype: "playlists" });
+	                  }.bind(this) },
+	                'Playlists'
+	              )
+	            ),
+	            this.props.children
+	          ),
 	          React.createElement(UserSideBar, { user: this.state.user })
 	        )
 	      );
@@ -35803,66 +35863,6 @@
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
-	var UserContent = React.createClass({
-	  displayName: 'UserContent',
-
-	  getInitialState: function () {
-	    return { tabtype: "all" };
-	  },
-
-	  tabbed: function (type) {
-	    if (type === this.state.tabtype) {
-	      return " tab-selected";
-	    }
-	    return "";
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'user-content' },
-	      React.createElement(
-	        'div',
-	        { className: 'user-content-tabs' },
-	        React.createElement(
-	          'div',
-	          { className: "user-content-tabitems" + this.tabbed("all"),
-	            onClick: function () {
-	              this.setState({ tabtype: "all" });
-	            }.bind(this) },
-	          'All'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: "user-content-tabitems" + this.tabbed("tracks"),
-	            onClick: function () {
-	              this.setState({ tabtype: "tracks" });
-	            }.bind(this) },
-	          'Tracks'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: "user-content-tabitems" + this.tabbed("playlists"),
-	            onClick: function () {
-	              this.setState({ tabtype: "playlists" });
-	            }.bind(this) },
-	          'Playlists'
-	        )
-	      ),
-	      this.props.children
-	    );
-	  }
-	});
-
-	module.exports = UserContent;
-
-/***/ },
-/* 298 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
 	var imgsrc = "http://assets.audiomack.com/crooklyn00/98fe3aaa11182c65006502a066f05840.jpeg";
 
 	var UserForeground = React.createClass({
@@ -35887,7 +35887,11 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'user-foreground' },
-	      React.createElement('img', { className: 'user-profile-pic', src: imgsrc, id: 'profile-image' }),
+	      React.createElement(
+	        'div',
+	        { className: 'user-profile-pic-container' },
+	        React.createElement('img', { className: 'user-profile-pic', src: imgsrc, id: 'profile-image' })
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'user-profile-info' },
@@ -35914,7 +35918,7 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35936,7 +35940,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35958,7 +35962,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35966,14 +35970,14 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(251),
-	    PlaylistStore = __webpack_require__(302);
+	    PlaylistStore = __webpack_require__(301);
 	//actions
-	var PlaylistClientActions = __webpack_require__(304);
+	var PlaylistClientActions = __webpack_require__(303);
 	//components
-	var PlaylistContent = __webpack_require__(307),
-	    PlaylistSideBar = __webpack_require__(308),
-	    PlaylistForeground = __webpack_require__(309),
-	    PlaylistNotFound = __webpack_require__(310);
+	var PlaylistContent = __webpack_require__(306),
+	    PlaylistSideBar = __webpack_require__(307),
+	    PlaylistForeground = __webpack_require__(308),
+	    PlaylistNotFound = __webpack_require__(309);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -36019,18 +36023,23 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    PlaylistConstants = __webpack_require__(303);
+	    PlaylistConstants = __webpack_require__(302);
 
 	var _displayPlaylist;
+	var _playlists;
 	var PlaylistStore = new Store(AppDispatcher);
 
 	PlaylistStore.displayPlaylist = function () {
 	  return _displayPlaylist;
+	};
+
+	PlaylistStore.displayUserPlaylists = function () {
+	  return _playlists;
 	};
 
 	PlaylistStore.receiveDisplayPlaylist = function (playlist) {
@@ -36043,8 +36052,12 @@
 	  this.__emitChange();
 	};
 
-	PlaylistStore.__onDispatch = function (payload) {
+	PlaylistStore.receiveUserPlaylists = function (playlists) {
+	  _playlists = playlists;
+	  this.__emitChange();
+	};
 
+	PlaylistStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
 	      PlaylistStore.receiveDisplayPlaylist(payload.playlist);
@@ -36052,39 +36065,47 @@
 	    case PlaylistConstants.RECEIVEDNOPLAYLIST:
 	      PlaylistStore.receivedNoPlaylist();
 	      break;
+	    case PlaylistConstants.RECEIVEUSERPLAYLISTS:
+	      PlaylistStore.receiveUserPlaylists(payload.playlists);
+	      break;
+
 	  }
 	};
 
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports) {
 
 	module.exports = {
 	  RECEIVEDISPLAYPLAYLIST: "RECEIVEDISPLAYPLAYLIST",
-	  RECEIVEDNOPLAYLIST: "RECEIVEDNOPLAYLIST"
+	  RECEIVEDNOPLAYLIST: "RECEIVEDNOPLAYLIST",
+	  RECEIVEUSERPLAYLISTS: "RECEIVEUSERPLAYLISTS"
 	};
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(305);
+	var PlaylistApiUtil = __webpack_require__(304);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
 	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
+	  },
+	  fetchUserPlaylists: function (user) {
+	    PlaylistApiUtil.fetchUserPlaylists(user);
 	  }
 	};
 
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(306);
+	var PlaylistServerActions = __webpack_require__(305);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36100,17 +36121,32 @@
 	    };
 
 	    $.ajax(request);
+	  },
+	  fetchUserPlaylists: function (user) {
+	    var request = {
+	      type: "get",
+	      url: "api/" + user + "/playlists",
+	      success: function (data) {
+	        PlaylistServerActions.receiveUserPlaylists(data);
+	      },
+	      error: function (error) {
+	        console.log("user playlists not fetched");
+	      }
+	    };
+
+	    $.ajax(request);
 	  }
+
 	};
 
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    PlaylistConstants = __webpack_require__(303);
+	    PlaylistConstants = __webpack_require__(302);
 
 	var PlaylistServerActions = {
 	  receiveDisplayPlaylist: function (playlist) {
@@ -36123,17 +36159,23 @@
 	    Dispatcher.dispatch({
 	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
 	    });
+	  },
+	  receiveUserPlaylists: function (playlists) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEUSERPLAYLISTS,
+	      playlists: playlists
+	    });
 	  }
 	};
 
 	module.exports = PlaylistServerActions;
 
 /***/ },
-/* 307 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(301),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistContent = React.createClass({
@@ -36153,11 +36195,11 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 308 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(301),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistSideBar = React.createClass({
@@ -36177,11 +36219,11 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(301),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistForeground = React.createClass({
@@ -36201,11 +36243,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 310 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(301),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -36226,48 +36268,118 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 311 */,
-/* 312 */,
-/* 313 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(292);
+	//react
+	var React = __webpack_require__(1);
+	//stores
+	var UserStore = __webpack_require__(292),
+	    TrackStore = __webpack_require__(271),
+	    PlaylistStore = __webpack_require__(301),
+	    MusicStore = __webpack_require__(275);
+	//actions
+	var TrackClientActions = __webpack_require__(279),
+	    PlaylistClientActions = __webpack_require__(303);
+	//components
+	var UserContentItem = __webpack_require__(312);
 
-	var userContentTab = React.createClass({
-	  displayName: 'userContentTab',
+	var dateComparator = function (time1, time2) {
+	  var t1 = new Date(time1.created_at);
+	  var t2 = new Date(time2.created_at);
+
+	  if (t1 < t2) {
+	    return -1;
+	  } else {
+	    return 1;
+	  }
+	};
+
+	var UserContentTab = React.createClass({
+	  displayName: 'UserContentTab',
 
 	  getInitialState: function () {
-	    return { contents: [] };
+
+	    return { contents: [], tracks: [], playlists: [] };
 	  },
 
 	  componentDidMount: function () {
-	    debugger;
-	    //   this.trackstorelistener = TrackStore.addListener(this._onChange);
-	    //   this.playliststorelistener = PlaylistStore.addListener(this._onChange);
-	  },
-	  _onChange: function () {
-	    // this.setState({tracks: , playlists: })
 
+	    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
+	    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
+	    PlaylistClientActions.fetchUserPlaylists(this.props.params.user);
+	    TrackClientActions.fetchUserTracks(this.props.params.user);
+	  },
+
+	  _onChangeTracks: function () {
+	    this.setState({ tracks: TrackStore.displayUserTracks() });
+	  },
+
+	  _onChangePlaylists: function () {
+	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
 	  },
 
 	  componentWillUnmount: function () {
-	    // this.trackstorelistener.remove();
-	    // this.playliststorelistener.remove();
+	    this.trackstorelistener.remove();
+	    this.playliststorelistener.remove();
+	  },
+	  allSorter: function (arr1, arr2) {
+	    return arr1.concat(arr2).sort(dateComparator);
 	  },
 
-	  componentWillReceiveProps: function () {},
+	  renderType: function () {
+	    if (this.props.params.tabtype === "tracks") {
+	      return this.state.tracks.map(function (track) {
+	        return React.createElement(UserContentItem, { item: track });
+	      });
+	    } else if (this.props.params.tabtype === "playlists") {
+	      return this.state.playlists.map(function (playlist) {
+	        return React.createElement(UserContentItem, { item: playlist });
+	      });
+	    } else {
+	      return this.allSorter(this.state.tracks, this.state.playlists).map(function (item) {
+	        return React.createElement(UserContentItem, { item: item });
+	      });
+	    }
+	  },
 
 	  render: function () {
+
 	    return React.createElement(
-	      'div',
+	      'ul',
 	      { className: 'user-content-tab-items' },
-	      this.props.tabtype
+	      this.renderType()
 	    );
 	  }
 	});
 
-	module.exports = userContentTab;
+	module.exports = UserContentTab;
+
+/***/ },
+/* 311 */,
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var UserContentItem = React.createClass({
+	  displayName: "UserContentItem",
+
+	  render: function () {
+	    return React.createElement(
+	      "li",
+	      { className: "user-content-items" },
+	      React.createElement("img", { className: "user-content-items-images", src: this.props.item.image_url }),
+	      React.createElement(
+	        "div",
+	        { className: "user-content-items-info" },
+	        this.props.item.title
+	      )
+	    );
+	  }
+	});
+
+	module.exports = UserContentItem;
 
 /***/ }
 /******/ ]);

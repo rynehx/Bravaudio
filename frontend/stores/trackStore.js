@@ -9,25 +9,13 @@ var TrackStore = new Store(AppDispatcher);
 
 ////Trending Page methods
 TrackStore.all = function(){
-  var res = [];
-  for(var key in _tracks){
-    if(_tracks.hasOwnProperty(key)){
-     res.push(_tracks[key]);
-    }
-  }
-  return res;
+  return _tracks;
 };
 
 
 
 TrackStore.recieveTracks = function(tracks){
-    _tracks={};
-
-  for(var key in tracks){
-    if(tracks.hasOwnProperty(key)){
-    _tracks[key] = tracks[key];
-    }
-  }
+  _tracks=tracks;
   TrackStore.__emitChange();
 };
 
@@ -56,13 +44,17 @@ TrackStore.userTracks = function(){
 
 TrackStore.receiveUserTracks = function(tracks){
   _userTracks = tracks;
+  TrackStore.__emitChange();
+};
+
+TrackStore.displayUserTracks = function(){
+  return _userTracks;
 };
 
 
 ///////
 
 TrackStore.__onDispatch = function(payload){
-
   switch(payload.actionType){
     case TrackConstants.RECEIVETRACKS:
       TrackStore.recieveTracks(payload.tracks);
@@ -70,7 +62,7 @@ TrackStore.__onDispatch = function(payload){
     case TrackConstants.RECEIVEDISPLAYTRACK:
       TrackStore.recieveDisplayTrack(payload.track);
       break;
-    case TrackConstants.RECEIVEDUSERTRACKS:
+    case TrackConstants.RECEIVEUSERTRACKS:
       TrackStore.receiveUserTracks(payload.tracks);
       break;
     case TrackConstants.DIDNOTFINDTRACK:

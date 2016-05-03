@@ -13,6 +13,11 @@ class User < ActiveRecord::Base
 	:tracks,
 	foreign_key: :author_id)
 
+	has_many(
+	:playlists,
+	foreign_key: :author_id
+	)
+
 
 
 	def password= password

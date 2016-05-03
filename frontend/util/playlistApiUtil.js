@@ -14,7 +14,22 @@ var PlaylistApiUtil = {
     };
 
     $.ajax(request);
-  }
+  },
+  fetchUserPlaylists: function(user){
+    var request = {
+      type: "get",
+      url: "api/" + user + "/playlists",
+      success: function(data){
+        PlaylistServerActions.receiveUserPlaylists(data);
+      },
+      error: function(error){
+        console.log("user playlists not fetched");
+      }
+    };
+
+    $.ajax(request);
+  },
+
 };
 
 module.exports = PlaylistApiUtil;

@@ -1,3 +1,9 @@
+///deprecated
+///deprecated
+///deprecated
+///deprecated
+
+
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 
@@ -35,8 +41,10 @@ var UserContent = React.createClass({
             Playlists</div>
 
         </div>
+          1111
 
-        {this.props.children}
+        {this.props.tabbing}
+        3333
       </div>
     );
   }

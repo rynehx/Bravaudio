@@ -23,7 +23,10 @@ var UserForeground = React.createClass({
   render: function(){
     return (
       <div className = "user-foreground">
+        <div className = "user-profile-pic-container">
         <img className = "user-profile-pic" src={imgsrc} id = "profile-image"/>
+        </div>
+
         <div className = "user-profile-info">
 
             <div className = "user-profile-username">

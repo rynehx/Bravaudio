@@ -19,8 +19,9 @@ Rails.application.routes.draw do
     # end
     get ":username", to: "users#username"
     get ":username/track/:title", to: "tracks#show"
+    get ":username/tracks", to: "tracks#user_tracks"
     get ":username/playlist/:title", to: "playlists#show"
-
+    get ":username/playlists", to: "playlists#user_playlists"
 
   end
 

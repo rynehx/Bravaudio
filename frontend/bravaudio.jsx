@@ -22,7 +22,11 @@ var CurrentSessionState = require('./mixins/currentSessionState'),
 
 //need listener to update store
 
+
+//userpage components
 var UserContentTab = require('./components/userPage/userContentTab');
+
+
 
 
 var App = React.createClass({
@@ -45,27 +49,23 @@ var App = React.createClass({
   }
 });
 
-
-
-
-
 var AppRouter = (
   <Router history={hashHistory}>
     <Route path="/" components={App}>
       <Route path="home" components={HomePage}/>
       <Route path="upload" components={UploadPage}/>
       <Route path=":user" components={UserPage}>
-        <Route path="all" components={UserContentTab}/>
-        <Route path="tracks" tabtype = "tracks" components={UserContentTab}/>
-        <Route path="playlists" components={UserContentTab}/>
+        <IndexRoute component={UserContentTab}/>
+        <Route path=":tabtype" components={UserContentTab}/>
       </Route>
+
+
       <Route path=":user/track/:track" components={TrackPage}/>
       <Route path=":user/playlist/:playlist" components={PlaylistPage}/>
 
     </Route>
   </Router>
 );
-
 
 document.addEventListener('DOMContentLoaded',function(){
   var root = document.getElementById('content');

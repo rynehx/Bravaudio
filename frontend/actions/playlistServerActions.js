@@ -14,6 +14,12 @@ var PlaylistServerActions = {
     Dispatcher.dispatch({
       actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
     });
+  },
+  receiveUserPlaylists: function(playlists){
+    Dispatcher.dispatch({
+      actionType: PlaylistConstants.RECEIVEUSERPLAYLISTS,
+      playlists: playlists
+    });
   }
 };
 

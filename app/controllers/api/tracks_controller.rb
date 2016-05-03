@@ -23,6 +23,17 @@ def show
   end
 end
 
+def user_tracks
+  author = User.find_by(username: params[:username])
+  @tracks = author.tracks
+  if @tracks
+    render "api/tracks/index"
+  else
+    @errors = ['track not found']
+    render "api/shared/error", status: 404
+  end
+end
+
 # def show
 #   @playlist = Playlist.find(params[:id])
 #   start_idx = params[:start_idx] || 1

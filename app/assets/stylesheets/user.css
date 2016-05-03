@@ -1,6 +1,5 @@
 .userpage{
-  margin: 0 auto;
-  width: 90%;
+  width: 100%;
   position: relative;
 
   display: flex;
@@ -13,14 +12,14 @@
 }
 
 .user-foreground{
-  height: 250px;
+  height: 235px;
   background-color: grey;
   display: flex;
   align-items: center;
 }
 
 .user-content{
-  width: 65%;
+  width: 70%;
   min-height: 500px;
   border: 1px;
   border-color: lightgrey;
@@ -34,7 +33,7 @@
 
 
 .user-sidebar{
-  width: 35%;
+  width: 30%;
   min-height: 500px;
   border: 1px;
   border-color: lightgrey;
@@ -45,7 +44,6 @@
 .user-profile-pic{
   width: auto;
   height: 200px;
-  margin-left: 35px;
   border-radius: 50%;
 }
 
@@ -58,6 +56,7 @@
   justify-content: flex-start;;
   flex-direction: column;
   margin-left: 35px;
+  font-family: "Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
 }
 
 
@@ -69,12 +68,10 @@
   color: white;
   padding: 2px 8px;
   margin: 5px;
-  font-family: Arial;
 
 }
 
 .user-profile-username{
-  font-family: Arial;
   font-size: 24px;
   background-color: #16171F;
   opacity: 0.85;
@@ -85,32 +82,55 @@
 
 
 .user-content-tabs{
+  margin-top:10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 50px;
+  height: 35px;
   border-style: solid;
+  border-color: lightgrey;
   border-width: 0px 0px 1px 0px;
 }
 
 .user-content-tabitems{
-  margin: 0px 10px;
+  padding: 0px 25px;
   height: 100%;
   display: flex;
   align-items: center;
   color: black;
   font-size: 16px;
-  font-family: Tahoma;
-  width: 70px;
-  justify-content: center;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  justify-content: space-between;
 }
 
 .tab-selected{
   color: orange;
-  border-bottom: 2px;
+  border-style: solid;
+  border-width: 0 0 2px 0;
 }
 
 .user-content-tab-items{
   display: flex;
   flex-direction: column;
+}
+
+.user-profile-pic-container {
+  width: 200px;
+  height: 200px;
+  margin-left: 35px;
+}
+
+.user-content-items{
+  width: auto;
+  height:220px;
+  background-color: lightblue;
+  display: flex;
+  align-items: flex-start;
+  margin: 20px;
+
+}
+
+.user-content-items-images{
+  width:150px;
+  height: 150px;
 }
