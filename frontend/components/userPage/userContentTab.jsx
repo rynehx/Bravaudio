@@ -9,7 +9,7 @@ var UserStore = require('../../stores/userStore'),
 var TrackClientActions = require('../../actions/trackClientActions'),
     PlaylistClientActions = require('../../actions/playlistClientActions');
 //components
-var UserContentItem = require("./UserContentItem");
+var UserContentItem = require("./userContentItem");
 
 
 var dateComparator = function(time1,time2){

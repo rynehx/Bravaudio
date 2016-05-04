@@ -36256,7 +36256,7 @@
 	var TrackClientActions = __webpack_require__(279),
 	    PlaylistClientActions = __webpack_require__(302);
 	//components
-	var UserContentItem = __webpack_require__(310);
+	var UserContentItem = __webpack_require__(312);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36335,7 +36335,34 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 310 */
+/* 310 */,
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserServerActions = __webpack_require__(295);
+
+	var UserApiUtil = {
+	  fetchDisplayUser: function (username) {
+
+	    var request = {
+	      type: "GET",
+	      url: "api/" + username,
+	      success: function (user) {
+	        UserServerActions.receivedDisplayUser(user);
+	      },
+	      error: function (errors) {
+	        UserServerActions.receivedNoUser(errors);
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36372,32 +36399,6 @@
 	});
 
 	module.exports = UserContentItem;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UserServerActions = __webpack_require__(295);
-
-	var UserApiUtil = {
-	  fetchDisplayUser: function (username) {
-
-	    var request = {
-	      type: "GET",
-	      url: "api/" + username,
-	      success: function (user) {
-	        UserServerActions.receivedDisplayUser(user);
-	      },
-	      error: function (errors) {
-	        UserServerActions.receivedNoUser(errors);
-	      }
-	    };
-
-	    $.ajax(request);
-	  }
-	};
-
-	module.exports = UserApiUtil;
 
 /***/ }
 /******/ ]);
