@@ -145,10 +145,10 @@
 }
 
 .musicbar-pause:last-child {
-  margin: 0px 20px 0px 5px
+  margin: 0px 20px 0px 5px;
 }
 .musicbar-pause:first-child {
-  margin: 0px 5px 0px 20px
+  margin: 0px 5px 0px 20px;
 }
 
 
@@ -179,7 +179,6 @@
   height: 2px;
   padding: 20px 0px;
   margin: 0px 10px 0px 10px;
-
 }
 .musicbar-progressbar-inner-base{
   height: 100%;
@@ -193,6 +192,5 @@
 }
 
 .musicbar-track-title{
-
   height: 20px;
 }

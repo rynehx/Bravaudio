@@ -11,8 +11,8 @@
   background-color: grey;
   display: flex;
   align-items: center;
-  justify-content: space-between;;
-  min-width:815px
+  justify-content: space-between;
+  min-width:815px;
 }
 
 .playlist-foreground-box{
@@ -51,7 +51,7 @@
   border: 1px;
   border-color: lightgrey;
   background-color: pink;
-  min-width:315px
+  min-width:315px;
 }
 
 
