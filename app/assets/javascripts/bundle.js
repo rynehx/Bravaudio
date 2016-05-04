@@ -35403,7 +35403,7 @@
 	var TrackClientActions = __webpack_require__(279);
 	//components
 	var TrackContent = __webpack_require__(286),
-	    TrackSideBar = __webpack_require__(288),
+	    TrackSideBar = __webpack_require__(287),
 	    TrackForeground = __webpack_require__(289),
 	    TrackNotFound = __webpack_require__(290);
 
@@ -35459,7 +35459,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(271),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackContent = React.createClass({
@@ -35482,83 +35482,8 @@
 /* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(245),
-	    Store = __webpack_require__(252).Store,
-	    TrackConstants = __webpack_require__(272);
-
-	var _tracks = {};
-	var _displayTrack;
-	var _userTracks;
-	var TrackStore = new Store(AppDispatcher);
-
-	////Trending Page methods
-	TrackStore.all = function () {
-	  return _tracks;
-	};
-
-	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	/////////Track Display Page Methods
-
-	TrackStore.displayTrack = function () {
-	  return _displayTrack;
-	};
-
-	TrackStore.recieveDisplayTrack = function (track) {
-	  _displayTrack = track;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.fetchedNoTrack = function () {
-	  _displayTrack = null;
-	  TrackStore.__emitChange();
-	};
-	///////User page tracklist methods
-	TrackStore.userTracks = function () {
-	  return _userTracks;
-	};
-
-	TrackStore.receiveUserTracks = function (tracks) {
-	  _userTracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.displayUserTracks = function () {
-	  return _userTracks;
-	};
-
-	///////
-
-	TrackStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case TrackConstants.RECEIVETRACKS:
-	      TrackStore.recieveTracks(payload.tracks);
-	      break;
-	    case TrackConstants.RECEIVEDISPLAYTRACK:
-	      TrackStore.recieveDisplayTrack(payload.track);
-	      break;
-	    case TrackConstants.RECEIVEUSERTRACKS:
-	      TrackStore.receiveUserTracks(payload.tracks);
-	      break;
-	    case TrackConstants.DIDNOTFINDTRACK:
-	      TrackStore.fetchedNoTrack();
-	      break;
-	    case TrackConstants.DIDNOTFETCHTRACKS:
-	      break;
-	  }
-	};
-
-	module.exports = TrackStore;
-
-/***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(271),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackSideBar = React.createClass({
@@ -35578,11 +35503,12 @@
 	module.exports = TrackSideBar;
 
 /***/ },
+/* 288 */,
 /* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(271),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackForeground = React.createClass({

@@ -1,5 +1,5 @@
 var React = require('react'),
-    TrackStore = require('../../stores/TrackStore'),
+    TrackStore = require('../../stores/trackStore'),
     hashHistory = require('react-router').hashHistory;
 
 var TrackSideBar = React.createClass({
