@@ -1,4 +1,4 @@
-json.extract! @playlist, :title, :description,:author_id,:image_url, :created_at
+json.extract! @playlist,:id, :title, :description,:author_id,:image_url, :created_at
 
 
 json.tracks  do

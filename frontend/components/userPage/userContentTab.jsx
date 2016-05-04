@@ -65,11 +65,11 @@ var UserContentTab = React.createClass({
     if(this.props.params.tabtype === "tracks"){
       return this.state.tracks.map(function(track){return <UserContentItem key={track.id + "t"} item = {track}/>;});
     }else if(this.props.params.tabtype === "playlists"){
-      return this.state.playlists.map(function(playlist){return <UserContentItem playlist={playlist.id + "p"}  item = {playlist}/>;});
+      return this.state.playlists.map(function(playlist){return <UserContentItem key={playlist.id + "p"}  item = {playlist}/>;});
     }else{
       return this.allSorter(this.state.tracks,this.state.playlists).map(function(item){
-        return <UserContentItem key={ ((item.tracks)? item.id : item.id)
-         + "m"   }  item = {item}/>;});
+        return <UserContentItem key={ ((item.tracks)? item.id+ "p" : item.id+ "t")
+            }  item = {item}/>;});
     }
   },
 

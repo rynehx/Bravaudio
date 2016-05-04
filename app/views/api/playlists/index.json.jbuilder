@@ -1,4 +1,5 @@
 json.array! @playlists do |playlist|
+  json.id playlist.id
   json.title playlist.title
   json.description playlist.description
   json.author_id playlist.author_id

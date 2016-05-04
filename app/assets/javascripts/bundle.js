@@ -35724,10 +35724,12 @@
 /* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(294);
+	var UserApiUtil = __webpack_require__(311);
 
 	var UserClientActions = {
+
 	  fetchDisplayUser: function (username) {
+	    debugger;
 	    UserApiUtil.fetchDisplayUser(username);
 	  }
 	};
@@ -35735,32 +35737,7 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 294 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UserServerActions = __webpack_require__(295);
-
-	var UserApiUtil = {
-	  fetchDisplayUser: function (username) {
-
-	    var request = {
-	      type: "GET",
-	      url: "api/" + username,
-	      success: function (user) {
-	        UserServerActions.receivedDisplayUser(user);
-	      },
-	      error: function (errors) {
-	        UserServerActions.receivedNoUser(errors);
-	      }
-	    };
-
-	    $.ajax(request);
-	  }
-	};
-
-	module.exports = UserApiUtil;
-
-/***/ },
+/* 294 */,
 /* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36336,11 +36313,11 @@
 	      });
 	    } else if (this.props.params.tabtype === "playlists") {
 	      return this.state.playlists.map(function (playlist) {
-	        return React.createElement(UserContentItem, { playlist: playlist.id + "p", item: playlist });
+	        return React.createElement(UserContentItem, { key: playlist.id + "p", item: playlist });
 	      });
 	    } else {
 	      return this.allSorter(this.state.tracks, this.state.playlists).map(function (item) {
-	        return React.createElement(UserContentItem, { key: (item.tracks ? item.id : item.id) + "m", item: item });
+	        return React.createElement(UserContentItem, { key: item.tracks ? item.id + "p" : item.id + "t", item: item });
 	      });
 	    }
 	  },
@@ -36395,6 +36372,32 @@
 	});
 
 	module.exports = UserContentItem;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserServerActions = __webpack_require__(295);
+
+	var UserApiUtil = {
+	  fetchDisplayUser: function (username) {
+
+	    var request = {
+	      type: "GET",
+	      url: "api/" + username,
+	      success: function (user) {
+	        UserServerActions.receivedDisplayUser(user);
+	      },
+	      error: function (errors) {
+	        UserServerActions.receivedNoUser(errors);
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = UserApiUtil;
 
 /***/ }
 /******/ ]);
