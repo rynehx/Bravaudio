@@ -40,10 +40,11 @@ var App = React.createClass({
     return (
       <div className = "background">
         <NavBar />
+        <MusicBar />
         <div className = "content-container">
           {this.props.children}
         </div>
-        <MusicBar />
+
       </div>
     );
   }
@@ -58,8 +59,6 @@ var AppRouter = (
         <IndexRoute component={UserContentTab}/>
         <Route path=":tabtype" components={UserContentTab}/>
       </Route>
-
-
       <Route path=":user/track/:track" components={TrackPage}/>
       <Route path=":user/playlist/:playlist" components={PlaylistPage}/>
 

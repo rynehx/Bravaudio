@@ -36,8 +36,8 @@ var AudioDisplay = React.createClass({
       <div className="musicbar-audio-display">
         <img className = "musicbar-track-image" src={this.state.track.image_url}/>
       <div className = "musicbar-text">
-        <div className = "musicbar-track-title" >{this.state.track.title}</div>
         <div className = "musicbar-playlist-title" >{this.state.playlist.title}</div>
+        <div className = "musicbar-track-title" >{this.state.track.title}</div>
       </div>
       </div>
     );

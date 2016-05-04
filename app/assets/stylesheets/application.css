@@ -52,6 +52,9 @@ body {
 
 .background{
   background-color: #EDEDED;
+  min-height: 100%;
+  height: auto;
+  z-index: -1;
 }
 
 

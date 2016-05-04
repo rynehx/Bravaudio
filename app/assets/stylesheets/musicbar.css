@@ -19,19 +19,20 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 0px 60px 0px 90px;
+  margin: 0px 30px 0px 90px;
 }
 
 
 .audio-components{
   display: flex;
+  height: 42px;
 }
 
 .musicbar-audio-display{
   display: flex;
-  justify-content: flex-start;;
+  justify-content: flex-start;
   align-items: center;
-  width: 500px;
+  min-width: 300px;
 }
 
 .musicbar-track-image {
@@ -107,18 +108,22 @@
 .musicbar-text{
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 40px;
+  justify-content: space-between;
+  height: 100%;
   white-space: nowrap;
   font-family: sans-serif;
 }
 
-.musicbar-playlist-title {
-  font-size: 16px;
+.musicbar-track-title {
+  display: flex;
+  align-items: flex-end;
+  font-size: 13px;
   font-family: sans-serif;
 }
 
-.musicbar-track-title {
+.musicbar-playlist-title {
+  display: flex;
+  align-items: flex-start;
   font-size: 12px;
   font-family: sans-serif;
   color: #949494;
@@ -174,7 +179,6 @@
   height: 2px;
   padding: 20px 0px;
   padding
-  background-color: transparent;
 
   margin: 0px 10px 0px 10px;
 

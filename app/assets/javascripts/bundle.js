@@ -59,8 +59,8 @@
 	    HomePage = __webpack_require__(277),
 	    UploadPage = __webpack_require__(284),
 	    TrackPage = __webpack_require__(285),
-	    UserPage = __webpack_require__(291),
-	    PlaylistPage = __webpack_require__(300);
+	    UserPage = __webpack_require__(290),
+	    PlaylistPage = __webpack_require__(299);
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -69,7 +69,7 @@
 	//need listener to update store
 
 	//userpage components
-	var UserContentTab = __webpack_require__(310);
+	var UserContentTab = __webpack_require__(309);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -85,12 +85,12 @@
 	      'div',
 	      { className: 'background' },
 	      React.createElement(NavBar, null),
+	      React.createElement(MusicBar, null),
 	      React.createElement(
 	        'div',
 	        { className: 'content-container' },
 	        this.props.children
-	      ),
-	      React.createElement(MusicBar, null)
+	      )
 	    );
 	  }
 	});
@@ -34675,6 +34675,7 @@
 	  },
 
 	  _onChange: function () {
+
 	    this.setState({ audioAction: "pause", initial: "0:00", track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
 	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
@@ -35073,13 +35074,13 @@
 	        { className: 'musicbar-text' },
 	        React.createElement(
 	          'div',
-	          { className: 'musicbar-track-title' },
-	          this.state.track.title
+	          { className: 'musicbar-playlist-title' },
+	          this.state.playlist.title
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'musicbar-playlist-title' },
-	          this.state.playlist.title
+	          { className: 'musicbar-track-title' },
+	          this.state.track.title
 	        )
 	      )
 	    );
@@ -35404,8 +35405,8 @@
 	//components
 	var TrackContent = __webpack_require__(286),
 	    TrackSideBar = __webpack_require__(287),
-	    TrackForeground = __webpack_require__(289),
-	    TrackNotFound = __webpack_require__(290);
+	    TrackForeground = __webpack_require__(288),
+	    TrackNotFound = __webpack_require__(289);
 
 	var TrackPage = React.createClass({
 	  displayName: 'TrackPage',
@@ -35503,8 +35504,7 @@
 	module.exports = TrackSideBar;
 
 /***/ },
-/* 288 */,
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35528,7 +35528,7 @@
 	module.exports = TrackForeground;
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35550,20 +35550,20 @@
 	module.exports = TrackNotFound;
 
 /***/ },
-/* 291 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(292);
+	var UserStore = __webpack_require__(291);
 	//actions
-	var UserClientActions = __webpack_require__(294);
+	var UserClientActions = __webpack_require__(293);
 	//components
-	var UserForeground = __webpack_require__(297),
-	    UserSideBar = __webpack_require__(298),
-	    UserNotFound = __webpack_require__(299);
+	var UserForeground = __webpack_require__(296),
+	    UserSideBar = __webpack_require__(297),
+	    UserNotFound = __webpack_require__(298);
 
 	var page;
 
@@ -35672,12 +35672,12 @@
 	module.exports = UserPage;
 
 /***/ },
-/* 292 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    UserConstants = __webpack_require__(293);
+	    UserConstants = __webpack_require__(292);
 
 	var _displayUser = null;
 
@@ -35712,7 +35712,7 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 293 */
+/* 292 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35721,10 +35721,10 @@
 	};
 
 /***/ },
-/* 294 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(295);
+	var UserApiUtil = __webpack_require__(294);
 
 	var UserClientActions = {
 	  fetchDisplayUser: function (username) {
@@ -35735,10 +35735,10 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 295 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserServerActions = __webpack_require__(296);
+	var UserServerActions = __webpack_require__(295);
 
 	var UserApiUtil = {
 	  fetchDisplayUser: function (username) {
@@ -35761,11 +35761,11 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 296 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    UserConstants = __webpack_require__(293);
+	    UserConstants = __webpack_require__(292);
 
 	var UserServerActions = {
 	  receivedDisplayUser: function (user) {
@@ -35784,7 +35784,7 @@
 	module.exports = UserServerActions;
 
 /***/ },
-/* 297 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35845,11 +35845,11 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 298 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(292),
+	    UserStore = __webpack_require__(291),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserSideBar = React.createClass({
@@ -35867,7 +35867,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 299 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35889,7 +35889,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 300 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35897,14 +35897,14 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(251),
-	    PlaylistStore = __webpack_require__(301);
+	    PlaylistStore = __webpack_require__(300);
 	//actions
-	var PlaylistClientActions = __webpack_require__(303);
+	var PlaylistClientActions = __webpack_require__(302);
 	//components
-	var PlaylistContent = __webpack_require__(306),
-	    PlaylistSideBar = __webpack_require__(307),
-	    PlaylistForeground = __webpack_require__(308),
-	    PlaylistNotFound = __webpack_require__(309);
+	var PlaylistContent = __webpack_require__(305),
+	    PlaylistSideBar = __webpack_require__(306),
+	    PlaylistForeground = __webpack_require__(307),
+	    PlaylistNotFound = __webpack_require__(308);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -35958,12 +35958,12 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 301 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    PlaylistConstants = __webpack_require__(302);
+	    PlaylistConstants = __webpack_require__(301);
 
 	var _displayPlaylist;
 	var _playlists;
@@ -36010,7 +36010,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 302 */
+/* 301 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -36020,10 +36020,10 @@
 	};
 
 /***/ },
-/* 303 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(304);
+	var PlaylistApiUtil = __webpack_require__(303);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36037,10 +36037,10 @@
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 304 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(305);
+	var PlaylistServerActions = __webpack_require__(304);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36077,11 +36077,11 @@
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 305 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    PlaylistConstants = __webpack_require__(302);
+	    PlaylistConstants = __webpack_require__(301);
 
 	var PlaylistServerActions = {
 	  receiveDisplayPlaylist: function (playlist) {
@@ -36106,11 +36106,11 @@
 	module.exports = PlaylistServerActions;
 
 /***/ },
-/* 306 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistContent = React.createClass({
@@ -36121,7 +36121,30 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'playlist-content' },
-	      'content'
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-top' },
+	        'top'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-bottom' },
+	        React.createElement('div', { className: 'playlist-content-bottom-user' }),
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-content-bottom-right' },
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-content-bottom-tags' },
+	            'tags'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-content-bottom-tracks' },
+	            'track'
+	          )
+	        )
+	      )
 	    );
 	  }
 
@@ -36130,11 +36153,11 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 307 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistSideBar = React.createClass({
@@ -36154,15 +36177,15 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 308 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var PlaylistStore = __webpack_require__(301),
-	    TrackStore = __webpack_require__(301);
+	var PlaylistStore = __webpack_require__(300),
+	    TrackStore = __webpack_require__(300);
 
 	var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 	var PlaylistForeground = React.createClass({
@@ -36178,19 +36201,35 @@
 	        { className: 'playlist-foreground-box' },
 	        React.createElement(
 	          'div',
-	          { className: 'playlist-info' },
+	          { className: 'playlist-top' },
+	          React.createElement('div', { className: 'playlist-foreground-playbutton', onClick: function () {
+	              console.log("lol");
+	            } }),
 	          React.createElement(
 	            'div',
-	            { className: 'playlist-profile-owner' },
-	            this.props.playlist.title
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'playlist-title' },
-	            'Henry Li'
+	            { className: 'playlist-top-container' },
+	            React.createElement(
+	              'div',
+	              { className: 'playlist-top-names' },
+	              React.createElement(
+	                'div',
+	                { className: 'playlist-owner' },
+	                'Henry Li'
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'playlist-title' },
+	                this.props.playlist.title
+	              )
+	            ),
+	            React.createElement('div', { className: 'playlist-top-tagshistory' })
 	          )
 	        ),
-	        React.createElement('div', { className: 'playlist-stats' })
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-bottom' },
+	          '  '
+	        )
 	      ),
 	      React.createElement('img', { className: 'playlist-pic', src: imgsrc, id: 'profile-image' })
 	    );
@@ -36201,11 +36240,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 309 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -36226,21 +36265,21 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 310 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
-	var UserStore = __webpack_require__(292),
+	var UserStore = __webpack_require__(291),
 	    TrackStore = __webpack_require__(271),
-	    PlaylistStore = __webpack_require__(301),
+	    PlaylistStore = __webpack_require__(300),
 	    MusicStore = __webpack_require__(275);
 	//actions
 	var TrackClientActions = __webpack_require__(279),
-	    PlaylistClientActions = __webpack_require__(303);
+	    PlaylistClientActions = __webpack_require__(302);
 	//components
-	var UserContentItem = __webpack_require__(311);
+	var UserContentItem = __webpack_require__(310);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36319,7 +36358,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 311 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react

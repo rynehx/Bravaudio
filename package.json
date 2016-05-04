@@ -8,7 +8,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./node_modules/.bin/webpack"
+
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,10 @@
   "bugs": {
     "url": "https://github.com/rynehx/Capstone/issues"
   },
-  "homepage": "https://github.com/rynehx/Capstone#readme"
+  "homepage": "https://github.com/rynehx/Capstone#readme",
+  "engines": {
+    "node": "5.6.0",
+    "npm": "3.6.0"
+  }
 
 }

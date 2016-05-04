@@ -41,6 +41,8 @@ var AudioPlayer = React.createClass({
   },
 
   _onChange: function(){
+
+
       this.setState({audioAction: "pause" ,initial: "0:00", track: MusicStore.currentTrack(),
       playlist: MusicStore.currentPlaylist()});
       //used the reset below to restart song on ff if its the only song on playlist otherwise do not need

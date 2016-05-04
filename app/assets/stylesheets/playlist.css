@@ -1,0 +1,176 @@
+.playlistpage{
+  width: 100%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist-foreground{
+  height: 340px;
+  background-color: grey;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;;
+  min-width:815px
+}
+
+.playlist-foreground-box{
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  height: 300px;
+}
+
+.playlist-bottom{
+    display: flex;
+}
+
+
+.playlist-content{
+  width: 100%;
+  min-height: 490px;
+  border: 1px;
+  border-color: lightgrey;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  min-width: 500px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+
+
+
+.playlist-sidebar{
+  min-height: 490px;
+  border: 1px;
+  border-color: lightgrey;
+  background-color: pink;
+  min-width:315px
+}
+
+
+
+.playlist-pic{
+  width: 300px;
+  height: 300px;
+  margin: 0px 15px 0px 0px;
+}
+
+
+
+.playlist-owner{
+  font-size: 14px;
+  background-color: #16171F;
+  opacity: 0.85;
+  color: white;
+  padding: 2px 8px;
+  margin: 5px;
+
+}
+
+
+.playlist-title{
+  font-size: 24px;
+  background-color: #16171F;
+  opacity: 0.85;
+  color: white;
+  padding: 2px 8px;
+  margin: 5px;
+
+}
+
+
+.playlist-top{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.playlist-top-container{
+  width: 100%;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+
+
+.playlist-foreground-playbutton{
+  height: 75px;
+  width: 75px;
+  min-width: 75px;
+  background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462339116/Untitled_Diagram_2_gil7ay.svg");
+  background-size: 75px;
+    background-repeat: no-repeat;
+}
+}
+
+
+.playlist-top-names{
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+}
+
+
+.playlist-top-tagshistory{
+  height: 100%;
+  width: 90px;
+
+}
+
+
+.playlist-content-top{
+  width: 90%;
+  min-height: 45px;
+  border-bottom: 1px;
+  border-style: solid;
+  border-color: #CCCCCC;
+}
+
+.playlist-content-bottom{
+
+  width: 92%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+}
+
+.playlist-content-bottom-user{
+  width:120px;
+  min-width: 120px;
+  height: 170px;
+  margin-right: 20px;
+  background-color: lime;
+}
+
+.playlist-content-bottom-right{
+  width: 100%;
+  height: 120px;
+  background-color: lime;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.playlist-content-bottom-tags{
+  height: 40px;
+  min-height: 40px;
+  width: 100%;
+}
+
+.playlist-content-bottom-tracks{
+  width: 100%;
+  height: 100%;
+
+}
