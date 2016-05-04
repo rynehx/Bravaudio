@@ -6,7 +6,7 @@ var PlaylistContent = React.createClass({
 
 render: function(){
 return(
-  <div>
+  <div className = "playlist-content">
     content
   </div>
 );

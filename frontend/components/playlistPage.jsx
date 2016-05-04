@@ -27,8 +27,13 @@ var PlaylistPage = React.createClass({
     this.playliststorelistener.remove();
   },
 
+  componentWillReceiveProps: function(nextprops){
+    PlaylistClientActions.fetchDisplayPlaylist(nextprops.params.user,
+      nextprops.params.playlist);
+  },
+
   _onChange: function(){
-  
+
     this.setState({playlist: PlaylistStore.displayPlaylist()});
   },
 
@@ -42,10 +47,12 @@ var PlaylistPage = React.createClass({
       );
     }else{
       return(
-        <div>
+        <div className = "playlistpage">
           <PlaylistForeground playlist = {this.state.playlist}/>
-          <PlaylistContent playlist = {this.state.playlist}/>
-          <PlaylistSideBar playlist = {this.state.playlist}/>
+          <div className = "playlist-bottom">
+            <PlaylistContent playlist = {this.state.playlist}/>
+            <PlaylistSideBar playlist = {this.state.playlist}/>
+          </div>
         </div>
       );
     }

@@ -35996,6 +35996,10 @@
 	    this.playliststorelistener.remove();
 	  },
 
+	  componentWillReceiveProps: function (nextprops) {
+	    PlaylistClientActions.fetchDisplayPlaylist(nextprops.params.user, nextprops.params.playlist);
+	  },
+
 	  _onChange: function () {
 
 	    this.setState({ playlist: PlaylistStore.displayPlaylist() });
@@ -36012,10 +36016,14 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        null,
+	        { className: 'playlistpage' },
 	        React.createElement(PlaylistForeground, { playlist: this.state.playlist }),
-	        React.createElement(PlaylistContent, { playlist: this.state.playlist }),
-	        React.createElement(PlaylistSideBar, { playlist: this.state.playlist })
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-bottom' },
+	          React.createElement(PlaylistContent, { playlist: this.state.playlist }),
+	          React.createElement(PlaylistSideBar, { playlist: this.state.playlist })
+	        )
 	      );
 	    }
 	  }
@@ -36186,7 +36194,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'playlist-content' },
 	      'content'
 	    );
 	  }
@@ -36210,7 +36218,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'playlist-sidebar' },
 	      'sidebar'
 	    );
 	  }
@@ -36223,10 +36231,14 @@
 /* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(301),
 	    hashHistory = __webpack_require__(159).hashHistory;
+	//stores
+	var PlaylistStore = __webpack_require__(301),
+	    TrackStore = __webpack_require__(301);
 
+	var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 	var PlaylistForeground = React.createClass({
 	  displayName: 'PlaylistForeground',
 
@@ -36234,8 +36246,27 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      this.props.playlist.title
+	      { className: 'playlist-foreground' },
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-foreground-box' },
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-info' },
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-profile-owner' },
+	            this.props.playlist.title
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-title' },
+	            'Henry Li'
+	          )
+	        ),
+	        React.createElement('div', { className: 'playlist-stats' })
+	      ),
+	      React.createElement('img', { className: 'playlist-pic', src: imgsrc, id: 'profile-image' })
 	    );
 	  }
 
@@ -36283,7 +36314,7 @@
 	var TrackClientActions = __webpack_require__(279),
 	    PlaylistClientActions = __webpack_require__(303);
 	//components
-	var UserContentItem = __webpack_require__(312);
+	var UserContentItem = __webpack_require__(311);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36362,8 +36393,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 311 */,
-/* 312 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
