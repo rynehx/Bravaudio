@@ -14,7 +14,7 @@ end
 
 def show
   author_id = User.find_by(username: params[:username])
-  @track = Track.find_by(title: params[:title], author_id: author_id)
+  @track = Track.includes(:author, {playlists: :author}).find_by(title: params[:title], author_id: author_id)
   if @track
     render "api/tracks/show"
   else

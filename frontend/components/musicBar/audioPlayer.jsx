@@ -7,6 +7,7 @@ var MusicStore = require('../../stores/musicStore');
 
 var actionButton;
 var clickdown = false;
+var repeatButton;
 
 
 var numberToTime = function(num) {
@@ -24,7 +25,8 @@ var numberToTime = function(num) {
 
 var AudioPlayer = React.createClass({
   getInitialState: function () {
-    return { audioAction: "play" ,initial: "0:00", track: {title:"",audio_url: "", image_url:""}, playlist: {} };
+    return { audioAction: "play" ,initial: "0:00", track: {title:"",audio_url: "", image_url:""},
+    playlist: {}, onRepeat : MusicStore.repeat() };
   },
 
   componentDidMount: function(){
@@ -44,7 +46,7 @@ var AudioPlayer = React.createClass({
 
 
       this.setState({audioAction: "pause" ,initial: "0:00", track: MusicStore.currentTrack(),
-      playlist: MusicStore.currentPlaylist()});
+      playlist: MusicStore.currentPlaylist(), onRepeat: MusicStore.repeat()});
       //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
       //also used to reset for slow audio fetching
       this.refs["audioDom"].currentTime = 0;
@@ -110,7 +112,7 @@ var AudioPlayer = React.createClass({
 
   },
   trackEndedAction: function(){
-    MusicStore.nextTrack();
+      MusicStore.nextTrack();
   },
 
   nextTrack: function(){
@@ -126,10 +128,14 @@ var AudioPlayer = React.createClass({
 
     MusicStore.previousTrack();
   },
+  clickRepeat: function(){
+    this.setState({onRepeat: !MusicStore.repeat()});
+    MusicStore.toggleRepeat();
+  },
 
   render: function(){
-    
 
+    console.log(MusicStore.repeat())
     if(this.state.audioAction === "play"){
       actionButton = <div onClick={this.audioActionButton}
         className = "musicbar-button">
@@ -142,6 +148,19 @@ var AudioPlayer = React.createClass({
         <div className = "musicbar-pause"></div>
       </div>;
     }
+
+
+    if(this.state.onRepeat){
+      repeatButton = <img className = "musicbar-repeat"
+        src ="http://res.cloudinary.com/bravaudio/image/upload/v1462432562/Untitled_Diagram_4_xrzaz3.svg"
+        onClick = {this.clickRepeat}></img>;
+    }else{
+      repeatButton = <img className = "musicbar-repeat"
+        src ="http://res.cloudinary.com/bravaudio/image/upload/v1462432563/Untitled_Diagram_5_zuegqw.svg"
+        onClick = {this.clickRepeat}></img>;
+    }
+
+
 
     return (
       <div className = "musicbar-audioplayer">
@@ -167,8 +186,9 @@ var AudioPlayer = React.createClass({
           onClick={this.nextTrack}>
             <div  className = "musicbar-rw"/>
             <div  className = "musicbar-rw-bar"/>
-
         </div>
+
+        {repeatButton}
 
         <section ref = "displaytime-current"
           className = "musicbar-time">{this.state.initial}</section>
@@ -211,7 +231,19 @@ var AudioPlayer = React.createClass({
         </div>
 
         <section ref = "displaytime-end"
-          className = "musicbar-time">{this.state.initial}</section>
+          className = "musicbar-time">{this.state.initial}
+        </section>
+        <div className = "musicbar-volume">
+          <img className = "musicbar-volume-speaker"
+            src = "http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg"
+          
+            >
+          </img>
+          <div className = "musicbar-volume-container" >
+
+          </div>
+        </div>
+
       </div>
     );
   }

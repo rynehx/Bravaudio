@@ -91,7 +91,7 @@ MusicStore.updateToPreviousTrack = function(action){
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)-1];
     }
 
-
+    this.__emitChange();
 };
 
 
@@ -102,17 +102,20 @@ MusicStore.updateToNextTrack = function(){
   var toRepeat = ((_currentPlaylist.tracks.indexOf(_currentTrack)+1) >=
    _currentPlaylist.tracks.length );
 
-  if(_onRepeat){
-    if(toRepeat){
+
+    if(toRepeat && _onRepeat){
       if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
       _currentTrack =  _currentPlaylist.tracks[0];
-
+      this.__emitChange();
+      this.__emitChange();
+    }else if(toRepeat){
+      console.log("mid")
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
+      this.__emitChange();
     }
-  }else{ //repeat off
-    console.log("check");
-  }
+
+
 
 };
 
@@ -125,11 +128,11 @@ MusicStore.__onDispatch = function(payload){
       break;
     case "PREVIOUSTRACK":
       MusicStore.updateToPreviousTrack();
-        this.__emitChange();
+
       break;
     case "NEXTTRACK":
       MusicStore.updateToNextTrack();
-        this.__emitChange();
+
       break;
 
   }

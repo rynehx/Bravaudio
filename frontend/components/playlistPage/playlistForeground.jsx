@@ -2,9 +2,7 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 //stores
-var PlaylistStore = require('../../stores/playlistStore'),
-    TrackStore = require('../../stores/playlistStore'),
-    MusicStore = require('../../stores/musicStore');
+var MusicStore = require('../../stores/musicStore');
 
 
 
@@ -27,11 +25,11 @@ return(
         <div className = "playlist-top">
 
           <div className = "playlist-foreground-playbutton"
-            onClick = {function(){this.playDisplayPlaylist();}.bind(this)} />
+            onClick = {this.playDisplayPlaylist} />
           <div className = "playlist-top-container">
             <div className = "playlist-top-names">
               <div className = "playlist-owner">
-                Henry Li
+                {this.props.playlist.author}
               </div>
               <div className = "playlist-title">{this.props.playlist.title}</div>
             </div>

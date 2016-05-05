@@ -1,1 +1,11 @@
-json.array! @tracks, :id, :author_id, :title, :description, :image_url, :audio_url, :times_played, :created_at
+json.array! @tracks do |track|
+  json.id track.id
+  json.author_id track.author_id
+  json.title track.title
+  json.description track.description
+  json.image_url track.image_url
+  json.audio_url track.audio_url
+  json.times_played track.times_played
+  json.created_at track.created_at
+  json.author track.author.username
+end

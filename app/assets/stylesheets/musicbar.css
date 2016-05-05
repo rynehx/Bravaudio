@@ -194,3 +194,28 @@
 .musicbar-track-title{
   height: 20px;
 }
+
+.musicbar-repeat{
+  width: 30px;
+  height: 30px;
+  margin: 0px 5px 0px 10px;
+
+}
+
+.musicbar-volume{
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  margin: 0px 5px 0px 10px;
+}
+
+.musicbar-volume-speaker{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+}
+
+.musicbar-volume-container{
+
+
+}

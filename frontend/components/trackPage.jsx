@@ -49,10 +49,12 @@ var TrackPage = React.createClass({
       );
     }else{
       return(
-        <div>
+        <div className = "trackpage">
           <TrackForeground track = {this.state.track}/>
-          <TrackContent track = {this.state.track}/>
-          <TrackSideBar track = {this.state.track}/>
+          <div className = "track-bottom">
+            <TrackContent track = {this.state.track}/>
+            <TrackSideBar track = {this.state.track}/>
+          </div>
         </div>
       );
     }

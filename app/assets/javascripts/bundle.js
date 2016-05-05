@@ -55,7 +55,7 @@
 	    hashHistory = ReactRouter.hashHistory;
 	//Components
 	var NavBar = __webpack_require__(218),
-	    MusicBar = __webpack_require__(270),
+	    MusicBar = __webpack_require__(272),
 	    HomePage = __webpack_require__(277),
 	    UploadPage = __webpack_require__(284),
 	    TrackPage = __webpack_require__(285),
@@ -69,7 +69,7 @@
 	//need listener to update store
 
 	//userpage components
-	var UserContentTab = __webpack_require__(309);
+	var UserContentTab = __webpack_require__(310);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -25148,7 +25148,7 @@
 	//Mixins
 	var SessionStore = __webpack_require__(251),
 	    SessionActions = __webpack_require__(244),
-	    MusicStore = __webpack_require__(275);
+	    MusicStore = __webpack_require__(270);
 
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -34505,413 +34505,9 @@
 /* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
-	//react
-	var React = __webpack_require__(1),
-	    hashHistory = __webpack_require__(159).hashHistory;
-
-	//Stores
-	var SessionStore = __webpack_require__(251),
-	    TrackStore = __webpack_require__(271);
-
-	//components
-	var AudioPlayer = __webpack_require__(273),
-	    AudioDisplay = __webpack_require__(276);
-
-	var MusicBar = React.createClass({
-	  displayName: 'MusicBar',
-
-
-	  renderMusicBar: function () {
-	    if (SessionStore.fetchCurrentUser()) {
-	      return React.createElement(
-	        'div',
-	        { className: 'musicbar' },
-	        React.createElement(
-	          'div',
-	          { className: 'audio-components' },
-	          React.createElement(AudioPlayer, null),
-	          React.createElement(AudioDisplay, null)
-	        )
-	      );
-	    } else {
-	      return React.createElement('div', null);
-	    }
-	  },
-
-	  render: function () {
-	    return this.renderMusicBar();
-	  }
-	});
-
-	module.exports = MusicBar;
-
-/***/ },
-/* 271 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    TrackConstants = __webpack_require__(272);
-
-	var _tracks = {};
-	var _displayTrack;
-	var _userTracks;
-	var TrackStore = new Store(AppDispatcher);
-
-	////Trending Page methods
-	TrackStore.all = function () {
-	  return _tracks;
-	};
-
-	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	/////////Track Display Page Methods
-
-	TrackStore.displayTrack = function () {
-	  return _displayTrack;
-	};
-
-	TrackStore.recieveDisplayTrack = function (track) {
-	  _displayTrack = track;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.fetchedNoTrack = function () {
-	  _displayTrack = null;
-	  TrackStore.__emitChange();
-	};
-	///////User page tracklist methods
-	TrackStore.userTracks = function () {
-	  return _userTracks;
-	};
-
-	TrackStore.receiveUserTracks = function (tracks) {
-	  _userTracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.displayUserTracks = function () {
-	  return _userTracks;
-	};
-
-	///////
-
-	TrackStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case TrackConstants.RECEIVETRACKS:
-	      TrackStore.recieveTracks(payload.tracks);
-	      break;
-	    case TrackConstants.RECEIVEDISPLAYTRACK:
-	      TrackStore.recieveDisplayTrack(payload.track);
-	      break;
-	    case TrackConstants.RECEIVEUSERTRACKS:
-	      TrackStore.receiveUserTracks(payload.tracks);
-	      break;
-	    case TrackConstants.DIDNOTFINDTRACK:
-	      TrackStore.fetchedNoTrack();
-	      break;
-	    case TrackConstants.DIDNOTFETCHTRACKS:
-	      break;
-	  }
-	};
-
-	module.exports = TrackStore;
-
-/***/ },
-/* 272 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  RECEIVETRACKS: "RECEIVETRACKS",
-	  RECEIVEDISPLAYTRACK: "RECEIVEDISPLAYTRACK",
-	  DIDNOTFINDTRACK: "DIDNOTFINDTRACK",
-	  DIDNOTFETCHTRACKS: "DIDNOTFETCHTRACKS",
-	  RECEIVEUSERTRACKS: "RECEIVEUSERTRACKS"
-	};
-
-/***/ },
-/* 273 */
-/***/ function(module, exports, __webpack_require__) {
-
-	//react
-	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(274);
-
-	//stores
-	var MusicStore = __webpack_require__(275);
-
-	var actionButton;
-	var clickdown = false;
-
-	var numberToTime = function (num) {
-	  // var hour = Math.floor(num/3600);
-	  // num = num%3600;
-	  var minute = Math.floor(num / 60);
-	  var second = Math.floor(num % 60);
-
-	  // return (hour > 9 ? "" + hour: "0" + hour) + ":" +
-	  return (minute > 9 ? "" + minute : minute) + ":" + (second > 9 ? "" + second : "0" + second);
-	};
-
-	var AudioPlayer = React.createClass({
-	  displayName: 'AudioPlayer',
-
-	  getInitialState: function () {
-	    return { audioAction: "play", initial: "0:00", track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
-	  },
-
-	  componentDidMount: function () {
-
-	    this.musicstorelistener = MusicStore.addListener(this._onChange);
-	    this.setState({ track: MusicStore.currentTrack(),
-	      playlist: MusicStore.currentPlaylist() });
-
-	    this.refs["audioDom"].ontimeupdate = this.updateTimer;
-	  },
-
-	  componentWillUnmount: function () {
-	    this.musicstorelistener.remove();
-	  },
-
-	  _onChange: function () {
-
-	    this.setState({ audioAction: "pause", initial: "0:00", track: MusicStore.currentTrack(),
-	      playlist: MusicStore.currentPlaylist() });
-	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
-	    //also used to reset for slow audio fetching
-	    this.refs["audioDom"].currentTime = 0;
-	    this.refs["displaytime-current"].innerHTML = "0:00";
-	    this.refs["displaytime-end"].innerHTML = "0:00";
-	    this.refs["displayprogress-inner"].style.width = "0px";
-	    this.refs.audioDom.src = this.state.track.audio_url;
-
-	    if (!(this.state.track.audio_url.length === 0)) {
-	      this.refs.audioDom.play();
-	    }
-	  },
-
-	  audioActionButton: function () {
-	    if (this.state.audioAction === "play") {
-	      this.refs["audioDom"].play();
-	      // document.getElementById('demo').pause();
-	      this.setState({ audioAction: "pause" });
-	    } else {
-	      this.refs["audioDom"].pause();
-	      // document.getElementById('demo').play();
-	      this.setState({ audioAction: "play" });
-	    }
-	  },
-	  updateTimer: function () {
-
-	    this.refs["displaytime-current"].innerHTML = numberToTime(this.refs["audioDom"].currentTime);
-
-	    if (this.refs["audioDom"].duration === this.refs["audioDom"].duration) {
-	      this.refs["displaytime-end"].innerHTML = numberToTime(this.refs["audioDom"].duration);
-	    } else {
-	      this.refs["displaytime-end"].innerHTML = "0:00";
-	    }
-
-	    this.refs["displayprogress-inner"].style.width = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration * 400 + "px";
-	  },
-
-	  updateProgress: function (e) {
-
-	    if (clickdown) {
-	      var selectedtime = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
-	      this.refs["audioDom"].currentTime = selectedtime;
-
-	      this.refs["displaytime-current"].innerHTML = numberToTime(selectedtime);
-
-	      this.refs["displayprogress-inner"].style.width = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * 400 + 'px';
-	    }
-	  },
-	  trackEndedAction: function () {
-	    MusicStore.nextTrack();
-	  },
-
-	  nextTrack: function () {
-	    MusicStore.nextTrack();
-	  },
-
-	  rewindTrack: function () {
-	    this.refs["audioDom"].currentTime = 0;
-	    this.refs["displayprogress-inner"].style.width = 0 + "px";
-	  },
-
-	  previousTrack: function () {
-
-	    MusicStore.previousTrack();
-	  },
-
-	  render: function () {
-
-	    if (this.state.audioAction === "play") {
-	      actionButton = React.createElement(
-	        'div',
-	        { onClick: this.audioActionButton,
-	          className: 'musicbar-button' },
-	        React.createElement('div', { className: 'musicbar-play' })
-	      );
-	    } else {
-	      actionButton = React.createElement(
-	        'div',
-	        { onClick: this.audioActionButton,
-	          className: 'musicbar-button' },
-	        React.createElement('div', { className: 'musicbar-pause' }),
-	        React.createElement('div', { className: 'musicbar-pause' })
-	      );
-	    }
-
-	    return React.createElement(
-	      'div',
-	      { className: 'musicbar-audioplayer' },
-	      React.createElement(
-	        'audio',
-	        { ref: 'audioDom', id: 'audioDom',
-	          src: this.state.track.audio_url,
-	          onEnded: this.trackEndedAction, autoPlay: true },
-	        React.createElement(
-	          'p',
-	          null,
-	          'Your browser does not support the audio element'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'music-ffrw',
-	          onDoubleClick: this.previousTrack,
-	          onClick: this.rewindTrack },
-	        React.createElement('div', { className: 'musicbar-ff-bar' }),
-	        React.createElement('div', { className: 'musicbar-ff' })
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        actionButton
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'music-ffrw',
-	          onClick: this.nextTrack },
-	        React.createElement('div', { className: 'musicbar-rw' }),
-	        React.createElement('div', { className: 'musicbar-rw-bar' })
-	      ),
-	      React.createElement(
-	        'section',
-	        { ref: 'displaytime-current',
-	          className: 'musicbar-time' },
-	        this.state.initial
-	      ),
-	      React.createElement(
-	        'div',
-	        { ref: 'displayprogress', className: 'musicbar-progressbar',
-	          style: { width: '400px' },
-
-	          onClick: function (e) {
-	            clickdown = true;
-	            this.updateProgress(e);
-	            clickdown = false;
-	          }.bind(this),
-
-	          onMouseDown: function () {
-	            clickdown = true;
-	            this.refs["audioDom"].muted = true;
-	          }.bind(this),
-
-	          onMouseMove: this.updateProgress,
-
-	          onMouseUp: function () {
-	            clickdown = false;
-	            this.refs["audioDom"].muted = false;
-	          }.bind(this),
-
-	          onMouseLeave: function () {
-	            clickdown = false;
-	            this.refs["audioDom"].muted = false;
-	          }.bind(this) },
-	        React.createElement(
-	          'div',
-	          { className: 'musicbar-progressbar-inner-base' },
-	          React.createElement('div', { ref: 'displayprogress-inner',
-	            className: 'musicbar-progressbar-inner', style: { width: '0px' } })
-	        )
-	      ),
-	      React.createElement(
-	        'section',
-	        { ref: 'displaytime-end',
-	          className: 'musicbar-time' },
-	        this.state.initial
-	      )
-	    );
-	  }
-	});
-
-	module.exports = AudioPlayer;
-
-/***/ },
-/* 274 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2016 Jed Watson.
-	  Licensed under the MIT License (MIT), see
-	  http://jedwatson.github.io/classnames
-	*/
-	/* global define */
-
-	(function () {
-		'use strict';
-
-		var hasOwn = {}.hasOwnProperty;
-
-		function classNames () {
-			var classes = [];
-
-			for (var i = 0; i < arguments.length; i++) {
-				var arg = arguments[i];
-				if (!arg) continue;
-
-				var argType = typeof arg;
-
-				if (argType === 'string' || argType === 'number') {
-					classes.push(arg);
-				} else if (Array.isArray(arg)) {
-					classes.push(classNames.apply(null, arg));
-				} else if (argType === 'object') {
-					for (var key in arg) {
-						if (hasOwn.call(arg, key) && arg[key]) {
-							classes.push(key);
-						}
-					}
-				}
-			}
-
-			return classes.join(' ');
-		}
-
-		if (typeof module !== 'undefined' && module.exports) {
-			module.exports = classNames;
-		} else if (true) {
-			// register as 'classnames', consistent with npm package name
-			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-				return classNames;
-			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-		} else {
-			window.classNames = classNames;
-		}
-	}());
-
-
-/***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(245),
-	    Store = __webpack_require__(252).Store,
-	    trackConstants = __webpack_require__(272);
+	    trackConstants = __webpack_require__(271);
 
 	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
 	    _currentTrack = { title: "", audio_url: "", image_url: "" },
@@ -34995,6 +34591,8 @@
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) - 1];
 	  }
+
+	  this.__emitChange();
 	};
 
 	MusicStore.updateToNextTrack = function () {
@@ -35003,18 +34601,18 @@
 
 	  var toRepeat = _currentPlaylist.tracks.indexOf(_currentTrack) + 1 >= _currentPlaylist.tracks.length;
 
-	  if (_onRepeat) {
-	    if (toRepeat) {
-	      if (_currentTrack === _currentPlaylist.tracks[0]) {
-	        _repeatedSong = true;
-	      }
-	      _currentTrack = _currentPlaylist.tracks[0];
-	    } else {
-	      _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
+	  if (toRepeat && _onRepeat) {
+	    if (_currentTrack === _currentPlaylist.tracks[0]) {
+	      _repeatedSong = true;
 	    }
+	    _currentTrack = _currentPlaylist.tracks[0];
+	    this.__emitChange();
+	    this.__emitChange();
+	  } else if (toRepeat) {
+	    console.log("mid");
 	  } else {
-	    //repeat off
-	    console.log("check");
+	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
+	    this.__emitChange();
 	  }
 	};
 
@@ -35027,17 +34625,448 @@
 	      break;
 	    case "PREVIOUSTRACK":
 	      MusicStore.updateToPreviousTrack();
-	      this.__emitChange();
+
 	      break;
 	    case "NEXTTRACK":
 	      MusicStore.updateToNextTrack();
-	      this.__emitChange();
+
 	      break;
 
 	  }
 	};
 
 	module.exports = MusicStore;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  RECEIVETRACKS: "RECEIVETRACKS",
+	  RECEIVEDISPLAYTRACK: "RECEIVEDISPLAYTRACK",
+	  DIDNOTFINDTRACK: "DIDNOTFINDTRACK",
+	  DIDNOTFETCHTRACKS: "DIDNOTFETCHTRACKS",
+	  RECEIVEUSERTRACKS: "RECEIVEUSERTRACKS"
+	};
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	//Stores
+	var SessionStore = __webpack_require__(251),
+	    TrackStore = __webpack_require__(273);
+
+	//components
+	var AudioPlayer = __webpack_require__(274),
+	    AudioDisplay = __webpack_require__(276);
+
+	var MusicBar = React.createClass({
+	  displayName: 'MusicBar',
+
+
+	  renderMusicBar: function () {
+	    if (SessionStore.fetchCurrentUser()) {
+	      return React.createElement(
+	        'div',
+	        { className: 'musicbar' },
+	        React.createElement(
+	          'div',
+	          { className: 'audio-components' },
+	          React.createElement(AudioPlayer, null),
+	          React.createElement(AudioDisplay, null)
+	        )
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+
+	  render: function () {
+	    return this.renderMusicBar();
+	  }
+	});
+
+	module.exports = MusicBar;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(245),
+	    Store = __webpack_require__(252).Store,
+	    TrackConstants = __webpack_require__(271);
+
+	var _tracks = {};
+	var _displayTrack;
+	var _userTracks;
+	var TrackStore = new Store(AppDispatcher);
+
+	////Trending Page methods
+	TrackStore.all = function () {
+	  return _tracks;
+	};
+
+	TrackStore.recieveTracks = function (tracks) {
+	  _tracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	/////////Track Display Page Methods
+
+	TrackStore.displayTrack = function () {
+	  return _displayTrack;
+	};
+
+	TrackStore.recieveDisplayTrack = function (track) {
+	  _displayTrack = track;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.fetchedNoTrack = function () {
+	  _displayTrack = null;
+	  TrackStore.__emitChange();
+	};
+	///////User page tracklist methods
+	TrackStore.userTracks = function () {
+	  return _userTracks;
+	};
+
+	TrackStore.receiveUserTracks = function (tracks) {
+	  _userTracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.displayUserTracks = function () {
+	  return _userTracks;
+	};
+
+	///////
+
+	TrackStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case TrackConstants.RECEIVETRACKS:
+	      TrackStore.recieveTracks(payload.tracks);
+	      break;
+	    case TrackConstants.RECEIVEDISPLAYTRACK:
+	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	    case TrackConstants.RECEIVEUSERTRACKS:
+	      TrackStore.receiveUserTracks(payload.tracks);
+	      break;
+	    case TrackConstants.DIDNOTFINDTRACK:
+	      TrackStore.fetchedNoTrack();
+	      break;
+	    case TrackConstants.DIDNOTFETCHTRACKS:
+	      break;
+	  }
+	};
+
+	module.exports = TrackStore;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    classNames = __webpack_require__(275);
+
+	//stores
+	var MusicStore = __webpack_require__(270);
+
+	var actionButton;
+	var clickdown = false;
+	var repeatButton;
+
+	var numberToTime = function (num) {
+	  // var hour = Math.floor(num/3600);
+	  // num = num%3600;
+	  var minute = Math.floor(num / 60);
+	  var second = Math.floor(num % 60);
+
+	  // return (hour > 9 ? "" + hour: "0" + hour) + ":" +
+	  return (minute > 9 ? "" + minute : minute) + ":" + (second > 9 ? "" + second : "0" + second);
+	};
+
+	var AudioPlayer = React.createClass({
+	  displayName: 'AudioPlayer',
+
+	  getInitialState: function () {
+	    return { audioAction: "play", initial: "0:00", track: { title: "", audio_url: "", image_url: "" },
+	      playlist: {}, onRepeat: MusicStore.repeat() };
+	  },
+
+	  componentDidMount: function () {
+
+	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+	    this.setState({ track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist() });
+
+	    this.refs["audioDom"].ontimeupdate = this.updateTimer;
+	  },
+
+	  componentWillUnmount: function () {
+	    this.musicstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+
+	    this.setState({ audioAction: "pause", initial: "0:00", track: MusicStore.currentTrack(),
+	      playlist: MusicStore.currentPlaylist(), onRepeat: MusicStore.repeat() });
+	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
+	    //also used to reset for slow audio fetching
+	    this.refs["audioDom"].currentTime = 0;
+	    this.refs["displaytime-current"].innerHTML = "0:00";
+	    this.refs["displaytime-end"].innerHTML = "0:00";
+	    this.refs["displayprogress-inner"].style.width = "0px";
+	    this.refs.audioDom.src = this.state.track.audio_url;
+
+	    if (!(this.state.track.audio_url.length === 0)) {
+	      this.refs.audioDom.play();
+	    }
+	  },
+
+	  audioActionButton: function () {
+	    if (this.state.audioAction === "play") {
+	      this.refs["audioDom"].play();
+	      // document.getElementById('demo').pause();
+	      this.setState({ audioAction: "pause" });
+	    } else {
+	      this.refs["audioDom"].pause();
+	      // document.getElementById('demo').play();
+	      this.setState({ audioAction: "play" });
+	    }
+	  },
+	  updateTimer: function () {
+
+	    this.refs["displaytime-current"].innerHTML = numberToTime(this.refs["audioDom"].currentTime);
+
+	    if (this.refs["audioDom"].duration === this.refs["audioDom"].duration) {
+	      this.refs["displaytime-end"].innerHTML = numberToTime(this.refs["audioDom"].duration);
+	    } else {
+	      this.refs["displaytime-end"].innerHTML = "0:00";
+	    }
+
+	    this.refs["displayprogress-inner"].style.width = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration * 400 + "px";
+	  },
+
+	  updateProgress: function (e) {
+
+	    if (clickdown) {
+	      var selectedtime = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * this.refs["audioDom"].duration;
+	      this.refs["audioDom"].currentTime = selectedtime;
+
+	      this.refs["displaytime-current"].innerHTML = numberToTime(selectedtime);
+
+	      this.refs["displayprogress-inner"].style.width = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * 400 + 'px';
+	    }
+	  },
+	  trackEndedAction: function () {
+	    MusicStore.nextTrack();
+	  },
+
+	  nextTrack: function () {
+	    MusicStore.nextTrack();
+	  },
+
+	  rewindTrack: function () {
+	    this.refs["audioDom"].currentTime = 0;
+	    this.refs["displayprogress-inner"].style.width = 0 + "px";
+	  },
+
+	  previousTrack: function () {
+
+	    MusicStore.previousTrack();
+	  },
+	  clickRepeat: function () {
+	    this.setState({ onRepeat: !MusicStore.repeat() });
+	    MusicStore.toggleRepeat();
+	  },
+
+	  render: function () {
+
+	    console.log(MusicStore.repeat());
+	    if (this.state.audioAction === "play") {
+	      actionButton = React.createElement(
+	        'div',
+	        { onClick: this.audioActionButton,
+	          className: 'musicbar-button' },
+	        React.createElement('div', { className: 'musicbar-play' })
+	      );
+	    } else {
+	      actionButton = React.createElement(
+	        'div',
+	        { onClick: this.audioActionButton,
+	          className: 'musicbar-button' },
+	        React.createElement('div', { className: 'musicbar-pause' }),
+	        React.createElement('div', { className: 'musicbar-pause' })
+	      );
+	    }
+
+	    if (this.state.onRepeat) {
+	      repeatButton = React.createElement('img', { className: 'musicbar-repeat',
+	        src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462432562/Untitled_Diagram_4_xrzaz3.svg',
+	        onClick: this.clickRepeat });
+	    } else {
+	      repeatButton = React.createElement('img', { className: 'musicbar-repeat',
+	        src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462432563/Untitled_Diagram_5_zuegqw.svg',
+	        onClick: this.clickRepeat });
+	    }
+
+	    return React.createElement(
+	      'div',
+	      { className: 'musicbar-audioplayer' },
+	      React.createElement(
+	        'audio',
+	        { ref: 'audioDom', id: 'audioDom',
+	          src: this.state.track.audio_url,
+	          onEnded: this.trackEndedAction, autoPlay: true },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Your browser does not support the audio element'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'music-ffrw',
+	          onDoubleClick: this.previousTrack,
+	          onClick: this.rewindTrack },
+	        React.createElement('div', { className: 'musicbar-ff-bar' }),
+	        React.createElement('div', { className: 'musicbar-ff' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        actionButton
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'music-ffrw',
+	          onClick: this.nextTrack },
+	        React.createElement('div', { className: 'musicbar-rw' }),
+	        React.createElement('div', { className: 'musicbar-rw-bar' })
+	      ),
+	      repeatButton,
+	      React.createElement(
+	        'section',
+	        { ref: 'displaytime-current',
+	          className: 'musicbar-time' },
+	        this.state.initial
+	      ),
+	      React.createElement(
+	        'div',
+	        { ref: 'displayprogress', className: 'musicbar-progressbar',
+	          style: { width: '400px' },
+
+	          onClick: function (e) {
+	            clickdown = true;
+	            this.updateProgress(e);
+	            clickdown = false;
+	          }.bind(this),
+
+	          onMouseDown: function () {
+	            clickdown = true;
+	            this.refs["audioDom"].muted = true;
+	          }.bind(this),
+
+	          onMouseMove: this.updateProgress,
+
+	          onMouseUp: function () {
+	            clickdown = false;
+	            this.refs["audioDom"].muted = false;
+	          }.bind(this),
+
+	          onMouseLeave: function () {
+	            clickdown = false;
+	            this.refs["audioDom"].muted = false;
+	          }.bind(this) },
+	        React.createElement(
+	          'div',
+	          { className: 'musicbar-progressbar-inner-base' },
+	          React.createElement('div', { ref: 'displayprogress-inner',
+	            className: 'musicbar-progressbar-inner', style: { width: '0px' } })
+	        )
+	      ),
+	      React.createElement(
+	        'section',
+	        { ref: 'displaytime-end',
+	          className: 'musicbar-time' },
+	        this.state.initial
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'musicbar-volume' },
+	        React.createElement('img', { className: 'musicbar-volume-speaker',
+	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg'
+
+	        }),
+	        React.createElement('div', { className: 'musicbar-volume-container' })
+	      )
+	    );
+	  }
+	});
+
+	module.exports = AudioPlayer;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2016 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+	/* global define */
+
+	(function () {
+		'use strict';
+
+		var hasOwn = {}.hasOwnProperty;
+
+		function classNames () {
+			var classes = [];
+
+			for (var i = 0; i < arguments.length; i++) {
+				var arg = arguments[i];
+				if (!arg) continue;
+
+				var argType = typeof arg;
+
+				if (argType === 'string' || argType === 'number') {
+					classes.push(arg);
+				} else if (Array.isArray(arg)) {
+					classes.push(classNames.apply(null, arg));
+				} else if (argType === 'object') {
+					for (var key in arg) {
+						if (hasOwn.call(arg, key) && arg[key]) {
+							classes.push(key);
+						}
+					}
+				}
+			}
+
+			return classes.join(' ');
+		}
+
+		if (typeof module !== 'undefined' && module.exports) {
+			module.exports = classNames;
+		} else if (true) {
+			// register as 'classnames', consistent with npm package name
+			!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return classNames;
+			}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else {
+			window.classNames = classNames;
+		}
+	}());
+
 
 /***/ },
 /* 276 */
@@ -35049,8 +35078,8 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(251),
-	    TrackStore = __webpack_require__(271),
-	    MusicStore = __webpack_require__(275);
+	    TrackStore = __webpack_require__(273),
+	    MusicStore = __webpack_require__(270);
 
 	var AudioDisplay = React.createClass({
 	  displayName: 'AudioDisplay',
@@ -35146,7 +35175,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(271),
+	    TrackStore = __webpack_require__(273),
 	    TrackClientActions = __webpack_require__(279),
 	    HomeTracks = __webpack_require__(282);
 
@@ -35276,7 +35305,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    trackConstants = __webpack_require__(272);
+	    trackConstants = __webpack_require__(271);
 
 	var TrackServerActions = {
 	  receiveTracks: function (tracks) {
@@ -35317,7 +35346,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    MusicStore = __webpack_require__(275);
+	    MusicStore = __webpack_require__(270);
 
 	var HomeTracks = React.createClass({
 	  displayName: 'HomeTracks',
@@ -35410,7 +35439,7 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var SessionStore = __webpack_require__(251),
-	    TrackStore = __webpack_require__(271);
+	    TrackStore = __webpack_require__(273);
 	//actions
 	var TrackClientActions = __webpack_require__(279);
 	//components
@@ -35455,10 +35484,14 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        null,
+	        { className: 'trackpage' },
 	        React.createElement(TrackForeground, { track: this.state.track }),
-	        React.createElement(TrackContent, { track: this.state.track }),
-	        React.createElement(TrackSideBar, { track: this.state.track })
+	        React.createElement(
+	          'div',
+	          { className: 'track-bottom' },
+	          React.createElement(TrackContent, { track: this.state.track }),
+	          React.createElement(TrackSideBar, { track: this.state.track })
+	        )
 	      );
 	    }
 	  }
@@ -35471,18 +35504,52 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(271),
+	    TrackStore = __webpack_require__(273),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackContent = React.createClass({
 	  displayName: 'TrackContent',
 
 
+	  goToAuthor: function () {
+	    hashHistory.push("/" + this.props.track.author);
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      'content'
+	      { className: 'track-content' },
+	      React.createElement(
+	        'div',
+	        { className: 'track-content-top' },
+	        'tag'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content-bottom' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-content-bottom-user' },
+	          React.createElement('img', { className: 'track-content-user-image', onClick: this.goToAuthor,
+	            src: "http://blog.caribanatoronto.com/wp-content/uploads/2015/03/drake-940x626.jpg" }),
+	          React.createElement(
+	            'div',
+	            { className: 'track-content-user-name' },
+	            this.props.track.author
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'track-content-bottom-right' },
+	          React.createElement(
+	            'div',
+	            { className: 'track-content-bottom-description' },
+	            this.props.track.description
+	          ),
+	          React.createElement('div', { className: 'track-content-bottom-tags' }),
+	          React.createElement('ol', { className: 'track-content-bottom-comment' })
+	        )
+	      )
 	    );
 	  }
 
@@ -35495,7 +35562,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(271),
+	    TrackStore = __webpack_require__(273),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var TrackSideBar = React.createClass({
@@ -35503,10 +35570,26 @@
 
 
 	  render: function () {
+	    if (this.props.track.playlists) {
+	      var playlists = this.props.track.playlists.map(function (playlist) {
+	        return React.createElement(
+	          'div',
+	          { key: playlist.id, className: 'track-sidebar-inplaylists-items' },
+	          playlist.title
+	        );
+	      });
+	    } else {
+	      var playlists = null;
+	    }
+
 	    return React.createElement(
 	      'div',
-	      null,
-	      'sidebar'
+	      { className: 'track-sidebar' },
+	      React.createElement(
+	        'div',
+	        { className: 'track-sidebar-inplaylists' },
+	        playlists
+	      )
 	    );
 	  }
 
@@ -35518,19 +35601,61 @@
 /* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(271),
+	    TrackStore = __webpack_require__(273),
 	    hashHistory = __webpack_require__(159).hashHistory;
+
+	//stores
+	var MusicStore = __webpack_require__(270);
 
 	var TrackForeground = React.createClass({
 	  displayName: 'TrackForeground',
 
 
+	  playDisplayTrack: function () {
+	    MusicStore.setMusic(this.props.track);
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      'foreground'
+	      { className: 'track-foreground' },
+	      React.createElement(
+	        'div',
+	        { className: 'track-foreground-box' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-top' },
+	          React.createElement('div', { className: 'track-foreground-playbutton',
+	            onClick: this.playDisplayTrack }),
+	          React.createElement(
+	            'div',
+	            { className: 'track-top-container' },
+	            React.createElement(
+	              'div',
+	              { className: 'track-top-names' },
+	              React.createElement(
+	                'div',
+	                { className: 'track-owner' },
+	                this.props.track.author
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'track-title' },
+	                this.props.track.title
+	              )
+	            ),
+	            React.createElement('div', { className: 'track-top-tagshistory' })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'track-bottom' },
+	          '  '
+	        )
+	      ),
+	      React.createElement('img', { className: 'track-pic', src: this.props.track.image_url, id: 'profile-image' })
 	    );
 	  }
 
@@ -35914,9 +36039,9 @@
 	var PlaylistClientActions = __webpack_require__(302);
 	//components
 	var PlaylistContent = __webpack_require__(305),
-	    PlaylistSideBar = __webpack_require__(306),
-	    PlaylistForeground = __webpack_require__(307),
-	    PlaylistNotFound = __webpack_require__(308);
+	    PlaylistSideBar = __webpack_require__(307),
+	    PlaylistForeground = __webpack_require__(308),
+	    PlaylistNotFound = __webpack_require__(309);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -36126,7 +36251,7 @@
 	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var PlaylistContentItems = __webpack_require__(311);
+	var PlaylistContentItems = __webpack_require__(306);
 
 	var PlaylistContent = React.createClass({
 	  displayName: 'PlaylistContent',
@@ -36162,6 +36287,11 @@
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-content-bottom-right' },
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-content-bottom-description' },
+	            this.props.playlist.description
+	          ),
 	          React.createElement('div', { className: 'playlist-content-bottom-tags' }),
 	          React.createElement(
 	            'ol',
@@ -36186,6 +36316,76 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory,
+	    MusicStore = __webpack_require__(270);
+
+	var PlaylistContentItem = React.createClass({
+	  displayName: 'PlaylistContentItem',
+
+	  goToTrack: function () {
+	    hashHistory.push('/' + this.props.track.author + "/track/" + this.props.track.title);
+	  },
+
+	  goToAuthor: function () {
+	    hashHistory.push("/" + this.props.track.author);
+	  },
+	  playPlaylistTrack: function () {
+	    MusicStore.setMusic(this.props.track, this.props.playlist);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'li',
+	      { className: 'playlist-content-bottom-items' },
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-image-container' },
+	        React.createElement('img', { className: 'playlist-content-items-images',
+	          src: this.props.track.image_url }),
+	        React.createElement('img', { className: 'playlist-content-items-play',
+	          onClick: function () {
+	            this.playPlaylistTrack();
+	          }.bind(this),
+	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-index' },
+	        this.props.index
+	      ),
+	      React.createElement(
+	        'a',
+	        { className: 'playlist-content-items-author',
+	          onClick: function () {
+	            this.goToAuthor;
+	          }.bind(this) },
+	        this.props.track.author
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-spacer' },
+	        '-'
+	      ),
+	      React.createElement(
+	        'a',
+	        { className: 'playlist-content-items-title',
+	          onClick: function () {
+	            hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
+	          }.bind(this) },
+	        this.props.track.title
+	      )
+	    );
+	  }
+
+	});
+
+	module.exports = PlaylistContentItem;
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
 	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
@@ -36206,16 +36406,14 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var PlaylistStore = __webpack_require__(300),
-	    TrackStore = __webpack_require__(300),
-	    MusicStore = __webpack_require__(275);
+	var MusicStore = __webpack_require__(270);
 
 	var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 	var PlaylistForeground = React.createClass({
@@ -36237,9 +36435,7 @@
 	          'div',
 	          { className: 'playlist-top' },
 	          React.createElement('div', { className: 'playlist-foreground-playbutton',
-	            onClick: function () {
-	              this.playDisplayPlaylist();
-	            }.bind(this) }),
+	            onClick: this.playDisplayPlaylist }),
 	          React.createElement(
 	            'div',
 	            { className: 'playlist-top-container' },
@@ -36249,7 +36445,7 @@
 	              React.createElement(
 	                'div',
 	                { className: 'playlist-owner' },
-	                'Henry Li'
+	                this.props.playlist.author
 	              ),
 	              React.createElement(
 	                'div',
@@ -36275,7 +36471,7 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36300,21 +36496,21 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
 	var UserStore = __webpack_require__(291),
-	    TrackStore = __webpack_require__(271),
+	    TrackStore = __webpack_require__(273),
 	    PlaylistStore = __webpack_require__(300),
-	    MusicStore = __webpack_require__(275);
+	    MusicStore = __webpack_require__(270);
 	//actions
 	var TrackClientActions = __webpack_require__(279),
 	    PlaylistClientActions = __webpack_require__(302);
 	//components
-	var UserContentItem = __webpack_require__(310);
+	var UserContentItem = __webpack_require__(311);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36393,13 +36589,13 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
-	var MusicStore = __webpack_require__(275);
+	var MusicStore = __webpack_require__(270);
 
 	var UserContentItem = React.createClass({
 	  displayName: "UserContentItem",
@@ -36430,74 +36626,6 @@
 	});
 
 	module.exports = UserContentItem;
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    hashHistory = __webpack_require__(159).hashHistory,
-	    MusicStore = __webpack_require__(275);
-
-	var PlaylistContentItem = React.createClass({
-	  displayName: 'PlaylistContentItem',
-
-	  goToTrack: function () {
-	    hashHistory.push('/' + this.props.track.author + "/track/" + this.props.track.title);
-	  },
-
-	  goToAuthor: function () {},
-	  playPlaylistTrack: function () {
-	    MusicStore.setMusic(this.props.track, this.props.playlist);
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'li',
-	      { className: 'playlist-content-bottom-items' },
-	      React.createElement(
-	        'div',
-	        { className: 'playlist-content-items-image-container' },
-	        React.createElement('img', { className: 'playlist-content-items-images',
-	          src: this.props.track.image_url }),
-	        React.createElement('img', { className: 'playlist-content-items-play',
-	          onClick: function () {
-	            this.playPlaylistTrack();
-	          }.bind(this),
-	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg' })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'playlist-content-items-index' },
-	        this.props.index
-	      ),
-	      React.createElement(
-	        'a',
-	        { className: 'playlist-content-items-author',
-	          onClick: function () {
-	            hashHistory.push("/" + this.props.track.author);
-	          }.bind(this) },
-	        this.props.track.author
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'playlist-content-items-spacer' },
-	        '-'
-	      ),
-	      React.createElement(
-	        'a',
-	        { className: 'playlist-content-items-title',
-	          onClick: function () {
-	            hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
-	          }.bind(this) },
-	        this.props.track.title
-	      )
-	    );
-	  }
-
-	});
-
-	module.exports = PlaylistContentItem;
 
 /***/ }
 /******/ ]);

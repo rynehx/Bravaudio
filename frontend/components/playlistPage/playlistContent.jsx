@@ -23,9 +23,9 @@ var PlaylistContent = React.createClass({
           <div className = "playlist-content-user-name" >{this.props.playlist.author}</div>
         </div>
         <div className = "playlist-content-bottom-right" >
-          <div className = "playlist-content-bottom-tags">
+          <div className = "playlist-content-bottom-description" >{this.props.playlist.description}</div>
+          <div className = "playlist-content-bottom-tags"></div>
 
-          </div>
           <ol className = "playlist-content-bottom-tracks">
             {this.props.playlist.tracks.map(function(track,i){
 

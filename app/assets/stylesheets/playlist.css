@@ -1,7 +1,5 @@
 .playlistpage{
   width: 100%;
-  position: relative;
-
   display: flex;
   flex-direction: column;
 }
@@ -60,6 +58,8 @@
   width: 300px;
   height: 300px;
   margin: 0px 15px 0px 0px;
+  min-width: 300px;
+  background-color: black;
 }
 
 
@@ -258,4 +258,14 @@
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   font-size: 12px;
   color: #303030;
+}
+
+.playlist-content-bottom-description{
+  height: 40px;
+  min-height: 40px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
 }
