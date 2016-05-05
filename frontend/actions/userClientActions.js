@@ -3,7 +3,6 @@
   var UserClientActions ={
 
     fetchDisplayUser: function(username){
-      debugger
       UserApiUtil.fetchDisplayUser(username);
     }
   };

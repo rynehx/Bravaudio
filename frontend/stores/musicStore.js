@@ -16,6 +16,13 @@ MusicStore.toggleRepeat = function(){
   }
 };
 
+MusicStore.emptyMusicStore = function(){
+      _currentPlaylist = {title:"",audio_url: "", image_url:""},
+      _currentTrack = {title:"",audio_url: "", image_url:""},
+      _playedTracks={}, _onRepeat = true, _repeatedSong = false;
+
+};
+
 MusicStore.repeat = function(){
   return _onRepeat;
 };

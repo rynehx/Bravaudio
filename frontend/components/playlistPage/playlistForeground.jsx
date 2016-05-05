@@ -3,12 +3,18 @@ var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 //stores
 var PlaylistStore = require('../../stores/playlistStore'),
-    TrackStore = require('../../stores/playlistStore');
+    TrackStore = require('../../stores/playlistStore'),
+    MusicStore = require('../../stores/musicStore');
 
 
 
 var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 var PlaylistForeground = React.createClass({
+
+playDisplayPlaylist: function(){
+  MusicStore.setMusic(undefined,this.props.playlist);
+},
+
 
 render: function(){
 return(
@@ -20,7 +26,8 @@ return(
       <div className = "playlist-foreground-box">
         <div className = "playlist-top">
 
-          <div className = "playlist-foreground-playbutton" onClick = {function(){console.log("lol")}} />
+          <div className = "playlist-foreground-playbutton"
+            onClick = {function(){this.playDisplayPlaylist();}.bind(this)} />
           <div className = "playlist-top-container">
             <div className = "playlist-top-names">
               <div className = "playlist-owner">

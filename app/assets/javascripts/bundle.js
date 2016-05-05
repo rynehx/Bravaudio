@@ -25147,7 +25147,8 @@
 	var LoginModal = __webpack_require__(219);
 	//Mixins
 	var SessionStore = __webpack_require__(251),
-	    SessionActions = __webpack_require__(244);
+	    SessionActions = __webpack_require__(244),
+	    MusicStore = __webpack_require__(275);
 
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -25189,6 +25190,7 @@
 	  logout: function (e) {
 	    e.preventDefault();
 	    SessionActions.logout();
+	    MusicStore.emptyMusicStore();
 	  },
 
 	  loginButtons: function () {
@@ -25207,8 +25209,10 @@
 	        { className: 'logged-in-nav' },
 	        React.createElement(
 	          'div',
-	          { className: 'logout-button nav-buttons', onClick: this.logout },
-	          'logout'
+	          { className: 'home-button nav-buttons', onClick: function () {
+	              hashHistory.push('home');
+	            } },
+	          'home'
 	        ),
 	        React.createElement(
 	          'div',
@@ -25219,10 +25223,8 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'home-button nav-buttons', onClick: function () {
-	              hashHistory.push('home');
-	            } },
-	          'home'
+	          { className: 'logout-button nav-buttons', onClick: this.logout },
+	          'logout'
 	        )
 	      );
 	    }
@@ -34684,6 +34686,11 @@
 	    this.refs["displaytime-current"].innerHTML = "0:00";
 	    this.refs["displaytime-end"].innerHTML = "0:00";
 	    this.refs["displayprogress-inner"].style.width = "0px";
+	    this.refs.audioDom.src = this.state.track.audio_url;
+
+	    if (!(this.state.track.audio_url.length === 0)) {
+	      this.refs.audioDom.play();
+	    }
 	  },
 
 	  audioActionButton: function () {
@@ -34920,6 +34927,10 @@
 	  } else {
 	    _onRepeat = true;
 	  }
+	};
+
+	MusicStore.emptyMusicStore = function () {
+	  _currentPlaylist = { title: "", audio_url: "", image_url: "" }, _currentTrack = { title: "", audio_url: "", image_url: "" }, _playedTracks = {}, _onRepeat = true, _repeatedSong = false;
 	};
 
 	MusicStore.repeat = function () {
@@ -35724,12 +35735,11 @@
 /* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(311);
+	var UserApiUtil = __webpack_require__(294);
 
 	var UserClientActions = {
 
 	  fetchDisplayUser: function (username) {
-	    debugger;
 	    UserApiUtil.fetchDisplayUser(username);
 	  }
 	};
@@ -35737,7 +35747,32 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 294 */,
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserServerActions = __webpack_require__(295);
+
+	var UserApiUtil = {
+	  fetchDisplayUser: function (username) {
+
+	    var request = {
+	      type: "GET",
+	      url: "api/" + username,
+	      success: function (user) {
+	        UserServerActions.receivedDisplayUser(user);
+	      },
+	      error: function (errors) {
+	        UserServerActions.receivedNoUser(errors);
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = UserApiUtil;
+
+/***/ },
 /* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35887,7 +35922,7 @@
 	  displayName: 'PlaylistPage',
 
 	  getInitialState: function () {
-	    return { playlist: {} };
+	    return { playlist: { tracks: [] } };
 	  },
 
 	  componentDidMount: function () {
@@ -36086,13 +36121,20 @@
 /* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
 	    PlaylistStore = __webpack_require__(300),
 	    hashHistory = __webpack_require__(159).hashHistory;
+	//components
+	var PlaylistContentItems = __webpack_require__(311);
 
 	var PlaylistContent = React.createClass({
 	  displayName: 'PlaylistContent',
 
+
+	  goToAuthor: function () {
+	    hashHistory.push("/" + this.props.playlist.author);
+	  },
 
 	  render: function () {
 	    return React.createElement(
@@ -36106,19 +36148,29 @@
 	      React.createElement(
 	        'div',
 	        { className: 'playlist-content-bottom' },
-	        React.createElement('div', { className: 'playlist-content-bottom-user' }),
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-content-bottom-user' },
+	          React.createElement('img', { className: 'playlist-content-user-image', onClick: this.goToAuthor,
+	            src: "http://blog.caribanatoronto.com/wp-content/uploads/2015/03/drake-940x626.jpg" }),
+	          React.createElement(
+	            'div',
+	            { className: 'playlist-content-user-name' },
+	            this.props.playlist.author
+	          )
+	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-content-bottom-right' },
+	          React.createElement('div', { className: 'playlist-content-bottom-tags' }),
 	          React.createElement(
-	            'div',
-	            { className: 'playlist-content-bottom-tags' },
-	            'tags'
-	          ),
-	          React.createElement(
-	            'div',
+	            'ol',
 	            { className: 'playlist-content-bottom-tracks' },
-	            'track'
+	            this.props.playlist.tracks.map(function (track, i) {
+
+	              return React.createElement(PlaylistContentItems, { key: track.id, track: track,
+	                playlist: this.props.playlist, index: i });
+	            }.bind(this))
 	          )
 	        )
 	      )
@@ -36162,12 +36214,17 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var PlaylistStore = __webpack_require__(300),
-	    TrackStore = __webpack_require__(300);
+	    TrackStore = __webpack_require__(300),
+	    MusicStore = __webpack_require__(275);
 
 	var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 	var PlaylistForeground = React.createClass({
 	  displayName: 'PlaylistForeground',
 
+
+	  playDisplayPlaylist: function () {
+	    MusicStore.setMusic(undefined, this.props.playlist);
+	  },
 
 	  render: function () {
 	    return React.createElement(
@@ -36179,9 +36236,10 @@
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-top' },
-	          React.createElement('div', { className: 'playlist-foreground-playbutton', onClick: function () {
-	              console.log("lol");
-	            } }),
+	          React.createElement('div', { className: 'playlist-foreground-playbutton',
+	            onClick: function () {
+	              this.playDisplayPlaylist();
+	            }.bind(this) }),
 	          React.createElement(
 	            'div',
 	            { className: 'playlist-top-container' },
@@ -36256,7 +36314,7 @@
 	var TrackClientActions = __webpack_require__(279),
 	    PlaylistClientActions = __webpack_require__(302);
 	//components
-	var UserContentItem = __webpack_require__(312);
+	var UserContentItem = __webpack_require__(310);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36335,34 +36393,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 310 */,
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UserServerActions = __webpack_require__(295);
-
-	var UserApiUtil = {
-	  fetchDisplayUser: function (username) {
-
-	    var request = {
-	      type: "GET",
-	      url: "api/" + username,
-	      success: function (user) {
-	        UserServerActions.receivedDisplayUser(user);
-	      },
-	      error: function (errors) {
-	        UserServerActions.receivedNoUser(errors);
-	      }
-	    };
-
-	    $.ajax(request);
-	  }
-	};
-
-	module.exports = UserApiUtil;
-
-/***/ },
-/* 312 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36399,6 +36430,74 @@
 	});
 
 	module.exports = UserContentItem;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory,
+	    MusicStore = __webpack_require__(275);
+
+	var PlaylistContentItem = React.createClass({
+	  displayName: 'PlaylistContentItem',
+
+	  goToTrack: function () {
+	    hashHistory.push('/' + this.props.track.author + "/track/" + this.props.track.title);
+	  },
+
+	  goToAuthor: function () {},
+	  playPlaylistTrack: function () {
+	    MusicStore.setMusic(this.props.track, this.props.playlist);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'li',
+	      { className: 'playlist-content-bottom-items' },
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-image-container' },
+	        React.createElement('img', { className: 'playlist-content-items-images',
+	          src: this.props.track.image_url }),
+	        React.createElement('img', { className: 'playlist-content-items-play',
+	          onClick: function () {
+	            this.playPlaylistTrack();
+	          }.bind(this),
+	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-index' },
+	        this.props.index
+	      ),
+	      React.createElement(
+	        'a',
+	        { className: 'playlist-content-items-author',
+	          onClick: function () {
+	            hashHistory.push("/" + this.props.track.author);
+	          }.bind(this) },
+	        this.props.track.author
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-spacer' },
+	        '-'
+	      ),
+	      React.createElement(
+	        'a',
+	        { className: 'playlist-content-items-title',
+	          onClick: function () {
+	            hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
+	          }.bind(this) },
+	        this.props.track.title
+	      )
+	    );
+	  }
+
+	});
+
+	module.exports = PlaylistContentItem;
 
 /***/ }
 /******/ ]);

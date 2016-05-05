@@ -117,7 +117,9 @@
 .playlist-top-names{
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
 
 }
 
@@ -139,7 +141,7 @@
 
 .playlist-content-bottom{
 
-  width: 92%;
+  width: 96%;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -149,15 +151,15 @@
 .playlist-content-bottom-user{
   width:120px;
   min-width: 120px;
-  height: 170px;
+  height: auto;
   margin-right: 20px;
-  background-color: lime;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .playlist-content-bottom-right{
   width: 100%;
-  height: 120px;
-  background-color: lime;
   display: flex;
   flex-direction: column;
 }
@@ -173,4 +175,87 @@
   width: 100%;
   height: 100%;
 
+}
+
+.playlist-content-bottom-items{
+  width: 100%;
+  height: 50px;
+  list-style-type:none;
+  display: flex;
+  align-items: center;
+
+
+}
+
+.playlist-content-items-image-container{
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+  background-color: black;
+}
+
+.playlist-content-items-images{
+  width: 40px;
+  height: auto;
+  position: absolute;
+
+}
+
+
+.playlist-content-items-play{
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  display: none;
+}
+
+.playlist-content-items-image-container:hover .playlist-content-items-play{
+  display: flex;
+  z-index: 50;
+}
+
+.playlist-content-items-index{
+  width: 10px;
+  text-align: center;
+  margin: 10px;
+  color: #BFBFBF;
+}
+
+.playlist-content-items-author{
+  text-align: center;
+  margin: 0 5px 0px 10px;
+  color: #BFBFBF;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+}
+
+.playlist-content-items-title{
+  text-align: center;
+  margin: 0 10px 0px 5px;
+  color: #303030;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+}
+
+.playlist-content-items-spacer{
+  text-align: center;
+  color: #BFBFBF;
+}
+
+
+
+.playlist-content-user-image{
+  background-color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.playlist-content-user-name{
+  width: 100%;
+  float: left;
+  margin-left: 25px;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  font-size: 12px;
+  color: #303030;
 }

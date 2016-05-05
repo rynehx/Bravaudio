@@ -14,7 +14,7 @@ var PlaylistContent = require('./playlistPage/playlistContent'),
 
 var PlaylistPage = React.createClass({
   getInitialState: function () {
-    return { playlist: { } };
+    return { playlist: {tracks:[] } };
   },
 
   componentDidMount: function(){
@@ -38,7 +38,7 @@ var PlaylistPage = React.createClass({
   },
 
   render: function(){
-
+    
     if(this.state.playlist === null){
       return(
         <div>

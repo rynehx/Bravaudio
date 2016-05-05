@@ -1,7 +1,7 @@
 class Track < ActiveRecord::Base
 
   belongs_to(
-    :user,
+    :author,
     foreign_key: :author_id,
     class_name: User
   )

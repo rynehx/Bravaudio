@@ -6,7 +6,8 @@ var React = require('react'),
 var LoginModal = require('./loginModal');
 //Mixins
 var SessionStore = require('../stores/sessionStore'),
-    SessionActions = require('../actions/sessionActions');
+    SessionActions = require('../actions/sessionActions'),
+    MusicStore = require('../stores/musicStore');
 
 var NavBar = React.createClass({
   greeting: function(){
@@ -36,6 +37,7 @@ var NavBar = React.createClass({
   logout: function(e){
 		e.preventDefault();
 		SessionActions.logout();
+    MusicStore.emptyMusicStore();
 	},
 
   loginButtons: function(){
@@ -51,9 +53,9 @@ var NavBar = React.createClass({
     }else{
       return (
         <div className = "logged-in-nav">
-          <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
-          <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
           <div className = "home-button nav-buttons" onClick={function(){hashHistory.push('home');}}>home</div>
+          <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
+          <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
         </div>
       );
     }

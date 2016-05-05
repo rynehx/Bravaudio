@@ -51,6 +51,12 @@ var AudioPlayer = React.createClass({
       this.refs["displaytime-current"].innerHTML ="0:00";
       this.refs["displaytime-end"].innerHTML ="0:00";
       this.refs["displayprogress-inner"].style.width="0px";
+      this.refs.audioDom.src = this.state.track.audio_url;
+
+      if(!(this.state.track.audio_url.length === 0)){
+        this.refs.audioDom.play();
+      }
+
 
   },
 
@@ -122,7 +128,7 @@ var AudioPlayer = React.createClass({
   },
 
   render: function(){
-
+    
 
     if(this.state.audioAction === "play"){
       actionButton = <div onClick={this.audioActionButton}
