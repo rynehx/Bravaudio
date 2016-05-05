@@ -134,8 +134,6 @@ var AudioPlayer = React.createClass({
   },
 
   render: function(){
-
-    console.log(MusicStore.repeat())
     if(this.state.audioAction === "play"){
       actionButton = <div onClick={this.audioActionButton}
         className = "musicbar-button">
@@ -236,7 +234,7 @@ var AudioPlayer = React.createClass({
         <div className = "musicbar-volume">
           <img className = "musicbar-volume-speaker"
             src = "http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg"
-          
+
             >
           </img>
           <div className = "musicbar-volume-container" >

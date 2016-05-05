@@ -123,15 +123,78 @@
 
 .user-content-items{
   width: auto;
-  height:220px;
+  height:180px;
   background-color: lightblue;
   display: flex;
-  align-items: flex-start;
-  margin: 20px;
+  align-items: center;
+  margin: 10px;
 
 }
 
 .user-content-items-images{
-  width:150px;
-  height: 150px;
+  width:165px;
+  height: 165px;
+  min-width: 165px;
+}
+
+.user-content-items-main{
+  width:100%;
+  height: 165px;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.user-content-items-top{
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.user-content-items-mid{
+  width: 100%;
+  height: 85px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.user-content-items-bottom{
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.user-content-items-play{
+  height: 40px;
+  width: 40px;
+  background-size: cover;
+  background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg");
+  margin: 0px 5px 0px 10px;
+}
+
+.user-content-items-header{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+
+.user-content-items-author{
+  color: grey;
+  font-size: 12px;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+}
+.user-content-items-title{
+  font-size: 15px;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+
 }

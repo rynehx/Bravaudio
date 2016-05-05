@@ -34889,8 +34889,6 @@
 	  },
 
 	  render: function () {
-
-	    console.log(MusicStore.repeat());
 	    if (this.state.audioAction === "play") {
 	      actionButton = React.createElement(
 	        'div',
@@ -36563,16 +36561,16 @@
 	  renderType: function () {
 	    if (this.props.params.tabtype === "tracks") {
 	      return this.state.tracks.map(function (track) {
-	        return React.createElement(UserContentItem, { key: track.id + "t", item: track });
-	      });
+	        return React.createElement(UserContentItem, { key: track.id + "t", item: track, user: this.props.params.user });
+	      }.bind(this));
 	    } else if (this.props.params.tabtype === "playlists") {
 	      return this.state.playlists.map(function (playlist) {
-	        return React.createElement(UserContentItem, { key: playlist.id + "p", item: playlist });
-	      });
+	        return React.createElement(UserContentItem, { key: playlist.id + "p", item: playlist, user: this.props.params.user });
+	      }.bind(this));
 	    } else {
 	      return this.allSorter(this.state.tracks, this.state.playlists).map(function (item) {
-	        return React.createElement(UserContentItem, { key: item.tracks ? item.id + "p" : item.id + "t", item: item });
-	      });
+	        return React.createElement(UserContentItem, { key: item.tracks ? item.id + "p" : item.id + "t", item: item, user: this.props.params.user });
+	      }.bind(this));
 	    }
 	  },
 
@@ -36593,7 +36591,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var MusicStore = __webpack_require__(270);
 
@@ -36610,16 +36609,54 @@
 	    }
 	  },
 
+	  gotToItem: function () {
+	    var item = this.props.item;
+	    if (item.tracks) {
+	      hashHistory.push("/" + this.props.user + "/playlist/" + this.props.item.title);
+	    } else {
+	      hashHistory.push("/" + this.props.user + "/track/" + this.props.item.title);
+	    }
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      "li",
 	      { className: "user-content-items" },
 	      React.createElement("img", { className: "user-content-items-images", src: this.props.item.image_url,
-	        onClick: this.setMusic }),
+	        onClick: this.gotToItem }),
 	      React.createElement(
 	        "div",
-	        { className: "user-content-items-info" },
-	        this.props.item.title
+	        { className: "user-content-items-main" },
+	        React.createElement(
+	          "div",
+	          { className: "user-content-items-top" },
+	          React.createElement("div", { className: "user-content-items-play",
+	            onClick: this.setMusic }),
+	          React.createElement(
+	            "div",
+	            { className: "user-content-items-header" },
+	            React.createElement(
+	              "div",
+	              { className: "user-content-items-author" },
+	              this.props.user
+	            ),
+	            React.createElement(
+	              "div",
+	              { className: "user-content-items-title" },
+	              this.props.item.title
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "user-content-items-mid" },
+	          "m"
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "user-content-items-bottom" },
+	          "b"
+	        )
 	      )
 	    );
 	  }

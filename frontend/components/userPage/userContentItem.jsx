@@ -1,5 +1,6 @@
 //react
-var React = require("react");
+var React = require("react"),
+    hashHistory = require('react-router').hashHistory;
 //stores
 var MusicStore = require("../../stores/musicStore");
 
@@ -18,12 +19,39 @@ var UserContentItem = React.createClass({
 
   },
 
+  gotToItem: function(){
+    var item = this.props.item;
+    if(item.tracks){
+      hashHistory.push("/" + this.props.user+ "/playlist/" + this.props.item.title);
+    }else{
+      hashHistory.push("/" + this.props.user + "/track/" + this.props.item.title);
+    }
+  },
+
   render: function(){
     return (
       <li className = "user-content-items">
         <img className = "user-content-items-images" src= {this.props.item.image_url}
-          onClick = {this.setMusic} />
-        <div className = "user-content-items-info" >{this.props.item.title}</div>
+          onClick = {this.gotToItem} />
+        <div className = "user-content-items-main" >
+          <div className = "user-content-items-top" >
+            <div className = "user-content-items-play"
+              onClick ={this.setMusic}></div>
+            <div className = "user-content-items-header">
+              <div className = "user-content-items-author">{this.props.user}</div>
+              <div className = "user-content-items-title">{this.props.item.title}</div>
+            </div>
+          </div>
+
+          <div className = "user-content-items-mid" >
+            m
+          </div>
+
+          <div className = "user-content-items-bottom" >
+            b
+          </div>
+
+        </div>
       </li>
     );
   }
