@@ -25144,7 +25144,7 @@
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
-
+	//  <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
 	//Components
 	var LoginModal = __webpack_require__(219),
 	    UserProfile = __webpack_require__(270),
@@ -25204,13 +25204,6 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'logged-in-nav' },
-	        React.createElement(
-	          'div',
-	          { className: 'upload-button nav-buttons', onClick: function () {
-	              hashHistory.push('upload');
-	            } },
-	          'upload'
-	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'logout-button nav-buttons', onClick: this.logout },
@@ -35650,11 +35643,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'track-content' },
-	      React.createElement(
-	        'div',
-	        { className: 'track-content-top' },
-	        'tag'
-	      ),
+	      React.createElement('div', { className: 'track-content-top' }),
 	      React.createElement(
 	        'div',
 	        { className: 'track-content-bottom' },
@@ -35662,7 +35651,7 @@
 	          'div',
 	          { className: 'track-content-bottom-user' },
 	          React.createElement('img', { className: 'track-content-user-image', onClick: this.goToAuthor,
-	            src: "http://m6.i.pbase.com/o2/40/791040/1/113045316.XFll908U.100_3575222copy.jpg" }),
+	            src: this.props.track.author_img }),
 	          React.createElement(
 	            'div',
 	            { className: 'track-content-user-name' },
@@ -36157,11 +36146,7 @@
 	  displayName: 'UserSideBar',
 
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'user-sidebar' },
-	      'sidebar'
-	    );
+	    return React.createElement('div', { className: 'user-sidebar' });
 	  }
 	});
 
@@ -36429,11 +36414,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'playlist-content' },
-	      React.createElement(
-	        'div',
-	        { className: 'playlist-content-top' },
-	        'top'
-	      ),
+	      React.createElement('div', { className: 'playlist-content-top' }),
 	      React.createElement(
 	        'div',
 	        { className: 'playlist-content-bottom' },
@@ -36441,7 +36422,7 @@
 	          'div',
 	          { className: 'playlist-content-bottom-user' },
 	          React.createElement('img', { className: 'playlist-content-user-image', onClick: this.goToAuthor,
-	            src: "http://blog.caribanatoronto.com/wp-content/uploads/2015/03/drake-940x626.jpg" }),
+	            src: this.props.playlist.author_img }),
 	          React.createElement(
 	            'div',
 	            { className: 'playlist-content-user-name' },
@@ -36559,11 +36540,7 @@
 
 
 	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'playlist-sidebar' },
-	      'sidebar'
-	    );
+	    return React.createElement('div', { className: 'playlist-sidebar' });
 	  }
 
 	});
@@ -36842,16 +36819,8 @@
 	            )
 	          )
 	        ),
-	        React.createElement(
-	          "div",
-	          { className: "user-content-items-mid" },
-	          "m"
-	        ),
-	        React.createElement(
-	          "div",
-	          { className: "user-content-items-bottom" },
-	          "b"
-	        )
+	        React.createElement("div", { className: "user-content-items-mid" }),
+	        React.createElement("div", { className: "user-content-items-bottom" })
 	      )
 	    );
 	  }

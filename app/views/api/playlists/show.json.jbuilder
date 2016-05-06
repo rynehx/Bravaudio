@@ -1,7 +1,7 @@
 json.extract! @playlist,:id, :title, :description,:author_id,:image_url, :created_at
 
 json.author @playlist.author.username
-
+json.author_img @playlist.author.profile_picture_url
 
 json.tracks  do
   json.array! (@tracks) do |track|

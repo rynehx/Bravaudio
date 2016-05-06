@@ -8,7 +8,7 @@
   json.times_played @track.times_played
   json.created_at @track.created_at
   json.author  @track.author.username
-
+  json.author_img  @track.author.profile_picture_url
   json.playlists do
     json.array! @track.playlists do |playlist|
       json.id playlist.id

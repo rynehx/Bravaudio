@@ -7,7 +7,7 @@ var PlaylistSideBar = React.createClass({
 render: function(){
 return(
   <div className = "playlist-sidebar">
-    sidebar
+
   </div>
 );
 }

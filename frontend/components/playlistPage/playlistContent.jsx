@@ -14,11 +14,11 @@ var PlaylistContent = React.createClass({
   render: function(){
   return(
     <div className = "playlist-content">
-      <div className = "playlist-content-top">top</div>
+      <div className = "playlist-content-top"></div>
       <div className = "playlist-content-bottom">
         <div className = "playlist-content-bottom-user" >
           <img className = "playlist-content-user-image" onClick={this.goToAuthor}
-            src = {"http://blog.caribanatoronto.com/wp-content/uploads/2015/03/drake-940x626.jpg"}>
+            src = {this.props.playlist.author_img}>
           </img>
           <div className = "playlist-content-user-name" >{this.props.playlist.author}</div>
         </div>

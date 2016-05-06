@@ -44,11 +44,11 @@ var UserContentItem = React.createClass({
           </div>
 
           <div className = "user-content-items-mid" >
-            m
+
           </div>
 
           <div className = "user-content-items-bottom" >
-            b
+            
           </div>
 
         </div>

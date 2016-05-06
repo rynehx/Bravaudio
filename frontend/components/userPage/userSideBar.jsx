@@ -7,7 +7,7 @@ var UserSideBar = React.createClass({
   render: function(){
     return (
       <div className = "user-sidebar">
-        sidebar
+
       </div>
     );
   }
