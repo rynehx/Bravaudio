@@ -20,8 +20,9 @@ var style = {
     right           : '150px',
     bottom          : '100px',
     border          : '1px solid #ccc',
-    padding         : '20px'
-  }
+    padding         : '20px',
+  },
+  height: "3000px"
 };
 
 

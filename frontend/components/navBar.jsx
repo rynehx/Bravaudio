@@ -3,23 +3,16 @@ var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 
 //Components
-var LoginModal = require('./loginModal');
+var LoginModal = require('./loginModal'),
+    UserProfile = require('./navBar/userProfile'),
+    SearchBar = require('./navBar/searchBar');
 //Mixins
 var SessionStore = require('../stores/sessionStore'),
     SessionActions = require('../actions/sessionActions'),
     MusicStore = require('../stores/musicStore');
 
 var NavBar = React.createClass({
-  greeting: function(){
-		if (!SessionStore.fetchCurrentUser()) {
-			return;
-		}
-		return (
-			<div>
-				<h2>Hi, {SessionStore.fetchCurrentUser().username}!</h2>
-			</div>
-		);
-	},
+
 	errors: function(){
 		if (SessionStore.fetchError() === null){
 			return;
@@ -40,6 +33,15 @@ var NavBar = React.createClass({
     MusicStore.emptyMusicStore();
 	},
 
+  userProfile: function(){
+        if(SessionStore.fetchCurrentUser()){
+          return <UserProfile user = {SessionStore.fetchCurrentUser()}/>;
+        }else{
+          return <div></div>;
+        }
+
+  },
+
   loginButtons: function(){
 
     if(!SessionStore.fetchCurrentUser()){
@@ -53,7 +55,6 @@ var NavBar = React.createClass({
     }else{
       return (
         <div className = "logged-in-nav">
-          <div className = "home-button nav-buttons" onClick={function(){hashHistory.push('home');}}>home</div>
           <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
           <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
         </div>
@@ -66,9 +67,16 @@ var NavBar = React.createClass({
 
   render: function(){
 
+
+
+
     return (
       <div className = "navBar">
         <div className = "navBar-container">
+          <div className = "home-button nav-buttons"
+            onClick={function(){hashHistory.push('home');}}>home</div>
+          <SearchBar />
+          {this.userProfile()}
           {this.loginButtons()}
         </div>
       </div>

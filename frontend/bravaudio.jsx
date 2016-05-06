@@ -14,7 +14,8 @@ var NavBar = require('./components/navBar'),
     UploadPage = require('./components/uploadPage'),
     TrackPage = require('./components/trackPage'),
     UserPage = require('./components/userPage'),
-    PlaylistPage = require('./components/playlistPage');
+    PlaylistPage = require('./components/playlistPage'),
+    SplashPage = require('./components/SplashPage');
 //Mixins
 var CurrentSessionState = require('./mixins/currentSessionState'),
     SessionActions = require('./actions/sessionActions'),
@@ -53,6 +54,7 @@ var App = React.createClass({
 var AppRouter = (
   <Router history={hashHistory}>
     <Route path="/" components={App}>
+      <IndexRoute component={SplashPage}/>
       <Route path="home" components={HomePage}/>
       <Route path="upload" components={UploadPage}/>
       <Route path=":user" components={UserPage}>

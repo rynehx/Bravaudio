@@ -38,8 +38,8 @@ var UserContentItem = React.createClass({
             <div className = "user-content-items-play"
               onClick ={this.setMusic}></div>
             <div className = "user-content-items-header">
-              <div className = "user-content-items-author">{this.props.user}</div>
-              <div className = "user-content-items-title">{this.props.item.title}</div>
+              <a className = "user-content-items-author">{this.props.user}</a>
+              <a className = "user-content-items-title" onClick = {this.gotToItem}>{this.props.item.title}</a>
             </div>
           </div>
 

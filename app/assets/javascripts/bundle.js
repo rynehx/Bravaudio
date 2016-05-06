@@ -60,7 +60,8 @@
 	    UploadPage = __webpack_require__(284),
 	    TrackPage = __webpack_require__(285),
 	    UserPage = __webpack_require__(290),
-	    PlaylistPage = __webpack_require__(299);
+	    PlaylistPage = __webpack_require__(299),
+	    SplashPage = __webpack_require__(316);
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -101,6 +102,7 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', components: App },
+	    React.createElement(IndexRoute, { component: SplashPage }),
 	    React.createElement(Route, { path: 'home', components: HomePage }),
 	    React.createElement(Route, { path: 'upload', components: UploadPage }),
 	    React.createElement(
@@ -25144,7 +25146,9 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//Components
-	var LoginModal = __webpack_require__(219);
+	var LoginModal = __webpack_require__(219),
+	    UserProfile = __webpack_require__(313),
+	    SearchBar = __webpack_require__(314);
 	//Mixins
 	var SessionStore = __webpack_require__(251),
 	    SessionActions = __webpack_require__(244),
@@ -25153,22 +25157,7 @@
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 
-	  greeting: function () {
-	    if (!SessionStore.fetchCurrentUser()) {
-	      return;
-	    }
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'h2',
-	        null,
-	        'Hi, ',
-	        SessionStore.fetchCurrentUser().username,
-	        '!'
-	      )
-	    );
-	  },
+
 	  errors: function () {
 	    if (SessionStore.fetchError() === null) {
 	      return;
@@ -25193,6 +25182,14 @@
 	    MusicStore.emptyMusicStore();
 	  },
 
+	  userProfile: function () {
+	    if (SessionStore.fetchCurrentUser()) {
+	      return React.createElement(UserProfile, { user: SessionStore.fetchCurrentUser() });
+	    } else {
+	      return React.createElement('div', null);
+	    }
+	  },
+
 	  loginButtons: function () {
 
 	    if (!SessionStore.fetchCurrentUser()) {
@@ -25207,13 +25204,6 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'logged-in-nav' },
-	        React.createElement(
-	          'div',
-	          { className: 'home-button nav-buttons', onClick: function () {
-	              hashHistory.push('home');
-	            } },
-	          'home'
-	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'upload-button nav-buttons', onClick: function () {
@@ -25238,6 +25228,16 @@
 	      React.createElement(
 	        'div',
 	        { className: 'navBar-container' },
+	        React.createElement(
+	          'div',
+	          { className: 'home-button nav-buttons',
+	            onClick: function () {
+	              hashHistory.push('home');
+	            } },
+	          'home'
+	        ),
+	        React.createElement(SearchBar, null),
+	        this.userProfile(),
 	        this.loginButtons()
 	      )
 	    );
@@ -25274,7 +25274,8 @@
 	    bottom: '100px',
 	    border: '1px solid #ccc',
 	    padding: '20px'
-	  }
+	  },
+	  height: "3000px"
 	};
 
 	var LoginModal = React.createClass({
@@ -34782,6 +34783,7 @@
 	var actionButton;
 	var clickdown = false;
 	var repeatButton;
+	var _mouseDown = false;
 
 	var numberToTime = function (num) {
 	  // var hour = Math.floor(num/3600);
@@ -34888,7 +34890,37 @@
 	    MusicStore.toggleRepeat();
 	  },
 
+	  mouseDown: function (e) {
+	    _mouseDown = true;
+	    this.adjustVolume(e);
+	  },
+
+	  mouseUp: function () {
+	    _mouseDown = false;
+	  },
+
+	  adjustVolume: function (e) {
+	    if (_mouseDown) {
+
+	      //735 560
+	      var top = this.refs.volumebar.getBoundingClientRect().top;
+	      var bot = this.refs.volumebar.getBoundingClientRect().bottom;
+
+	      var diff = .07 * (bot - top);
+
+	      if (e.clientY > top + diff && e.clientY < bot - diff) {
+	        this.refs.volume.style.bottom = bot - e.clientY - 13 + "px";
+	        this.refs.audioDom.volume = (bot - diff - e.clientY) / (bot - diff - (top + diff));
+	        console.log(this.refs.audioDom.volume);
+	      }
+	    }
+	  },
+
 	  render: function () {
+	    if (this.refs.audioDom) {
+	      this.refs.audioDom.volume = 0.5;
+	    }
+
 	    if (this.state.audioAction === "play") {
 	      actionButton = React.createElement(
 	        'div',
@@ -34999,12 +35031,18 @@
 	      ),
 	      React.createElement(
 	        'div',
-	        { className: 'musicbar-volume' },
+	        { ref: 'volumebox', className: 'musicbar-volume' },
 	        React.createElement('img', { className: 'musicbar-volume-speaker',
-	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg'
-
-	        }),
-	        React.createElement('div', { className: 'musicbar-volume-container' })
+	          src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg' }),
+	        React.createElement(
+	          'div',
+	          { ref: 'volumebar', className: 'musicbar-volume-container',
+	            onMouseDown: this.mouseDown,
+	            onMouseUp: this.mouseUp,
+	            onMouseLeave: this.mouseUp,
+	            onMouseMove: this.adjustVolume },
+	          React.createElement('div', { ref: 'volume', style: { bottom: "90px" }, className: 'musicbar-volume-nobe' })
+	        )
 	      )
 	    );
 	  }
@@ -35101,23 +35139,29 @@
 	    this.setState({ track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
 	  },
+	  goToCurrentPlaylist: function () {
+	    hashHistory.push("/" + this.state.track.author + "/playlist/" + this.state.playlist.title);
+	  },
+	  goToCurrentTrack: function () {
+	    hashHistory.push("/" + this.state.track.author + "/track/" + this.state.track.title);
+	  },
 
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'musicbar-audio-display' },
-	      React.createElement('img', { className: 'musicbar-track-image', src: this.state.track.image_url }),
+	      React.createElement('img', { className: 'musicbar-track-image', onClick: this.goToCurrentTrack, src: this.state.track.image_url }),
 	      React.createElement(
 	        'div',
 	        { className: 'musicbar-text' },
 	        React.createElement(
 	          'div',
-	          { className: 'musicbar-playlist-title' },
+	          { className: 'musicbar-playlist-title', onClick: this.goToCurrentPlaylist },
 	          this.state.playlist.title
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'musicbar-track-title' },
+	          { className: 'musicbar-track-title', onClick: this.goToCurrentTrack },
 	          this.state.track.title
 	        )
 	      )
@@ -35567,13 +35611,43 @@
 	  displayName: 'TrackSideBar',
 
 
+	  goToPlaylist: function (playlist) {
+	    hashHistory.push("/" + playlist.author + "/playlist/" + playlist.title);
+	  },
+
+	  goToPlaylistAuthor: function (playlist) {
+	    hashHistory.push("/" + playlist.author);
+	  },
+
 	  render: function () {
+	    var that = this;
 	    if (this.props.track.playlists) {
 	      var playlists = this.props.track.playlists.map(function (playlist) {
 	        return React.createElement(
 	          'div',
 	          { key: playlist.id, className: 'track-sidebar-inplaylists-items' },
-	          playlist.title
+	          React.createElement('img', { className: 'track-sidebar-inplaylists-image', src: playlist.image_url,
+	            onClick: function () {
+	              that.goToPlaylist(playlist);
+	            } }),
+	          React.createElement(
+	            'div',
+	            { className: 'track-sidebar-inplaylists-info' },
+	            React.createElement(
+	              'div',
+	              { className: 'track-sidebar-inplaylists-author', onClick: function () {
+	                  that.goToPlaylistAuthor(playlist);
+	                } },
+	              playlist.author
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'track-sidebar-inplaylists-title', onClick: function () {
+	                  that.goToPlaylist(playlist);
+	                } },
+	              playlist.title
+	            )
+	          )
 	        );
 	      });
 	    } else {
@@ -35586,6 +35660,11 @@
 	      React.createElement(
 	        'div',
 	        { className: 'track-sidebar-inplaylists' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-sidebar-inplaylists-header' },
+	          'In playlists'
+	        ),
 	        playlists
 	      )
 	    );
@@ -36636,13 +36715,13 @@
 	            "div",
 	            { className: "user-content-items-header" },
 	            React.createElement(
-	              "div",
+	              "a",
 	              { className: "user-content-items-author" },
 	              this.props.user
 	            ),
 	            React.createElement(
-	              "div",
-	              { className: "user-content-items-title" },
+	              "a",
+	              { className: "user-content-items-title", onClick: this.gotToItem },
 	              this.props.item.title
 	            )
 	          )
@@ -36663,6 +36742,80 @@
 	});
 
 	module.exports = UserContentItem;
+
+/***/ },
+/* 312 */,
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	//this.props.user.profile_picture_url
+	var UserProfile = React.createClass({
+	  displayName: 'UserProfile',
+
+	  goToUser: function () {
+	    hashHistory.push("/" + this.props.user.username);
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      { className: 'userprofile', onClick: this.goToUser },
+	      React.createElement('img', { className: 'userprofile-image', src: 'http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcyMDcxMjkwMzgx.jpg' }),
+	      React.createElement(
+	        'div',
+	        { className: 'userprofile-username' },
+	        this.props.user.username
+	      )
+	    );
+	  }
+	});
+
+	module.exports = UserProfile;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SearchBar = React.createClass({
+	  displayName: "SearchBar",
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "searchbar" },
+	      React.createElement("input", { className: "searchbar-inner", placeholder: "search" })
+	    );
+	  }
+	});
+
+	module.exports = SearchBar;
+
+/***/ },
+/* 315 */,
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SplashPage = React.createClass({
+	  displayName: 'SplashPage',
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'Splash'
+	    );
+	  }
+	});
+
+	module.exports = SplashPage;
 
 /***/ }
 /******/ ]);

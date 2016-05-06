@@ -29,15 +29,21 @@ var AudioDisplay = React.createClass({
     this.setState({track: MusicStore.currentTrack(),
       playlist: MusicStore.currentPlaylist()});
   },
+  goToCurrentPlaylist: function(){
+    hashHistory.push("/" + this.state.track.author + "/playlist/"+ this.state.playlist.title);
+  },
+  goToCurrentTrack: function(){
+    hashHistory.push("/" + this.state.track.author + "/track/"+ this.state.track.title);
+  },
 
 
   render: function(){
     return (
       <div className="musicbar-audio-display">
-        <img className = "musicbar-track-image" src={this.state.track.image_url}/>
+        <img className = "musicbar-track-image" onClick = {this.goToCurrentTrack} src={this.state.track.image_url} />
       <div className = "musicbar-text">
-        <div className = "musicbar-playlist-title" >{this.state.playlist.title}</div>
-        <div className = "musicbar-track-title" >{this.state.track.title}</div>
+        <div className = "musicbar-playlist-title" onClick = {this.goToCurrentPlaylist}>{this.state.playlist.title}</div>
+        <div className = "musicbar-track-title" onClick = {this.goToCurrentTrack}>{this.state.track.title}</div>
       </div>
       </div>
     );

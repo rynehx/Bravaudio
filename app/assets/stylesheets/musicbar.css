@@ -207,6 +207,7 @@
   height: 20px;
   padding: 10px;
   margin: 0px 5px 0px 10px;
+
 }
 
 .musicbar-volume-speaker{
@@ -216,6 +217,32 @@
 }
 
 .musicbar-volume-container{
+  position: relative;
+  bottom: 208px;
+  right: 10px;
+  height: 200px;
+  width: 40px;
+  display: none;
+
+}
+
+.musicbar-volume:hover .musicbar-volume-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462484272/Untitled_Diagram_13_dq8vkl.svg");
+
+}
 
 
+
+.musicbar-volume-nobe{
+  position: absolute;
+  z-index: 80;
+  left: 13px;
+  background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462482374/Untitled_Diagram_11_bcwkmk.svg");
+  height: 20px;
+  width: 20px;
+  background-repeat: no-repeat;
 }

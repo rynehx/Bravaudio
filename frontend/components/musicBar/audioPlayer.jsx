@@ -8,6 +8,7 @@ var MusicStore = require('../../stores/musicStore');
 var actionButton;
 var clickdown = false;
 var repeatButton;
+var _mouseDown = false;
 
 
 var numberToTime = function(num) {
@@ -133,7 +134,37 @@ var AudioPlayer = React.createClass({
     MusicStore.toggleRepeat();
   },
 
+  mouseDown: function(e){
+    _mouseDown = true;
+    this.adjustVolume(e);
+  },
+
+  mouseUp: function(){
+    _mouseDown = false;
+  },
+
+  adjustVolume: function(e){
+    if(_mouseDown){
+
+      //735 560
+      var top = this.refs.volumebar.getBoundingClientRect().top;
+      var bot = this.refs.volumebar.getBoundingClientRect().bottom;
+
+      var diff = .07*(bot - top);
+
+      if(e.clientY> top+diff && e.clientY < bot-diff){
+        this.refs.volume.style.bottom =   (bot - e.clientY)-13  + "px";
+        this.refs.audioDom.volume = ((bot-diff)-e.clientY)/ ((bot-diff)-(top+diff));
+        console.log(this.refs.audioDom.volume)
+      }
+    }
+  },
+
   render: function(){
+    if(this.refs.audioDom){
+      this.refs.audioDom.volume= 0.5;
+    }
+
     if(this.state.audioAction === "play"){
       actionButton = <div onClick={this.audioActionButton}
         className = "musicbar-button">
@@ -231,14 +262,17 @@ var AudioPlayer = React.createClass({
         <section ref = "displaytime-end"
           className = "musicbar-time">{this.state.initial}
         </section>
-        <div className = "musicbar-volume">
+        <div ref = "volumebox" className = "musicbar-volume">
           <img className = "musicbar-volume-speaker"
-            src = "http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg"
-
-            >
+            src = "http://res.cloudinary.com/bravaudio/image/upload/v1462434645/Untitled_Diagram_6_xemipi.svg">
           </img>
-          <div className = "musicbar-volume-container" >
-
+          <div ref = "volumebar"  className = "musicbar-volume-container"
+            onMouseDown = {this.mouseDown}
+            onMouseUp = {this.mouseUp}
+            onMouseLeave = {this.mouseUp}
+            onMouseMove = {this.adjustVolume}>
+            <div ref = "volume" style = {{bottom: "90px"}}  className = "musicbar-volume-nobe">
+            </div>
           </div>
         </div>
 
