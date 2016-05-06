@@ -32,7 +32,7 @@ var PlaylistContent = React.createClass({
               return (
 
                 <PlaylistContentItems key = {track.id} track = {track}
-                  playlist = {this.props.playlist} index = {i}/>
+                  playlist = {this.props.playlist} index = {i+1}/>
               );
             }.bind(this))}
           </ol>

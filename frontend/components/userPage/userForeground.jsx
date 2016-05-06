@@ -1,7 +1,7 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 
-var imgsrc = "http://assets.audiomack.com/crooklyn00/98fe3aaa11182c65006502a066f05840.jpeg";
+
 
 var UserForeground = React.createClass({
 
@@ -24,7 +24,7 @@ var UserForeground = React.createClass({
     return (
       <div className = "user-foreground">
         <div className = "user-profile-pic-container">
-        <img className = "user-profile-pic" src={imgsrc} id = "profile-image"/>
+        <img className = "user-profile-pic" src={this.props.user.profile_picture_url} id = "profile-image"/>
         </div>
 
         <div className = "user-profile-info">
@@ -32,8 +32,8 @@ var UserForeground = React.createClass({
             <div className = "user-profile-username">
               {this.props.user.username}
             </div>
-            <div className = "user-profile-location">Henry Li</div>
-            <div className = "user-profile-location">City, State, Country</div>
+            <div className = "user-profile-location">{this.props.user.name}</div>
+            <div className = "user-profile-location">{this.props.user.city+" "+ this.props.user.state + " " + this.props.user.country}</div>
         </div>
       </div>
     );

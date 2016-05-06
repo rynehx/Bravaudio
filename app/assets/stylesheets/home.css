@@ -45,6 +45,11 @@
 
 
 .home-tracks-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-family: Verdana;
-  font-size: 15px;
+  font-size: 14px;
+
 }

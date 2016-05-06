@@ -36067,8 +36067,6 @@
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
-	var imgsrc = "http://assets.audiomack.com/crooklyn00/98fe3aaa11182c65006502a066f05840.jpeg";
-
 	var UserForeground = React.createClass({
 	  displayName: 'UserForeground',
 
@@ -36094,7 +36092,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'user-profile-pic-container' },
-	        React.createElement('img', { className: 'user-profile-pic', src: imgsrc, id: 'profile-image' })
+	        React.createElement('img', { className: 'user-profile-pic', src: this.props.user.profile_picture_url, id: 'profile-image' })
 	      ),
 	      React.createElement(
 	        'div',
@@ -36107,12 +36105,12 @@
 	        React.createElement(
 	          'div',
 	          { className: 'user-profile-location' },
-	          'Henry Li'
+	          this.props.user.name
 	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'user-profile-location' },
-	          'City, State, Country'
+	          this.props.user.city + " " + this.props.user.state + " " + this.props.user.country
 	        )
 	      )
 	    );
@@ -36439,7 +36437,7 @@
 	            this.props.playlist.tracks.map(function (track, i) {
 
 	              return React.createElement(PlaylistContentItems, { key: track.id, track: track,
-	                playlist: this.props.playlist, index: i });
+	                playlist: this.props.playlist, index: i + 1 });
 	            }.bind(this))
 	          )
 	        )
@@ -36497,7 +36495,7 @@
 	        'a',
 	        { className: 'playlist-content-items-author',
 	          onClick: function () {
-	            this.goToAuthor;
+	            this.goToAuthor();
 	          }.bind(this) },
 	        this.props.track.author
 	      ),
@@ -36555,7 +36553,6 @@
 	//stores
 	var MusicStore = __webpack_require__(272);
 
-	var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
 	var PlaylistForeground = React.createClass({
 	  displayName: 'PlaylistForeground',
 
@@ -36602,7 +36599,7 @@
 	          '  '
 	        )
 	      ),
-	      React.createElement('img', { className: 'playlist-pic', src: imgsrc, id: 'profile-image' })
+	      React.createElement('img', { className: 'playlist-pic', src: this.props.playlist.image_url, id: 'profile-image' })
 	    );
 	  }
 

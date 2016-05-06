@@ -13,7 +13,7 @@ var HomeTracks = React.createClass({
     hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
   },
   goToAuthor: function(){
-    hashHistory.push("/" + this.props.track.author)
+    hashHistory.push("/" + this.props.track.author);
   },
 
   render: function(){

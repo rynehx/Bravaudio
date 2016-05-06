@@ -6,7 +6,7 @@ var MusicStore = require('../../stores/musicStore');
 
 
 
-var imgsrc = "https://upload.wikimedia.org/wikipedia/en/5/55/Michael_Jackson_-_Thriller.png";
+
 var PlaylistForeground = React.createClass({
 
 playDisplayPlaylist: function(){
@@ -40,7 +40,7 @@ return(
 
       </div>
 
-        <img className = "playlist-pic" src={imgsrc} id = "profile-image"/>
+        <img className = "playlist-pic" src={this.props.playlist.image_url} id = "profile-image"/>
   </div>
 );
 }

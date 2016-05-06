@@ -19,10 +19,12 @@ ActiveRecord::Schema.define(version: 20160501062828) do
   create_table "playlist_track_joinings", force: :cascade do |t|
     t.integer  "track_id",    null: false
     t.integer  "playlist_id", null: false
+    t.integer  "order",       null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
 
+  add_index "playlist_track_joinings", ["order"], name: "index_playlist_track_joinings_on_order", using: :btree
   add_index "playlist_track_joinings", ["playlist_id"], name: "index_playlist_track_joinings_on_playlist_id", using: :btree
   add_index "playlist_track_joinings", ["track_id"], name: "index_playlist_track_joinings_on_track_id", using: :btree
 

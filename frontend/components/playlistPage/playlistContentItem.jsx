@@ -32,7 +32,7 @@ var PlaylistContentItem = React.createClass({
       <div className = "playlist-content-items-index">{this.props.index}</div>
 
       <a className = "playlist-content-items-author"
-        onClick= {function(){this.goToAuthor}.bind(this)}>
+        onClick= {function(){this.goToAuthor()}.bind(this)}>
         {this.props.track.author}
       </a>
 
