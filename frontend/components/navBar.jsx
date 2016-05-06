@@ -73,6 +73,7 @@ var NavBar = React.createClass({
     return (
       <div className = "navBar">
         <div className = "navBar-container">
+          <div className = "navBar-title" >Bravaudio</div>
           <div className = "home-button nav-buttons"
             onClick={function(){hashHistory.push('home');}}>home</div>
           <SearchBar />

@@ -15,7 +15,7 @@ var NavBar = require('./components/navBar'),
     TrackPage = require('./components/trackPage'),
     UserPage = require('./components/userPage'),
     PlaylistPage = require('./components/playlistPage'),
-    SplashPage = require('./components/SplashPage');
+    SplashPage = require('./components/splashPage');
 //Mixins
 var CurrentSessionState = require('./mixins/currentSessionState'),
     SessionActions = require('./actions/sessionActions'),

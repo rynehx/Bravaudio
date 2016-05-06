@@ -25,9 +25,7 @@ var HomePage = React.createClass({
   render: function(){
     return (
       <div className = "home">
-        {this.props.children}
         <HomeContent/>
-        <HomeSideBar/>
       </div>
     );
   }

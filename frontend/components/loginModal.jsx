@@ -21,8 +21,7 @@ var style = {
     bottom          : '100px',
     border          : '1px solid #ccc',
     padding         : '20px',
-  },
-  height: "3000px"
+  }
 };
 
 
@@ -72,7 +71,7 @@ var LoginModal = React.createClass({
       return (
         <div className = "logged-out-nav">
         <div className={this.props.sessionAction + "-button nav-buttons"} onClick={this.openModal}>{this.props.sessionAction}</div>
-        <Modal
+        <Modal className = "login-modal"
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}

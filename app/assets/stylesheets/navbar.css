@@ -6,12 +6,12 @@
   height: 42px;
   background-color: #262e33;
   z-index: 9000;
-  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+    font-family: 'Arial Black', 'Arial Bold', Gadget, sans-serif;
 }
 
 .navBar-container{
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   width: 90%;
   margin: auto;

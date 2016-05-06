@@ -29,16 +29,15 @@ var HomeContent = React.createClass({
 
     return (
 
-      <div>
+
         <div className = "home-container">
           {
             this.state.tracks.map(function(track){
-
               return (<HomeTracks key = {track.id} track={track} playlist = {null} />);
             })
           }
         </div>
-      </div>
+
     );
   }
 
