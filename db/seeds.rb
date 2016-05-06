@@ -378,7 +378,7 @@ author_id: 1},
       {username: "OVO", password:"password" , name: "Drake", profile_picture_url: "https://www.morganstanley.com/assets/images/people/tiles/karlene-quigley-large.jpg" , city: "Toronto", state: "Ontario", country: "Canada", session_token: "dir"},
       {username: "TIMID_neuce", password:"password" , name: "Andy", profile_picture_url: "http://www.google.com/+/images/learnmore/getstarted/feat-profile.png" , city: "Houston", state: "Texas", country: "USA", session_token: "dir"},
       {username: "hatcher_man", password:"password" , name: "James", profile_picture_url: "https://www.cheme.cornell.edu/engineering/customcf/iws_ai_faculty_display/ai_images/ads10-profile.jpg" , city: "Austin", state: "Texas", country: "USA", session_token: "dir"},
-      {username: "hadazz", password:"password" , name: "Guy", profile_picture_url: "http://www.outsidemediakit.com/images/cntntimgs_aud_demprofile_2015_01.jpg" , city: "San Francisco", state: "California", country: "USA", session_token: "dir"},
+      {username: "guest", password:"password" , name: "Guest", profile_picture_url: "http://www.outsidemediakit.com/images/cntntimgs_aud_demprofile_2015_01.jpg" , city: "San Francisco", state: "California", country: "USA", session_token: "dir"},
       {username: "dieselpwr", password:"password" , name: "Steve", profile_picture_url: "https://i.vimeocdn.com/portrait/12321126_300x300.jpg" , city: "Oakland", state: "California", country: "USA", session_token: "dir"},
       {username: "zyrtantar", password:"password" , name: "Mitch", profile_picture_url: "https://expertbeacon.com/sites/default/files/advice_for_men_on_selecting_your_online_dating_profile_photo.jpg" , city: "Los Angeles", state: "California", country: "USA", session_token: "dir"}
       ])

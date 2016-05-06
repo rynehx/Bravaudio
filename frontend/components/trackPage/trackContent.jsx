@@ -15,7 +15,7 @@ return(
       <div className = "track-content-bottom">
         <div className = "track-content-bottom-user" >
           <img className = "track-content-user-image" onClick={this.goToAuthor}
-            src = {"http://blog.caribanatoronto.com/wp-content/uploads/2015/03/drake-940x626.jpg"}>
+            src = {"http://m6.i.pbase.com/o2/40/791040/1/113045316.XFll908U.100_3575222copy.jpg"}>
           </img>
           <div className = "track-content-user-name" >{this.props.track.author}</div>
         </div>

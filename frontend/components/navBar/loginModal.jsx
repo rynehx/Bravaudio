@@ -11,7 +11,7 @@ var style = {
 		    left            : 0,
 		    right           : 0,
 		    bottom          : 0,
-		    backgroundColor : 'rgba(255, 255, 255, 0.30)',
+		    backgroundColor : 'rgba(255, 255, 255, 0.90)',
 		    zIndex          : 1000,
 		  },
 		  content : {
@@ -67,6 +67,14 @@ var LoginModal = React.createClass({
       }
 
     },
+
+    guestLogin: function(){
+      SessionActions[this.props.sessionAction]({
+        username: "guest",
+        password: "password"
+      });
+    },
+
     render: function() {
       return (
         <div className = "logged-out-modals">
@@ -79,13 +87,18 @@ var LoginModal = React.createClass({
 
 
 
-          <h2>{this.props.sessionAction}</h2>
+          <p className = "login-title">{this.props.sessionAction}</p>
           <section>{this.showErrors()}</section>
           <form>
-            <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
-            <input type="password" valueLink={this.linkState("password")} placeholder="password"/>
-            <button onClick={this.handleSubmit}>submit</button>
-            <button onClick={this.closeModal}>close</button>
+            <div className = "login-input">
+              <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
+              <input type="password" valueLink={this.linkState("password")} placeholder="password"/>
+            </div>
+            <div className = "login-input-buttons">
+              <div className = "login-input-button" onClick={this.handleSubmit}>Submit</div>
+              <div className = "login-input-button" onClick={this.closeModal}>Close</div>
+              <div className = "login-input-button" onClick = {this.guestLogin}>Guest Login</div>
+            </div>
           </form>
         </Modal>
         </div>

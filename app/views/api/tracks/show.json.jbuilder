@@ -7,7 +7,8 @@
   json.audio_url @track.audio_url
   json.times_played @track.times_played
   json.created_at @track.created_at
-  json.author @track.author.username
+  json.author  @track.author.username
+
   json.playlists do
     json.array! @track.playlists do |playlist|
       json.id playlist.id

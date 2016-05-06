@@ -92,8 +92,8 @@ body {
 .login-modal{
   height: 100px;
   width: 400px;
+  min-width: 400px;
   background-color: black;
-  opacity: 0.7;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -101,8 +101,37 @@ body {
   -moz-transform: translateX(-200px) translateY(-100px);
   -webkit-transform: translateX(-200px) translateY(-100px);
   transform: translateX(-200px) translateY(-100px);
+  border-style: none;
 }
 
+.login-title{
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    font-family: Arial;
+    margin-bottom: 20px;
+}
+
+.login-input{
+  display: flex;
+  justify-content: space-around;
+}
+
+.login-input-buttons{
+
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+.login-input-button{
+  background-color: orange;
+  color:white;
+  font-family: Arial;
+  margin: 0px 10px;
+  padding: 5px;
+}
 
 .navBar-title{
   height: 100%;
@@ -114,10 +143,5 @@ body {
 	line-height: 26.4px;
   display: flex;
   align-items: center;
-  color: white;
-}
-
-.navBar-title:hover{
   color: orange;
-  text-decoration: underline;
 }

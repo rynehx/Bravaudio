@@ -67,6 +67,8 @@ var NavBar = React.createClass({
 
   render: function(){
 
+        if(SessionStore.fetchCurrentUser()){var homeButton =  "home";}else{}
+
 
 
 
@@ -74,8 +76,10 @@ var NavBar = React.createClass({
       <div className = "navBar">
         <div className = "navBar-container">
           <div className = "navBar-title" >Bravaudio</div>
+
           <div className = "home-button nav-buttons"
-            onClick={function(){hashHistory.push('home');}}>home</div>
+            onClick={function(){hashHistory.push('home');}}>{homeButton}</div>
+
           <SearchBar />
           {this.userProfile()}
           {this.loginButtons()}
