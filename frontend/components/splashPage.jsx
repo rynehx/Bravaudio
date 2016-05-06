@@ -17,7 +17,7 @@ var SplashPage = React.createClass({
 
 
         <div  className = "splash-entry" onClick={this.goToLogin} >
-          Immense Yourself In Music
+          Immerse Yourself In Music
         </div>
 
       </div>

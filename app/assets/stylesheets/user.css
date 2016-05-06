@@ -130,13 +130,14 @@
   display: flex;
   align-items: center;
   margin: 10px;
+  justify-content: space-between;
 
 }
 
 .user-content-items-images{
   width:165px;
   height: 165px;
-  min-width: 165px;
+
 }
 
 .user-content-items-main{

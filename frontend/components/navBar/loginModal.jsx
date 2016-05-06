@@ -1,29 +1,29 @@
 var React = require('react'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
     Modal = require('react-modal'),
-    SessionActions = require("../actions/sessionActions"),
-    SessionStore = require("../stores/sessionStore"),
-    CurrentSessionState = require("../mixins/currentSessionState");
+    SessionActions = require("../../actions/sessionActions"),
+    SessionStore = require("../../stores/sessionStore"),
+    CurrentSessionState = require("../../mixins/currentSessionState");
 var style = {
   overlay : {
-    position        : 'fixed',
-    top             : 0,
-    left            : 0,
-    right           : 0,
-    bottom          : 0,
-    backgroundColor : 'rgba(255, 255, 255, 0.0)'
-  },
-  content : {
-    position        : 'fixed',
-    top             : '100px',
-    left            : '150px',
-    right           : '150px',
-    bottom          : '100px',
-    border          : '1px solid #ccc',
-    padding         : '20px',
-  }
-};
-
+		    position        : 'fixed',
+		    top             : 0,
+		    left            : 0,
+		    right           : 0,
+		    bottom          : 0,
+		    backgroundColor : 'rgba(255, 255, 255, 0.30)',
+		    zIndex          : 1000,
+		  },
+		  content : {
+		    position        : 'fixed',
+				margin          : '0 auto',
+		    border          : '1px solid #ccc',
+		    padding         : '20px',
+		    zIndex          : 1001,
+				width           : '30%',
+				maxWidth        : '500px',
+		  }
+		};
 
 
 var LoginModal = React.createClass({
@@ -69,7 +69,7 @@ var LoginModal = React.createClass({
     },
     render: function() {
       return (
-        <div className = "logged-out-nav">
+        <div className = "logged-out-modals">
         <div className={this.props.sessionAction + "-button nav-buttons"} onClick={this.openModal}>{this.props.sessionAction}</div>
         <Modal className = "login-modal"
           isOpen={this.state.modalIsOpen}

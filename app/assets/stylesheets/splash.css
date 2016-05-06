@@ -6,12 +6,13 @@ video#splashvideo {
     min-height: 100%;
     width: auto;
     height: auto;
-    z-index: 0;
+    z-index: -1;
     -ms-transform: translateX(-50%) translateY(-50%);
     -moz-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translateX(-50%) translateY(-50%);
     transform: translateX(-50%) translateY(-50%);
     background-size: cover;
+
 }
 
 .splashpage{
@@ -20,16 +21,20 @@ video#splashvideo {
   align-items: center;
   height: 100%;
   width: 100%;
-
+  margin: 0 auto;
 }
 
 .splash-entry{
+  position: fixed;
+  top: 50%;
+  left: 50%;
   opacity: 0.5;
   font-size: 40px;
   color: white;
   font-weight: 500;
   border-radius: 20px;
   height: 150px;
+  width: 540px;
   background-color: black;
   z-index: 2;
   padding: 0px 30px;
@@ -37,7 +42,10 @@ video#splashvideo {
   justify-content: center;
   align-items: center;
   font-family: Arial;
-
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-270px) translateY(-75px);
 }
 
 .splash-entry:hover{

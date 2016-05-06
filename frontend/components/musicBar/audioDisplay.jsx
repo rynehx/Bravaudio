@@ -11,7 +11,7 @@ var SessionStore = require('../../stores/sessionStore'),
 
 var AudioDisplay = React.createClass({
   getInitialState: function () {
-    return { track: {title:"",audio_url: "", image_url:""}, playlist: {} };
+    return { track: {title: "",audio_url: "", image_url: ""}, playlist: {} };
   },
 
   componentDidMount: function(){

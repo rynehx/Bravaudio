@@ -25146,7 +25146,7 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//Components
-	var LoginModal = __webpack_require__(219),
+	var LoginModal = __webpack_require__(315),
 	    UserProfile = __webpack_require__(270),
 	    SearchBar = __webpack_require__(271);
 	//Mixins
@@ -25253,126 +25253,7 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    LinkedStateMixin = __webpack_require__(220),
-	    Modal = __webpack_require__(224),
-	    SessionActions = __webpack_require__(244),
-	    SessionStore = __webpack_require__(251),
-	    CurrentSessionState = __webpack_require__(269);
-	var style = {
-	  overlay: {
-	    position: 'fixed',
-	    top: 0,
-	    left: 0,
-	    right: 0,
-	    bottom: 0,
-	    backgroundColor: 'rgba(255, 255, 255, 0.0)'
-	  },
-	  content: {
-	    position: 'fixed',
-	    top: '100px',
-	    left: '150px',
-	    right: '150px',
-	    bottom: '100px',
-	    border: '1px solid #ccc',
-	    padding: '20px'
-	  }
-	};
-
-	var LoginModal = React.createClass({
-	  displayName: 'LoginModal',
-
-	  mixins: [LinkedStateMixin],
-	  getInitialState: function () {
-	    return { modalIsOpen: false };
-	  },
-	  componentWillMount: function () {
-	    var container = document.getElementById("content");
-	    Modal.setAppElement(container);
-	  },
-	  componentWillUpdate: function () {
-	    if (SessionStore.fetchCurrentUser() && this.state.modalIsOpen) {
-	      this.closeModal();
-	    }
-	  },
-	  openModal: function () {
-	    this.setState({ modalIsOpen: true });
-	  },
-
-	  afterOpenModal: function () {
-	    // references are now sync'd and can be accessed.
-
-	  },
-
-	  closeModal: function () {
-	    this.setState({ modalIsOpen: false });
-	  },
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    SessionActions[this.props.sessionAction]({
-	      username: this.state.username,
-	      password: this.state.password
-	    });
-	  },
-	  showErrors: function () {
-
-	    if (this.props.errors != "null") {
-	      return this.props.errors;
-	    }
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'logged-out-nav' },
-	      React.createElement(
-	        'div',
-	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
-	        this.props.sessionAction
-	      ),
-	      React.createElement(
-	        Modal,
-	        { className: 'login-modal',
-	          isOpen: this.state.modalIsOpen,
-	          onAfterOpen: this.afterOpenModal,
-	          onRequestClose: this.closeModal,
-	          style: style },
-	        React.createElement(
-	          'h2',
-	          null,
-	          this.props.sessionAction
-	        ),
-	        React.createElement(
-	          'section',
-	          null,
-	          this.showErrors()
-	        ),
-	        React.createElement(
-	          'form',
-	          null,
-	          React.createElement('input', { type: 'text', valueLink: this.linkState("username"), placeholder: 'username' }),
-	          React.createElement('input', { type: 'password', valueLink: this.linkState("password"), placeholder: 'password' }),
-	          React.createElement(
-	            'button',
-	            { onClick: this.handleSubmit },
-	            'submit'
-	          ),
-	          React.createElement(
-	            'button',
-	            { onClick: this.closeModal },
-	            'close'
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	module.exports = LoginModal;
-
-/***/ },
+/* 219 */,
 /* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -34526,7 +34407,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'userprofile', onClick: this.goToUser },
-	      React.createElement('img', { className: 'userprofile-image', src: 'http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcyMDcxMjkwMzgx.jpg' }),
+	      React.createElement('img', { className: 'userprofile-image', src: this.props.user.profile_picture_url }),
 	      React.createElement(
 	        'div',
 	        { className: 'userprofile-username' },
@@ -36654,7 +36535,7 @@
 	      React.createElement(
 	        "div",
 	        { className: "splash-entry", onClick: this.goToLogin },
-	        "Immense Yourself In Music"
+	        "Immerse Yourself In Music"
 	      )
 	    );
 	  }
@@ -36832,6 +36713,127 @@
 	});
 
 	module.exports = UserContentItem;
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(220),
+	    Modal = __webpack_require__(224),
+	    SessionActions = __webpack_require__(244),
+	    SessionStore = __webpack_require__(251),
+	    CurrentSessionState = __webpack_require__(269);
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.30)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: '1px solid #ccc',
+	    padding: '20px',
+	    zIndex: 1001,
+	    width: '30%',
+	    maxWidth: '500px'
+	  }
+	};
+
+	var LoginModal = React.createClass({
+	  displayName: 'LoginModal',
+
+	  mixins: [LinkedStateMixin],
+	  getInitialState: function () {
+	    return { modalIsOpen: false };
+	  },
+	  componentWillMount: function () {
+	    var container = document.getElementById("content");
+	    Modal.setAppElement(container);
+	  },
+	  componentWillUpdate: function () {
+	    if (SessionStore.fetchCurrentUser() && this.state.modalIsOpen) {
+	      this.closeModal();
+	    }
+	  },
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    SessionActions[this.props.sessionAction]({
+	      username: this.state.username,
+	      password: this.state.password
+	    });
+	  },
+	  showErrors: function () {
+
+	    if (this.props.errors != "null") {
+	      return this.props.errors;
+	    }
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'logged-out-modals' },
+	      React.createElement(
+	        'div',
+	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
+	        this.props.sessionAction
+	      ),
+	      React.createElement(
+	        Modal,
+	        { className: 'login-modal',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'h2',
+	          null,
+	          this.props.sessionAction
+	        ),
+	        React.createElement(
+	          'section',
+	          null,
+	          this.showErrors()
+	        ),
+	        React.createElement(
+	          'form',
+	          null,
+	          React.createElement('input', { type: 'text', valueLink: this.linkState("username"), placeholder: 'username' }),
+	          React.createElement('input', { type: 'password', valueLink: this.linkState("password"), placeholder: 'password' }),
+	          React.createElement(
+	            'button',
+	            { onClick: this.handleSubmit },
+	            'submit'
+	          ),
+	          React.createElement(
+	            'button',
+	            { onClick: this.closeModal },
+	            'close'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = LoginModal;
 
 /***/ }
 /******/ ]);

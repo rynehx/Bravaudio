@@ -37,26 +37,24 @@
 
 
 #content{
+  background-color: #EDEDED;
   height: 100%;
-    min-height: 100%;
-    background-color: #EDEDED;
 }
 
 html{
-  height: 100%;
-    min-height: 100%;
+
 }
 
 
 body {
   height: 100%;
-    min-height: 100%;
+  min-height: 100%;
+
 }
 
 .background{
   height: 100%;
   min-height: 100%;
-  z-index: -1;
 }
 
 
@@ -83,7 +81,7 @@ body {
 }
 
 .content-container{
-  margin: 42px auto 0px auto;
+  margin: 42px auto 45px auto;
   max-width: 1130px;
   width: 87%;
   min-height: 100%;
@@ -92,10 +90,17 @@ body {
 
 
 .login-modal{
-  height: 200px;
+  height: 100px;
   width: 400px;
   background-color: black;
   opacity: 0.7;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translateX(-200px) translateY(-100px);
+  -moz-transform: translateX(-200px) translateY(-100px);
+  -webkit-transform: translateX(-200px) translateY(-100px);
+  transform: translateX(-200px) translateY(-100px);
 }
 
 

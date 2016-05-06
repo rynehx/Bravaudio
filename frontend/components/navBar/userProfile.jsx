@@ -12,7 +12,7 @@ var UserProfile = React.createClass({
     return (
       <div className = "userprofile" onClick = {this.goToUser}>
 
-        <img className = "userprofile-image" src = "http://a5.files.biography.com/image/upload/c_fill,cs_srgb,dpr_1.0,g_face,h_300,q_80,w_300/MTE1ODA0OTcyMDcxMjkwMzgx.jpg"/>
+        <img className = "userprofile-image" src = {this.props.user.profile_picture_url}/>
         <div className = "userprofile-username">{this.props.user.username}</div>
       </div>
     );

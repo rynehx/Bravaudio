@@ -3,7 +3,7 @@ var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 
 //Components
-var LoginModal = require('./loginModal'),
+var LoginModal = require('./navBar/loginModal'),
     UserProfile = require('./navBar/userProfile'),
     SearchBar = require('./navBar/searchBar');
 //Mixins
