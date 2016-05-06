@@ -15,6 +15,8 @@ var PlaylistContentItem = React.createClass({
   },
 
   render: function(){
+
+
     return (<li className = "playlist-content-bottom-items">
 
       <div className ="playlist-content-items-image-container">

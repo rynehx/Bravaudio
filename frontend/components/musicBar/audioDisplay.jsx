@@ -30,7 +30,7 @@ var AudioDisplay = React.createClass({
       playlist: MusicStore.currentPlaylist()});
   },
   goToCurrentPlaylist: function(){
-    hashHistory.push("/" + this.state.track.author + "/playlist/"+ this.state.playlist.title);
+    hashHistory.push("/" + this.state.playlist.author + "/playlist/"+ this.state.playlist.title);
   },
   goToCurrentTrack: function(){
     hashHistory.push("/" + this.state.track.author + "/track/"+ this.state.track.title);
