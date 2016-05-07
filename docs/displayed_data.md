@@ -19,40 +19,21 @@ Each page/route of the App requires certain data from the data base to be displa
 
 ### Playlists Page
   * `Currently Displayed Playlist` fetched as a json with containing info (using includes with nesting)
-    0. `# of likes`
-    0. `Tags`
-    0. `Number of tracks included`
-    0. `Total run time of all included tracks`
     0. `All tracks included` fetched as json
-      * `tracks likes`
-      * `times played`
     0. `Owner`
-      * `other tracks from the owner`
 
 
 ### User Profile Page
   * `User Information`
     0. `Tracks Owned`
     0. `Playlists Owned`
-    0. `Reposts`
-    0. `Following`
-    0. `Followers`
-    0. `Likes`
 
-### Upload  Page
 
-### Collection  Page
-  * `Items Owned`
-    0. `Playlists Owned`
-    0. `Reposts`
-    0. `Following`
-    0. `Followers`
-    0. `Likes`
+
+
 ### Home Page
   * `News Feed`
-    0. `Site wide top tracks`
-    0. `Latest from people user followed`
+    0. `Site wide tracks`
 
 ### Splash Page
   * `Intro video`
-  * `Site wide top tracks`

@@ -16,8 +16,8 @@ what you'll need to do.
 * `MusicBar Store`
 * `Track Store`
 * `Playlist Store`
-* `Search Store`
 * `User Store`
+* `SessionStore`
 
 
 ## Track Cycles
