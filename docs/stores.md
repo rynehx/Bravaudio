@@ -19,11 +19,3 @@
   * `keep track of current user`
 ###Users Store
   * `keep track of other people`
-
-
-
-
-
-##question
-          1. what is the advantage of using ajax request relations vs keeping the relations in a store.
-          2. if I do use ajax would I keep a listener on the store and call a user refetch every time I submit a relational property (e.g. adding a commit on a track. commit is a property on track and not in store)
