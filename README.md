@@ -12,14 +12,9 @@ The App has the following minimum viable product features
 - [ ] Smooth, bug-free navigation
 - [ ] Adequate seed data to demonstrate the site's features
 - [ ] Main Pages: login splash page,
-- [ ] Allows Upload of music files.
-- [ ] Allow users to make playlists. (public and private)
-- [ ] Allow uploaded tracks to be displayed, which can be commented, liked, playlisted.
-- [ ] Tracks display length of song, length played so far,
-- [ ] Allow users to follow other users
+- [ ] Tracks display length of song
 - [ ] Includes a music bar at the bottom that is playing current music (music play even when the user navigates)
-- [ ] Includes User show page with all activity, tracks, playlists, reposts. Displays followers, likes, following, tracks, and bio.
-- [ ] Includes a Track Page. Track includes tags, description, comments, likes, show artist profile. Has ability to be added to playlist, be favorited, shared. Include side panel that recommend similar tracks and other public playlist that include the song.
+- [ ] Includes a Track Page.
 - [ ] Hosting on Heroku
 - [ ] CSS styling that is satisfactorily visually appealing
 - [ ] A production README, replacing this README (**NB**: check out the [sample production README](https://github.com/appacademy/sample-project-proposal/blob/master/docs/production_readme.md) -- you'll write this later)
