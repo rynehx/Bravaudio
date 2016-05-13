@@ -7,6 +7,7 @@ json.array! @playlists do |playlist|
   json.created_at playlist.created_at
   json.tracks  do
     json.array! (playlist.tracks) do |track|
+    
       json.id track.id
       json.author_id track.author_id
       json.title track.title
@@ -16,9 +17,6 @@ json.array! @playlists do |playlist|
       json.times_played track.times_played
       json.created_at track.created_at
       json.author track.author.username
-
-
      end
-
   end
 end

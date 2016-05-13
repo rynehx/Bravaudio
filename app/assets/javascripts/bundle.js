@@ -25144,7 +25144,7 @@
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
-	//  <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
+
 	//Components
 	var LoginModal = __webpack_require__(219),
 	    UserProfile = __webpack_require__(270),
@@ -25206,6 +25206,13 @@
 	        { className: 'logged-in-nav' },
 	        React.createElement(
 	          'div',
+	          { className: 'upload-button nav-buttons', onClick: function () {
+	              hashHistory.push('upload');
+	            } },
+	          'upload'
+	        ),
+	        React.createElement(
+	          'div',
 	          { className: 'logout-button nav-buttons', onClick: this.logout },
 	          'logout'
 	        )
@@ -25217,7 +25224,9 @@
 
 	    if (SessionStore.fetchCurrentUser()) {
 	      var homeButton = "home";
-	    } else {}
+	    } else {
+	      return;
+	    }
 
 	    return React.createElement(
 	      'div',

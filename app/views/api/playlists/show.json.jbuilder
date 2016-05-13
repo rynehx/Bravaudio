@@ -5,6 +5,7 @@ json.author_img @playlist.author.profile_picture_url
 
 json.tracks  do
   json.array! (@tracks) do |track|
+
     json.id track.id
     json.author_id track.author_id
     json.title track.title
@@ -14,8 +15,5 @@ json.tracks  do
     json.times_played track.times_played
     json.created_at track.created_at
     json.author  track.author.username
-
-
    end
-
 end

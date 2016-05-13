@@ -1,7 +1,7 @@
 //react
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
-//  <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
+
 //Components
 var LoginModal = require('./navBar/loginModal'),
     UserProfile = require('./navBar/userProfile'),
@@ -55,7 +55,7 @@ var NavBar = React.createClass({
     }else{
       return (
         <div className = "logged-in-nav">
-
+          <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
           <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
         </div>
       );
@@ -67,10 +67,7 @@ var NavBar = React.createClass({
 
   render: function(){
 
-        if(SessionStore.fetchCurrentUser()){var homeButton =  "home";}else{}
-
-
-
+    if(SessionStore.fetchCurrentUser()){var homeButton =  "home";}else{return;}
 
     return (
       <div className = "navBar">

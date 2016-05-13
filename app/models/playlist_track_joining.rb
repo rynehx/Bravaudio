@@ -3,7 +3,7 @@ class PlaylistTrackJoining < ActiveRecord::Base
   belongs_to(
     :tracks,
     foreign_key: :track_id,
-    class_name: Track
+    class_name: Track,
   )
 
   belongs_to(
