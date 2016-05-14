@@ -11,14 +11,14 @@ class User < ActiveRecord::Base
 
 	has_many(
 	:tracks,
-	  -> { order(:created_at => :desc) },
+	-> { order(:created_at => :desc) },
 	foreign_key: :author_id,
 
 	)
 
 	has_many(
 	:playlists,
-	  -> { order(:created_at => :desc) },
+	-> { order(:created_at => :desc) },
 	foreign_key: :author_id,
 
 	)

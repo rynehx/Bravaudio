@@ -61,7 +61,8 @@
 	    TrackPage = __webpack_require__(287),
 	    UserPage = __webpack_require__(292),
 	    PlaylistPage = __webpack_require__(301),
-	    SplashPage = __webpack_require__(312);
+	    SplashPage = __webpack_require__(312),
+	    YourPage = __webpack_require__(316);
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -70,7 +71,9 @@
 	//need listener to update store
 
 	//userpage components
-	var UserContentTab = __webpack_require__(313);
+	var UserContentTab = __webpack_require__(314);
+	//yourpage components
+	var YourContentPage = __webpack_require__(320);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -104,6 +107,11 @@
 	    { path: '/', components: App },
 	    React.createElement(IndexRoute, { component: SplashPage }),
 	    React.createElement(Route, { path: 'home', components: HomePage }),
+	    React.createElement(
+	      Route,
+	      { path: 'you', components: YourPage },
+	      React.createElement(IndexRoute, { component: YourContentPage })
+	    ),
 	    React.createElement(Route, { path: 'upload', components: UploadPage }),
 	    React.createElement(
 	      Route,
@@ -25223,7 +25231,7 @@
 	  render: function () {
 
 	    if (SessionStore.fetchCurrentUser()) {
-	      var homeButton = "home";
+	      var homeButton = "home";var youButton = "collection";
 	    } else {
 	      return;
 	    }
@@ -25241,11 +25249,19 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'home-button nav-buttons',
+	          { className: 'nav-buttons home-button',
 	            onClick: function () {
 	              hashHistory.push('home');
 	            } },
 	          homeButton
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'nav-buttons you-button',
+	            onClick: function () {
+	              hashHistory.push('you');
+	            } },
+	          youButton
 	        ),
 	        React.createElement(SearchBar, null),
 	        this.userProfile(),
@@ -36675,7 +36691,8 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 313 */
+/* 313 */,
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36689,7 +36706,7 @@
 	var TrackClientActions = __webpack_require__(281),
 	    PlaylistClientActions = __webpack_require__(304);
 	//components
-	var UserContentItem = __webpack_require__(314);
+	var UserContentItem = __webpack_require__(315);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36768,7 +36785,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36836,6 +36853,64 @@
 	});
 
 	module.exports = UserContentItem;
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1);
+	//components
+	var YourCollectionPage = __webpack_require__(317),
+	    YourTabs = __webpack_require__(319);
+
+	var YourPage = React.createClass({
+	  displayName: 'YourPage',
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'yourpage' },
+	      React.createElement('div', { className: 'yourpage-yourtabs' }),
+	      this.props.children
+	    );
+	  }
+	});
+
+	module.exports = YourPage;
+
+/***/ },
+/* 317 */
+/***/ function(module, exports) {
+
+	
+
+/***/ },
+/* 318 */,
+/* 319 */
+/***/ function(module, exports) {
+
+	
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var YourContentPage = React.createClass({
+	  displayName: 'YourContentPage',
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'HIII'
+	    );
+	  }
+	});
+
+	module.exports = YourContentPage;
 
 /***/ }
 /******/ ]);

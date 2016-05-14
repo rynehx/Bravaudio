@@ -9,16 +9,12 @@ class Playlist < ActiveRecord::Base
     :tracks,
     through: :playlist_track_joinings,
     source: :tracks
-
   )
-
-
 
   belongs_to(
     :author,
     foreign_key: :author_id,
     class_name: "User"
   )
-
 
 end
