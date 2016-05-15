@@ -17,6 +17,7 @@ var NavBar = require('./components/navBar'),
     PlaylistPage = require('./components/playlistPage'),
     SplashPage = require('./components/splashPage'),
     YourPage = require('./components/yourPage');
+
 //Mixins
 var CurrentSessionState = require('./mixins/currentSessionState'),
     SessionActions = require('./actions/sessionActions'),
@@ -28,7 +29,7 @@ var CurrentSessionState = require('./mixins/currentSessionState'),
 //userpage components
 var UserContentTab = require('./components/userPage/userContentTab');
 //yourpage components
-var YourContentPage = require('./components/youPage/yourContentPage');
+var YourContent = require('./components/youPage/yourContent');
 
 
 
@@ -59,7 +60,8 @@ var AppRouter = (
       <IndexRoute component={SplashPage}/>
       <Route path="home" components={HomePage}/>
       <Route path="you" components={YourPage}>
-        <IndexRoute component={YourContentPage}/>
+        <IndexRoute component={YourContent}/>
+        <Route path=":tabtype" component = {YourContent}/>
       </Route>
       <Route path="upload" components={UploadPage}/>
       <Route path=":user" components={UserPage}>

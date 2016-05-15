@@ -66,8 +66,13 @@ var NavBar = React.createClass({
 
 
   render: function(){
+    var homeButton="";
+    var youButton="";
 
-    if(SessionStore.fetchCurrentUser()){var homeButton =  "home"; var youButton = "collection";}else{return;}
+    if(SessionStore.fetchCurrentUser()){
+      homeButton =  "home";
+      youButton = "collection";
+    }
 
     return (
       <div className = "navBar">
@@ -77,6 +82,7 @@ var NavBar = React.createClass({
           <div className = "nav-buttons home-button"
             onClick={function(){hashHistory.push('home');}}>{homeButton}
           </div>
+
           <div className = "nav-buttons you-button"
             onClick={function(){hashHistory.push('you');}}>{youButton}
           </div>

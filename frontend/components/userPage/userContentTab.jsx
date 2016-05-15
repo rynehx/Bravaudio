@@ -3,8 +3,8 @@ var React = require('react');
 //stores
 var UserStore = require('../../stores/userStore'),
     TrackStore = require('../../stores/trackStore'),
-    PlaylistStore = require('../../stores/playlistStore'),
-    MusicStore = require('../../stores/musicStore');
+    PlaylistStore = require('../../stores/playlistStore');
+
 //actions
 var TrackClientActions = require('../../actions/trackClientActions'),
     PlaylistClientActions = require('../../actions/playlistClientActions');
@@ -26,13 +26,11 @@ var dateComparator = function(time1,time2){
 
 var UserContentTab = React.createClass({
   getInitialState: function () {
-
     return { contents: [], tracks: [], playlists: [] };
   },
 
 
   componentDidMount: function(){
-
     this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
     this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
     PlaylistClientActions.fetchUserPlaylists(this.props.params.user);

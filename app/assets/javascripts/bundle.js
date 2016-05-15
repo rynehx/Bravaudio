@@ -62,7 +62,8 @@
 	    UserPage = __webpack_require__(292),
 	    PlaylistPage = __webpack_require__(301),
 	    SplashPage = __webpack_require__(312),
-	    YourPage = __webpack_require__(316);
+	    YourPage = __webpack_require__(313);
+
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
 	    SessionActions = __webpack_require__(244),
@@ -73,7 +74,7 @@
 	//userpage components
 	var UserContentTab = __webpack_require__(314);
 	//yourpage components
-	var YourContentPage = __webpack_require__(320);
+	var YourContent = __webpack_require__(316);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -110,7 +111,8 @@
 	    React.createElement(
 	      Route,
 	      { path: 'you', components: YourPage },
-	      React.createElement(IndexRoute, { component: YourContentPage })
+	      React.createElement(IndexRoute, { component: YourContent }),
+	      React.createElement(Route, { path: ':tabtype', component: YourContent })
 	    ),
 	    React.createElement(Route, { path: 'upload', components: UploadPage }),
 	    React.createElement(
@@ -25229,11 +25231,12 @@
 	  },
 
 	  render: function () {
+	    var homeButton = "";
+	    var youButton = "";
 
 	    if (SessionStore.fetchCurrentUser()) {
-	      var homeButton = "home";var youButton = "collection";
-	    } else {
-	      return;
+	      homeButton = "home";
+	      youButton = "collection";
 	    }
 
 	    return React.createElement(
@@ -36691,7 +36694,108 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 313 */,
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+	//stores
+
+	//actions
+	var UserClientActions = __webpack_require__(295);
+
+	var YourPage = React.createClass({
+	  displayName: 'YourPage',
+
+	  getInitialState: function () {
+	    return {
+	      tabtype: this.initialTabSet()
+	    };
+	  },
+
+	  initialTabSet: function () {
+
+	    return this.props.params.tabtype ? this.props.params.tabtype : "all";
+	  },
+
+	  componentDidMount: function () {
+
+	    //UserClientActions.fetchDisplayUser(this.state.user);
+	    // this.sessionStoreListener = SessionStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    //  this.sessionStoreListener.remove();
+	  },
+
+	  componentWillReceiveProps: function (newprops) {
+	    //UserClientActions.fetchDisplayUser(newprops.params.user);
+	    var tab = newprops.params.tabtype ? newprops.params.tabtype : "all";
+
+	    this.setState({ tabtype: tab });
+	  },
+
+	  // _onChange: function(){
+	  //   this.setState({user:SessionStore.currentDisplayUser(),tabtype: this.initialTabSet()});
+	  // },
+
+	  pushTabs: function (action) {
+	    if (action === "all") {
+	      hashHistory.push("/you/");
+	    } else {
+	      hashHistory.push("/you/" + action);
+	    }
+	  },
+
+	  tabbed: function (type) {
+	    if (type === this.state.tabtype) {
+	      return " tab-selected";
+	    }
+	    return "";
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      { className: 'yourpage' },
+	      React.createElement(
+	        'div',
+	        { className: 'your-content-tabs' },
+	        React.createElement(
+	          'div',
+	          { className: "your-content-tabitems" + this.tabbed("all"),
+	            onClick: function () {
+	              this.pushTabs("all");
+	            }.bind(this) },
+	          'Overview'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: "your-content-tabitems" + this.tabbed("tracks"),
+	            onClick: function () {
+	              this.pushTabs("tracks");
+	            }.bind(this) },
+	          'Tracks'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: "your-content-tabitems" + this.tabbed("playlists"),
+	            onClick: function () {
+	              this.pushTabs("playlists");
+	            }.bind(this) },
+	          'Playlists'
+	        )
+	      ),
+	      this.props.children
+	    );
+	  }
+	});
+
+	module.exports = YourPage;
+
+/***/ },
 /* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36700,8 +36804,8 @@
 	//stores
 	var UserStore = __webpack_require__(293),
 	    TrackStore = __webpack_require__(275),
-	    PlaylistStore = __webpack_require__(302),
-	    MusicStore = __webpack_require__(272);
+	    PlaylistStore = __webpack_require__(302);
+
 	//actions
 	var TrackClientActions = __webpack_require__(281),
 	    PlaylistClientActions = __webpack_require__(304);
@@ -36723,12 +36827,10 @@
 	  displayName: 'UserContentTab',
 
 	  getInitialState: function () {
-
 	    return { contents: [], tracks: [], playlists: [] };
 	  },
 
 	  componentDidMount: function () {
-
 	    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
 	    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
 	    PlaylistClientActions.fetchUserPlaylists(this.props.params.user);
@@ -36861,56 +36963,183 @@
 	//react
 	var React = __webpack_require__(1);
 	//components
-	var YourCollectionPage = __webpack_require__(317),
-	    YourTabs = __webpack_require__(319);
+	var YourContentItems = __webpack_require__(319),
+	    YourContentAll = __webpack_require__(318);
 
-	var YourPage = React.createClass({
-	  displayName: 'YourPage',
+	//stores
+	var SessionStore = __webpack_require__(251),
+	    TrackStore = __webpack_require__(275),
+	    PlaylistStore = __webpack_require__(302),
+	    MusicStore = __webpack_require__(272);
+	//actions
+	var TrackClientActions = __webpack_require__(281),
+	    PlaylistClientActions = __webpack_require__(304);
+
+	var list = ["tracks", "playlists"];
+
+	var YourContent = React.createClass({
+	  displayName: 'YourContent',
+
+	  getInitialState: function () {
+	    return {
+	      user: SessionStore.fetchCurrentUser().username,
+	      tracks: [],
+	      playlists: []
+	    };
+	  },
+
+	  componentDidMount: function () {
+	    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
+	    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
+	    PlaylistClientActions.fetchUserPlaylists(this.state.user);
+	    TrackClientActions.fetchUserTracks(this.state.user);
+	  },
+
+	  _onChangeTracks: function () {
+	    this.setState({ tracks: TrackStore.displayUserTracks() });
+	  },
+
+	  _onChangePlaylists: function () {
+	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
+	  },
+
+	  // componentWillReceiveProps: function(newprops){
+	  //   PlaylistClientActions.fetchUserPlaylists(newprops.params.user);
+	  //   TrackClientActions.fetchUserTracks(newprops.params.user);
+	  // },
+
+	  componentWillUnmount: function () {
+	    this.trackstorelistener.remove();
+	    this.playliststorelistener.remove();
+	  },
 
 	  render: function () {
+	    var content;
+
+	    if (this.props.params.tabtype === "tracks") {
+	      content = React.createElement(YourContentItems, { items: this.state.tracks, typing: 'track' });
+	    } else if (this.props.params.tabtype === "playlists") {
+	      content = React.createElement(YourContentItems, { items: this.state.playlists, typing: 'playlist' });
+	    } else {
+	      content = React.createElement(YourContentAll, { tracks: this.state.tracks, playlists: this.state.playlists });
+	    }
+
 	    return React.createElement(
 	      'div',
-	      { className: 'yourpage' },
-	      React.createElement('div', { className: 'yourpage-yourtabs' }),
-	      this.props.children
+	      { className: 'your-content-main' },
+	      content
 	    );
 	  }
 	});
 
-	module.exports = YourPage;
+	module.exports = YourContent;
 
 /***/ },
-/* 317 */
-/***/ function(module, exports) {
-
-	
-
-/***/ },
-/* 318 */,
-/* 319 */
-/***/ function(module, exports) {
-
-	
-
-/***/ },
-/* 320 */
+/* 317 */,
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 
-	var YourContentPage = React.createClass({
-	  displayName: 'YourContentPage',
+	var YourContentAll = React.createClass({
+	  displayName: 'YourContentAll',
 
 	  render: function () {
+	    return React.createElement('div', null);
+	  }
+	});
+
+	module.exports = YourContentAll;
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
+
+	var YourContentItems = React.createClass({
+	  displayName: 'YourContentItems',
+
+
+	  // goToItem: function(e){
+	  //
+	  //
+	  //   hashHistory.push("" + item.user +"/track/" + item.title );
+	  // },
+
+	  render: function () {
+
+	    var createButton;
+
+	    if (this.props.typing === "track") {
+	      createButton = React.createElement(
+	        'div',
+	        { className: 'your-content-topbar-create',
+	          onClick: function () {} },
+	        'new track'
+	      );
+	    } else if (this.props.typing === "playlist") {
+	      createButton = React.createElement(
+	        'div',
+	        { className: 'your-content-topbar-create',
+	          onClick: function () {} },
+	        'new playlist'
+	      );
+	    }
+
 	    return React.createElement(
 	      'div',
-	      null,
-	      'HIII'
+	      { className: 'your-content-main' },
+	      React.createElement(
+	        'div',
+	        { className: 'your-content-topbar' },
+	        React.createElement(
+	          'div',
+	          { className: 'your-content-topbar-text' },
+	          "your " + this.props.typing + "s"
+	        ),
+	        createButton
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'your-content-list' },
+	        this.props.items.map(function (item) {
+	          return React.createElement(
+	            'li',
+	            { key: item.id, className: 'your-content-items' },
+	            React.createElement('img', { className: 'your-content-items-image', src: item.image_url,
+	              onClick: function () {
+	                hashHistory.push("" + item.author + "/" + this.props.typing + "/" + item.title);
+	              }.bind(this) }),
+	            React.createElement(
+	              'div',
+	              { className: 'your-content-items-text' },
+	              React.createElement(
+	                'div',
+	                { className: 'your-content-items-title',
+	                  onClick: function () {
+	                    hashHistory.push("" + item.author + "/" + this.props.typing + "/" + item.title);
+	                  }.bind(this) },
+	                item.title
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'your-content-items-author',
+	                  onClick: function () {
+	                    hashHistory.push("" + item.author);
+	                  } },
+	                item.author
+	              )
+	            )
+	          );
+	        }.bind(this))
+	      )
 	    );
 	  }
 	});
 
-	module.exports = YourContentPage;
+	module.exports = YourContentItems;
 
 /***/ }
 /******/ ]);
