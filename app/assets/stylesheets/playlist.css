@@ -109,7 +109,7 @@
   min-width: 75px;
   background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462339116/Untitled_Diagram_2_gil7ay.svg");
   background-size: 75px;
-    background-repeat: no-repeat;
+  background-repeat: no-repeat;
 }
 
 
@@ -137,7 +137,32 @@
   border-bottom: 1px;
   border-style: solid;
   border-color: #CCCCCC;
+  display: flex;
 }
+
+.playlist-content-top-buttons{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlist-content-top-button{
+  margin: 0px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 12px;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 12px;
+  padding: 5px 5px;
+  border-color: #CCCCCC;
+}
+
+.playlist-content-top-button:hover{
+  border-color: grey;
+}
+
 
 .playlist-content-bottom{
 
@@ -209,7 +234,7 @@
   display: none;
 }
 
-.playlist-content-items-image-container:hover .playlist-content-items-play{
+.playlist-content-bottom-items:hover .playlist-content-items-play{
   display: flex;
   z-index: 50;
 }

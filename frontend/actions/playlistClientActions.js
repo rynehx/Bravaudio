@@ -7,6 +7,9 @@ var PlaylistClientActions = {
   },
   fetchUserPlaylists: function(user){
     PlaylistApiUtil.fetchUserPlaylists(user);
+  },
+  deleteDisplayPlaylist: function(user, playlist, onSuccess){
+    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
   }
 };
 

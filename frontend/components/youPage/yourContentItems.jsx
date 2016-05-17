@@ -48,14 +48,13 @@ var YourContentItems = React.createClass({
           {
             this.props.items.map(function(item){
               return <li key = {item.id} className = "your-content-items">
-                 <div className = "your-content-items-image">
-                    <img className = "your-content-items-image" src = {item.image_url}
-                      onClick = { function(){ if(item.tracks){
-                        MusicStore.setMusic(undefined,item);
-                      }else{
-                        MusicStore.setMusic(item);
-                      }}} />
-                    <img src="" className = "playlist-modal-list-items-imageplay"/>
+                 <div className = "your-content-items-image-container" onClick = { function(){ if(item.tracks){
+                   MusicStore.setMusic(undefined,item);
+                 }else{
+                   MusicStore.setMusic(item);
+                 }}}>
+                    <img className = "your-content-items-image" src = {item.image_url} />
+                    <img src="http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" className = "your-content-items-imageplay"/>
                   </div>
                   <div className = "your-content-items-text" >
                     <div className = "your-content-items-title"

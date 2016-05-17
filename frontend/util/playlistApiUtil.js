@@ -29,6 +29,19 @@ var PlaylistApiUtil = {
 
     $.ajax(request);
   },
+  deleteDisplayPlaylist: function(user, playlist, onSuccess){
+    var request = {
+      type: "delete",
+      url: "api/" + user + "/playlists",
+      success: function(data){
+        onSuccess();
+      },
+      error: function(error){
+        console.log("user playlists not fetched");
+      }
+    };
+    $.ajax(request);
+  }
 
 };
 

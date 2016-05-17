@@ -2,7 +2,8 @@ class Playlist < ActiveRecord::Base
 
   has_many(
     :playlist_track_joinings,
-    -> { order(:order => :asc) }
+    -> { order(:order => :asc) },
+    dependent: :destroy
   )
 
   has_many(

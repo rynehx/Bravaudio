@@ -28,7 +28,12 @@ class Api::PlaylistsController < ApplicationController
 
   end
 
-
+def delete
+  #@playlist = current_user.playlists.find_by(title: params[:title])
+  # if (current_user.username == params[:user])
+  #   @playlist = Playlist.find_by(title: params[:title])
+  # end
+end
 
 
 end

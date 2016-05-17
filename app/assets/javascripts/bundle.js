@@ -36357,6 +36357,9 @@
 	  },
 	  fetchUserPlaylists: function (user) {
 	    PlaylistApiUtil.fetchUserPlaylists(user);
+	  },
+	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
+	    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
 	  }
 	};
 
@@ -36396,6 +36399,19 @@
 	    };
 
 	    $.ajax(request);
+	  },
+	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
+	    var request = {
+	      type: "delete",
+	      url: "api/" + user + "/playlists",
+	      success: function (data) {
+	        onSuccess();
+	      },
+	      error: function (error) {
+	        console.log("user playlists not fetched");
+	      }
+	    };
+	    $.ajax(request);
 	  }
 
 	};
@@ -36427,6 +36443,7 @@
 	      playlists: playlists
 	    });
 	  }
+
 	};
 
 	module.exports = PlaylistServerActions;
@@ -36439,8 +36456,11 @@
 	var React = __webpack_require__(1),
 	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
+	//actions
+	var PlaylistClientActions = __webpack_require__(321);
 	//components
 	var PlaylistContentItems = __webpack_require__(308);
+	var PlaylistModal = __webpack_require__(318);
 
 	var PlaylistContent = React.createClass({
 	  displayName: 'PlaylistContent',
@@ -36450,11 +36470,32 @@
 	    hashHistory.push("/" + this.props.playlist.author);
 	  },
 
+	  deleteDisplayPlaylist: function () {
+	    PlaylistClientActions.deleteDisplayPlaylist(this.props.playlist.author, this.props.playlist.title, this.onDeleteSuccess);
+	  },
+
+	  onDeleteSuccess: function () {
+	    hashHistory.push("/");
+	  },
+
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'playlist-content' },
-	      React.createElement('div', { className: 'playlist-content-top' }),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-top' },
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-content-top-buttons' },
+	          React.createElement(PlaylistModal, { className: 'playlist-content-top-button',
+	            icon: 'http://simpleicon.com/wp-content/uploads/pen-15.svg',
+	            items: this.props.playlist.tracks }),
+	          React.createElement('img', { className: 'playlist-content-top-button',
+	            src: 'http://simpleicon.com/wp-content/uploads/trash.png',
+	            onClick: this.deleteDisplayPlaylist })
+	        )
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'playlist-content-bottom' },
@@ -37104,16 +37145,15 @@
 	            { key: item.id, className: 'your-content-items' },
 	            React.createElement(
 	              'div',
-	              { className: 'your-content-items-image' },
-	              React.createElement('img', { className: 'your-content-items-image', src: item.image_url,
-	                onClick: function () {
+	              { className: 'your-content-items-image-container', onClick: function () {
 	                  if (item.tracks) {
 	                    MusicStore.setMusic(undefined, item);
 	                  } else {
 	                    MusicStore.setMusic(item);
 	                  }
-	                } }),
-	              React.createElement('img', { src: '', className: 'playlist-modal-list-items-imageplay' })
+	                } },
+	              React.createElement('img', { className: 'your-content-items-image', src: item.image_url }),
+	              React.createElement('img', { src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg', className: 'your-content-items-imageplay' })
 	            ),
 	            React.createElement(
 	              'div',
@@ -37208,11 +37248,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'your-content-topbar-modify', onClick: this.openModal },
-	        'Modify ' + this.props.typing
-	      ),
+	      React.createElement('img', { className: 'playlist-content-top-button', src: this.props.icon, onClick: this.openModal }),
 	      React.createElement(
 	        Modal,
 	        { className: 'playlist-modal',
@@ -37258,6 +37294,27 @@
 	});
 
 	module.exports = YourContentAll;
+
+/***/ },
+/* 320 */,
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PlaylistApiUtil = __webpack_require__(305);
+
+	var PlaylistClientActions = {
+	  fetchDisplayPlaylist: function (user, playlist) {
+	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
+	  },
+	  fetchUserPlaylists: function (user) {
+	    PlaylistApiUtil.fetchUserPlaylists(user);
+	  },
+	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
+	    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
+	  }
+	};
+
+	module.exports = PlaylistClientActions;
 
 /***/ }
 /******/ ]);

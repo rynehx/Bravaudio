@@ -56,7 +56,7 @@ var PlaylistModal = React.createClass({
 
     return (
        <div >
-         <div className = "your-content-topbar-modify" onClick={this.openModal}>{'Modify '+this.props.typing}</div>
+         <img className="playlist-content-top-button" src={this.props.icon}  onClick={this.openModal}/>
            <Modal className = "playlist-modal"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}

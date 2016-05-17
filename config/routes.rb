@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get ":username/tracks", to: "tracks#user_tracks"
     get ":username/playlist/:title", to: "playlists#show"
     get ":username/playlists", to: "playlists#user_playlists"
-
+    delete ":username/playlist/:title" , to: "playlists#delete"
   end
 
     root "static_pages#root"

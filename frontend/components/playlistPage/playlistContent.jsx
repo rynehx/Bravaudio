@@ -2,8 +2,12 @@
 var React = require('react'),
     PlaylistStore = require('../../stores/playlistStore'),
     hashHistory = require('react-router').hashHistory;
+//actions
+var PlaylistClientActions = require('../../actions/PlaylistClientActions');
 //components
 var PlaylistContentItems = require('./playlistContentItem');
+var PlaylistModal = require('../modals/playlistModal');
+
 
 var PlaylistContent = React.createClass({
 
@@ -11,10 +15,27 @@ var PlaylistContent = React.createClass({
     hashHistory.push("/" + this.props.playlist.author);
   },
 
+  deleteDisplayPlaylist: function(){
+    PlaylistClientActions.deleteDisplayPlaylist(this.props.playlist.author, this.props.playlist.title, this.onDeleteSuccess);
+  },
+
+  onDeleteSuccess: function(){
+    hashHistory.push("/");
+  },
+
   render: function(){
   return(
     <div className = "playlist-content">
-      <div className = "playlist-content-top"></div>
+      <div className = "playlist-content-top">
+        <div className = "playlist-content-top-buttons">
+          <PlaylistModal className = "playlist-content-top-button"
+            icon="http://simpleicon.com/wp-content/uploads/pen-15.svg"
+            items = {this.props.playlist.tracks}/>
+          <img className = "playlist-content-top-button"
+            src= "http://simpleicon.com/wp-content/uploads/trash.png"
+            onClick = {this.deleteDisplayPlaylist}/>
+        </div>
+      </div>
       <div className = "playlist-content-bottom">
         <div className = "playlist-content-bottom-user" >
           <img className = "playlist-content-user-image" onClick={this.goToAuthor}
