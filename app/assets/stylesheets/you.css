@@ -65,7 +65,7 @@
   justify-content: space-between;
 }
 
-.your-content-topbar-create{
+.your-content-topbar-modify{
   border-style: solid;
   border-width: 3px;
   border-color: orange;
@@ -111,6 +111,7 @@
   font-size: 10px;
   color: grey;
   text-overflow: ellipsis;
+  white-space: nowrap;
   width: 140px;
   overflow: hidden;
 }

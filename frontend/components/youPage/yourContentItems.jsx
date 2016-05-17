@@ -1,5 +1,11 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
+//components
+var PlaylistModal = require('../modals/playlistModal');
+//stores
+var MusicStore = require('../../stores/musicStore');
+
+
 
 var YourContentItems = React.createClass({
 
@@ -10,20 +16,22 @@ var YourContentItems = React.createClass({
   //   hashHistory.push("" + item.user +"/track/" + item.title );
   // },
 
+
+  setMusic: function(){
+    return function(e){
+      debugger
+
+    };
+  },
+
   render: function(){
 
     var createButton;
 
     if(this.props.typing==="track"){
-      createButton = <div className = "your-content-topbar-create"
-        onClick = {function(){}}>
-        new track
-      </div>;
+      createButton = <PlaylistModal typing = "Tracks" items = {this.props.items}/>;
     }else if(this.props.typing==="playlist"){
-      createButton = <div className = "your-content-topbar-create"
-        onClick = {function(){}}>
-        new playlist
-      </div>;
+      createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
     }
 
 
@@ -33,16 +41,22 @@ var YourContentItems = React.createClass({
           <div className = "your-content-topbar-text">
           {"your " + this.props.typing + "s"}
           </div>
-          {createButton}
+
         </div>
 
         <ul className = "your-content-list">
           {
             this.props.items.map(function(item){
               return <li key = {item.id} className = "your-content-items">
-                  <img className = "your-content-items-image" src = {item.image_url}
-                    onClick = {function(){hashHistory.push("" + item.author +"/" +
-                      this.props.typing + "/" + item.title );}.bind(this)} />
+                 <div className = "your-content-items-image">
+                    <img className = "your-content-items-image" src = {item.image_url}
+                      onClick = { function(){ if(item.tracks){
+                        MusicStore.setMusic(undefined,item);
+                      }else{
+                        MusicStore.setMusic(item);
+                      }}} />
+                    <img src="" className = "playlist-modal-list-items-imageplay"/>
+                  </div>
                   <div className = "your-content-items-text" >
                     <div className = "your-content-items-title"
                       onClick = {function(){hashHistory.push("" + item.author +"/" +

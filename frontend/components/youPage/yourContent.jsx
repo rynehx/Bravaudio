@@ -52,22 +52,22 @@ var YourContent = React.createClass({
   },
 
   render: function(){
-    var content;
+    //var content;
 
     if(this.props.params.tabtype==="tracks"){
-      content = <YourContentItems items={this.state.tracks} typing = "track" />;
+      return <YourContentItems items={this.state.tracks} typing = "track" />;
     }else if(this.props.params.tabtype==="playlists"){
-      content = <YourContentItems items={this.state.playlists} typing = "playlist" />;
+      return <YourContentItems items={this.state.playlists} typing = "playlist" />;
     }else{
-      content = <YourContentAll tracks={this.state.tracks} playlists = {this.state.playlists} />;
+      return <YourContentAll tracks={this.state.tracks} playlists = {this.state.playlists} />;
     }
 
 
-    return (
-      <div className = "your-content-main">
-        {content}
-      </div>
-    );
+    // return (
+    //   <div className = "your-content-main">
+    //     {content}
+    //   </div>
+    // );
   }
 });
 

@@ -5,27 +5,42 @@ var React = require('react'),
 
 //Stores
 var SessionStore = require('../stores/sessionStore'),
-    TrackStore = require('../stores/trackStore');
-
+    TrackStore = require('../stores/trackStore'),
+    MusicStore = require('../stores/musicStore');
 //components
 var AudioPlayer = require('./musicBar/audioPlayer'),
     AudioDisplay = require('./musicBar/audioDisplay');
 
 
-
+var hidden;
 
 var MusicBar = React.createClass({
 
 
+  componentDidMount: function(){
+    this.musicstorelistener = MusicStore.addListener(function(){
+      this.setState({});
+    }.bind(this));
+  },
+
+
+  componentWillUnmount: function(){
+    this.musicstorelistener.remove();
+  },
+
+
+
   renderMusicBar: function(){
-    if(SessionStore.fetchCurrentUser()){
+
+    if(SessionStore.fetchCurrentUser() && MusicStore.currentTrack().title){
       return (
-        <div className = "musicbar">
+        <div className = "musicbar" >
           <div className = "audio-components">
             <AudioPlayer />
             <AudioDisplay />
           </div>
-        </div>);
+        </div>
+       );
     }else{
       return (<div>
         </div>);

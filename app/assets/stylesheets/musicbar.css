@@ -1,4 +1,9 @@
 
+#hidden{
+  display: none;
+}
+
+
 .musicbar {
   position: fixed;
   bottom: 0;

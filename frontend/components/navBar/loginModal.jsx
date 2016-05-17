@@ -46,7 +46,6 @@ var LoginModal = React.createClass({
 
     afterOpenModal: function() {
       // references are now sync'd and can be accessed.
-
     },
 
     closeModal: function() {
@@ -79,28 +78,28 @@ var LoginModal = React.createClass({
       return (
         <div className = "logged-out-modals">
         <div className={this.props.sessionAction + "-button nav-buttons"} onClick={this.openModal}>{this.props.sessionAction}</div>
-        <Modal className = "login-modal"
-          isOpen={this.state.modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
-          onRequestClose={this.closeModal}
-          style={style}>
+          <Modal className = "login-modal"
+            isOpen={this.state.modalIsOpen}
+            onAfterOpen={this.afterOpenModal}
+            onRequestClose={this.closeModal}
+            style={style}>
 
 
 
-          <p className = "login-title">{this.props.sessionAction}</p>
-          <section>{this.showErrors()}</section>
-          <form>
-            <div className = "login-input">
-              <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
-              <input type="password" valueLink={this.linkState("password")} placeholder="password"/>
-            </div>
-            <div className = "login-input-buttons">
-              <div className = "login-input-button" onClick={this.handleSubmit}>Submit</div>
-              <div className = "login-input-button" onClick={this.closeModal}>Close</div>
-              <div className = "login-input-button" onClick = {this.guestLogin}>Guest Login</div>
-            </div>
-          </form>
-        </Modal>
+            <p className = "login-title">{this.props.sessionAction}</p>
+            <section>{this.showErrors()}</section>
+            <form>
+              <div className = "login-input">
+                <input type="text" valueLink={this.linkState("username")} placeholder="username"/>
+                <input type="password" valueLink={this.linkState("password")} placeholder="password"/>
+              </div>
+              <div className = "login-input-buttons">
+                <div className = "login-input-button" onClick={this.handleSubmit}>Submit</div>
+                <div className = "login-input-button" onClick={this.closeModal}>Close</div>
+                <div className = "login-input-button" onClick = {this.guestLogin}>Guest Login</div>
+              </div>
+            </form>
+          </Modal>
         </div>
       );
     }
