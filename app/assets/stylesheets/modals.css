@@ -1,5 +1,5 @@
 .playlist-modal{
-
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   background-color: white;
   position: fixed;
   left: 50%;
@@ -10,32 +10,98 @@
   transform: translateX(-50%) translateY(-50%);
   border-style: none;
   outline:0;
+  display: flex;
+  justify-content: flex-start;;
+  align-items: center;
+  flex-direction: column;
+}
 
+.playlist-modal-inside-tabs{
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  justify-content: flex-start;;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-color: #CCCCCC;
+}
+
+.playlist-modal-inside-tab{
+  width: 60px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+.playlist-modal-inside-tabbed{
+  color: orange;
+  border-bottom: 1px solid;
+  border-color: orange;
 }
 
 .playlist-modal-inside-container{
   width: 100%;
-  height: 100%;
-
+  list-style: none;
+  margin:0;
+  padding:0
 }
 
 .playlist-modal-list{
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 15px;
-  background-color: pink;
+  height: 45px;
+  border-bottom: 1px solid;
+  border-color: #CCCCCC;
+}
+
+.playlist-modal-list-number{
+  padding: 8px 0px;
+  height: 30px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  font-size: 12px;
+  margin-left: 10px;
 }
 
 .playlist-modal-list-items{
-  height: 20px;
+  padding: 8px 0px;
+  height: 30px;
   width: 220px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+
 }
 
 .playlist-modal-list-items-image{
   height: 30px;
   width: 30px;
+  padding: 8px 0px;
+  pointer-events: none;
+  margin: 0px 15px;
+}
+
+
+
+li.placeholder {
+  background: lightgrey;
+  height: 46px;
+  display: flex;
+  align-items: center;
+}
+li.placeholder:before {
+  color: rgb(225,210,90);
 }

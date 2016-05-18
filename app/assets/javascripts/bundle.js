@@ -61,8 +61,8 @@
 	    TrackPage = __webpack_require__(287),
 	    UserPage = __webpack_require__(292),
 	    PlaylistPage = __webpack_require__(301),
-	    SplashPage = __webpack_require__(312),
-	    YourPage = __webpack_require__(313);
+	    SplashPage = __webpack_require__(313),
+	    YourPage = __webpack_require__(314);
 
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
@@ -72,9 +72,9 @@
 	//need listener to update store
 
 	//userpage components
-	var UserContentTab = __webpack_require__(314);
+	var UserContentTab = __webpack_require__(315);
 	//yourpage components
-	var YourContent = __webpack_require__(316);
+	var YourContent = __webpack_require__(317);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -36228,9 +36228,9 @@
 	var PlaylistClientActions = __webpack_require__(304);
 	//components
 	var PlaylistContent = __webpack_require__(307),
-	    PlaylistSideBar = __webpack_require__(309),
-	    PlaylistForeground = __webpack_require__(310),
-	    PlaylistNotFound = __webpack_require__(311);
+	    PlaylistSideBar = __webpack_require__(310),
+	    PlaylistForeground = __webpack_require__(311),
+	    PlaylistNotFound = __webpack_require__(312);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -36457,10 +36457,10 @@
 	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(321);
+	var PlaylistClientActions = __webpack_require__(304);
 	//components
 	var PlaylistContentItems = __webpack_require__(308);
-	var PlaylistModal = __webpack_require__(318);
+	var PlaylistModal = __webpack_require__(309);
 
 	var PlaylistContent = React.createClass({
 	  displayName: 'PlaylistContent',
@@ -36490,7 +36490,7 @@
 	          { className: 'playlist-content-top-buttons' },
 	          React.createElement(PlaylistModal, { className: 'playlist-content-top-button',
 	            icon: 'http://simpleicon.com/wp-content/uploads/pen-15.svg',
-	            items: this.props.playlist.tracks }),
+	            playlist: this.props.playlist }),
 	          React.createElement('img', { className: 'playlist-content-top-button',
 	            src: 'http://simpleicon.com/wp-content/uploads/trash.png',
 	            onClick: this.deleteDisplayPlaylist })
@@ -36613,6 +36613,205 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(220),
+	    Modal = __webpack_require__(224);
+
+	var modalWidth = window.innerWidth * 0.7;
+	var modalHeight = window.innerHeight * 0.8;
+	var selected;
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.80)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    minWidth: modalWidth,
+	    minHeight: modalHeight,
+	    width: modalWidth,
+	    height: modalHeight,
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: 'none',
+	    zIndex: 1001,
+	    maxWidth: '500px',
+	    overflowY: 'scroll',
+	    WebkitOverflowScrolling: 'touch'
+	  }
+	};
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+
+	var placeholder = document.createElement("li");
+	placeholder.className = "placeholder";
+
+	var PlaylistModal = React.createClass({
+	  displayName: 'PlaylistModal',
+
+	  mixins: [LinkedStateMixin],
+	  getInitialState: function () {
+	    return { modalOpen: false, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks };
+	  },
+	  componentWillMount: function () {
+	    var container = document.getElementById("content");
+	    Modal.setAppElement(container);
+	  },
+
+	  setInfoTab: function () {
+	    this.setState({ tab: "info" });
+	  },
+
+	  setTracksTab: function () {
+	    this.setState({ tab: "tracks" });
+	  },
+
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+
+	  tabbed: function (type) {
+	    if (this.state.tab === type) {
+	      return " playlist-modal-inside-tabbed";
+	    } else {
+	      return "";
+	    }
+	  },
+
+	  dragStart: function (e) {
+	    this.dragged = e.currentTarget;
+	    e.dataTransfer.effectAllowed = 'move';
+	    // Firefox requires dataTransfer data to be set
+	    e.dataTransfer.setData("text/html", e.currentTarget);
+	  },
+
+	  dragEnd: function (e) {
+	    this.dragged.style.display = "flex";
+	    this.dragged.parentNode.removeChild(placeholder);
+	    // Update data
+	    var tracks = this.state.tracks;
+	    var from = Number(this.dragged.dataset.id);
+	    var to = Number(this.over.dataset.id);
+	    if (from < to) to--;
+	    if (this.nodePlacement == "after") to++;
+	    tracks.splice(to, 0, tracks.splice(from, 1)[0]);
+	    this.setState({ tracks: tracks });
+	  },
+
+	  dragOver: function (e) {
+	    e.preventDefault();
+	    this.dragged.style.display = "none";
+	    if (e.target.className == "placeholder") return;
+	    this.over = e.target;
+	    // Inside the dragOver method
+	    var relY = e.clientY - 120 - (this.over.offsetTop - 41);
+	    console.log(this.over.offsetHeight);
+
+	    var height = this.over.offsetHeight / 2;
+	    var parent = e.target.parentNode;
+
+	    if (relY > height) {
+	      this.nodePlacement = "after";
+	      parent.insertBefore(placeholder, e.target.nextElementSibling);
+	    } else if (relY <= height) {
+	      this.nodePlacement = "before";
+	      parent.insertBefore(placeholder, e.target);
+	    }
+	  },
+
+	  contentShow: function () {
+	    if (this.state.tab === "info") {
+	      return React.createElement('div', null);
+	    } else if (this.state.tab === "tracks") {
+	      return React.createElement(
+	        'ul',
+	        { className: 'playlist-modal-inside-container',
+	          onDragOver: this.dragOver },
+	        this.state.tracks.map(function (item, i) {
+	          return React.createElement(
+	            'li',
+	            { className: 'playlist-modal-list',
+	              'data-id': i,
+	              draggable: 'true',
+	              onDragEnd: this.dragEnd,
+	              onDragStart: this.dragStart,
+	              key: item.id },
+	            React.createElement(
+	              'div',
+	              { className: 'playlist-modal-list-number' },
+	              i + 1 + "."
+	            ),
+	            React.createElement('img', { className: 'playlist-modal-list-items-image', src: item.image_url }),
+	            React.createElement(
+	              'div',
+	              { className: 'playlist-modal-list-items' },
+	              item.title
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'playlist-modal-list-items' },
+	              item.author
+	            )
+	          );
+	        }, this)
+	      );
+	    }
+	  },
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('img', { className: 'playlist-content-top-button', src: this.props.icon, onClick: this.openModal }),
+	      React.createElement(
+	        Modal,
+	        { className: 'playlist-modal',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-modal-inside-tabs' },
+	          React.createElement(
+	            'div',
+	            { className: "playlist-modal-inside-tab" + this.tabbed("info"), onClick: this.setInfoTab },
+	            'Info'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: "playlist-modal-inside-tab" + this.tabbed("tracks"), onClick: this.setTracksTab },
+	            'Tracks'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-modal-inside-container' },
+	          this.contentShow()
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = PlaylistModal;
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
 	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
@@ -36629,7 +36828,7 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36693,7 +36892,7 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36718,7 +36917,7 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36747,7 +36946,7 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36849,7 +37048,7 @@
 	module.exports = YourPage;
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36863,7 +37062,7 @@
 	var TrackClientActions = __webpack_require__(281),
 	    PlaylistClientActions = __webpack_require__(304);
 	//components
-	var UserContentItem = __webpack_require__(315);
+	var UserContentItem = __webpack_require__(316);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -36940,7 +37139,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37010,13 +37209,13 @@
 	module.exports = UserContentItem;
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//components
-	var YourContentItems = __webpack_require__(317),
+	var YourContentItems = __webpack_require__(318),
 	    YourContentAll = __webpack_require__(319);
 
 	//stores
@@ -37088,13 +37287,13 @@
 	module.exports = YourContent;
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var PlaylistModal = __webpack_require__(318);
+	var PlaylistModal = __webpack_require__(309);
 	//stores
 	var MusicStore = __webpack_require__(272);
 
@@ -37185,101 +37384,6 @@
 	module.exports = YourContentItems;
 
 /***/ },
-/* 318 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    LinkedStateMixin = __webpack_require__(220),
-	    Modal = __webpack_require__(224);
-
-	var modalWidth = window.innerWidth * 0.7;
-	var modalHeight = window.innerHeight * 0.8;
-
-	var style = {
-	  overlay: {
-	    position: 'fixed',
-	    top: 0,
-	    left: 0,
-	    right: 0,
-	    bottom: 0,
-	    backgroundColor: 'rgba(255, 255, 255, 0.90)',
-	    zIndex: 1000
-	  },
-	  content: {
-	    "min-width": modalWidth,
-	    "min-height": modalHeight,
-	    width: modalWidth,
-	    height: modalHeight,
-	    position: 'fixed',
-	    margin: '0 auto',
-	    border: '1px solid #ccc',
-	    zIndex: 1001,
-	    maxWidth: '500px',
-	    "overflow-y": 'scroll',
-	    WebkitOverflowScrolling: 'touch'
-	  }
-	};
-
-	var PlaylistModal = React.createClass({
-	  displayName: 'PlaylistModal',
-
-	  mixins: [LinkedStateMixin],
-	  getInitialState: function () {
-	    return { modalOpen: false };
-	  },
-	  componentWillMount: function () {
-	    var container = document.getElementById("content");
-	    Modal.setAppElement(container);
-	  },
-
-	  openModal: function () {
-	    this.setState({ modalIsOpen: true });
-	  },
-
-	  afterOpenModal: function () {
-	    // references are now sync'd and can be accessed.
-	  },
-
-	  closeModal: function () {
-	    this.setState({ modalIsOpen: false });
-	  },
-	  render: function () {
-
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement('img', { className: 'playlist-content-top-button', src: this.props.icon, onClick: this.openModal }),
-	      React.createElement(
-	        Modal,
-	        { className: 'playlist-modal',
-	          isOpen: this.state.modalIsOpen,
-	          onAfterOpen: this.afterOpenModal,
-	          onRequestClose: this.closeModal,
-	          style: style },
-	        React.createElement(
-	          'ul',
-	          { className: 'playlist-modal-inside-container' },
-	          this.props.items.map(function (item) {
-	            return React.createElement(
-	              'li',
-	              { className: 'playlist-modal-list', key: item.id },
-	              React.createElement(
-	                'a',
-	                { className: 'playlist-modal-list-items' },
-	                item.title
-	              ),
-	              React.createElement('img', { className: 'playlist-modal-list-items-image', src: item.image_url })
-	            );
-	          })
-	        )
-	      )
-	    );
-	  }
-	});
-
-	module.exports = PlaylistModal;
-
-/***/ },
 /* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -37294,27 +37398,6 @@
 	});
 
 	module.exports = YourContentAll;
-
-/***/ },
-/* 320 */,
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var PlaylistApiUtil = __webpack_require__(305);
-
-	var PlaylistClientActions = {
-	  fetchDisplayPlaylist: function (user, playlist) {
-	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
-	  },
-	  fetchUserPlaylists: function (user) {
-	    PlaylistApiUtil.fetchUserPlaylists(user);
-	  },
-	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
-	    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
-	  }
-	};
-
-	module.exports = PlaylistClientActions;
 
 /***/ }
 /******/ ]);
