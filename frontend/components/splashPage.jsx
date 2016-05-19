@@ -11,9 +11,9 @@ var SplashPage = React.createClass({
     var modalWidth = "300px";
     return (
       <div className = "splashpage">
-        <video 
+        <video
           autoPlay id = "splashvideo" loop muted
-        src="http://res.cloudinary.com/bravaudio/video/upload/v1463637610/My_Movie_lnjnby.mp4" type="video/mp4">
+        src="https://s3-us-west-1.amazonaws.com/bravaudio/lights.mp4" type="video/mp4">
         </video>
 
 
