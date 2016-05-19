@@ -37001,11 +37001,13 @@
 
 	  render: function () {
 
+	    var modalWidth = "300px";
 	    return React.createElement(
 	      "div",
 	      { className: "splashpage" },
-	      React.createElement("video", { autoPlay: true, id: "splashvideo", loop: true,
-	        src: "http://res.cloudinary.com/bravaudio/video/upload/v1462502918/My_Movie2_hg6zys.mp4", type: "video/mp4" }),
+	      React.createElement("video", {
+	        autoPlay: true, id: "splashvideo", loop: true, muted: true,
+	        src: "http://res.cloudinary.com/bravaudio/video/upload/v1463637610/My_Movie_lnjnby.mp4", type: "video/mp4" }),
 	      React.createElement(
 	        "div",
 	        { className: "splash-entry", onClick: this.goToLogin },
