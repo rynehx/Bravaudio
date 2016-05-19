@@ -36617,7 +36617,7 @@
 	    Modal = __webpack_require__(224);
 
 	var modalWidth = window.innerWidth * 0.7;
-	var modalHeight = window.innerHeight * 0.8;
+	var modalHeight = window.innerHeight * 0.7;
 	var selected;
 	var style = {
 	  overlay: {
@@ -36630,9 +36630,8 @@
 	    zIndex: 1000
 	  },
 	  content: {
-	    minWidth: modalWidth,
-	    minHeight: modalHeight,
-	    width: modalWidth,
+	    Height: modalHeight,
+	    width: '500px',
 	    height: modalHeight,
 	    position: 'fixed',
 	    margin: '0 auto',
@@ -36653,7 +36652,7 @@
 
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { modalOpen: false, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks };
+	    return { modalOpen: false, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks.slice(0) };
 	  },
 	  componentWillMount: function () {
 	    var container = document.getElementById("content");
@@ -36669,7 +36668,8 @@
 	  },
 
 	  openModal: function () {
-	    this.setState({ modalIsOpen: true, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks });
+
+	    this.setState({ modalIsOpen: true, tab: "info", title: this.props.playlist.title, description: this.props.playlist.description, tracks: this.props.playlist.tracks.slice(0) });
 	  },
 
 	  afterOpenModal: function () {
@@ -36703,7 +36703,7 @@
 	    var from = Number(this.dragged.dataset.id);
 	    var to = Number(this.over.dataset.id);
 	    if (from < to) to--;
-	    if (this.nodePlacement == "after") to++;
+	    if (this.nodePlacement === "after") to++;
 	    tracks.splice(to, 0, tracks.splice(from, 1)[0]);
 	    this.setState({ tracks: tracks });
 	  },
@@ -36711,11 +36711,10 @@
 	  dragOver: function (e) {
 	    e.preventDefault();
 	    this.dragged.style.display = "none";
-	    if (e.target.className == "placeholder") return;
+	    if (e.target.className === "placeholder") return;
 	    this.over = e.target;
 	    // Inside the dragOver method
-	    var relY = e.clientY - 120 - (this.over.offsetTop - 41);
-	    console.log(this.over.offsetHeight);
+	    var relY = e.clientY - 125 - (this.over.offsetTop - 41);
 
 	    var height = this.over.offsetHeight / 2;
 	    var parent = e.target.parentNode;
@@ -36729,9 +36728,53 @@
 	    }
 	  },
 
+	  changeTitle: function (event) {
+	    this.setState({ title: event.target.value });
+	  },
+
+	  changeDescription: function (event) {
+	    this.setState({ description: event.target.value });
+	  },
+
+	  deleteTrackFromPlaylist: function (event) {
+	    console.log(event.target.parentNode);
+	  },
+
+	  savePlaylist: function (event) {
+	    console.log(this.state.tracks);
+	  },
+
 	  contentShow: function () {
+
 	    if (this.state.tab === "info") {
-	      return React.createElement('div', null);
+	      return React.createElement(
+	        'form',
+	        null,
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-modal-inside-title' },
+	          'Title'
+	        ),
+	        React.createElement('input', { className: 'playlist-modal-inside-input',
+	          defaultValue: this.state.title,
+	          onChange: this.changeTitle }),
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-modal-inside-title' },
+	          'Tags'
+	        ),
+	        React.createElement('input', { className: 'playlist-modal-inside-input',
+	          defaultValue: ""
+	        }),
+	        React.createElement(
+	          'div',
+	          { className: 'playlist-modal-inside-title' },
+	          'Description'
+	        ),
+	        React.createElement('textarea', { className: 'playlist-modal-inside-textarea',
+	          defaultValue: this.state.description,
+	          onChange: this.changeDescription })
+	      );
 	    } else if (this.state.tab === "tracks") {
 	      return React.createElement(
 	        'ul',
@@ -36759,8 +36802,14 @@
 	            ),
 	            React.createElement(
 	              'div',
-	              { className: 'playlist-modal-list-items' },
+	              { className: 'playlist-modal-list-author' },
 	              item.author
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'playlist-modal-list-delete',
+	                onClick: this.deleteTrackFromPlaylist },
+	              '✕'
 	            )
 	          );
 	        }, this)
@@ -36768,7 +36817,28 @@
 	    }
 	  },
 
+	  cancelSaveButtons: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'playlist-modal-inside-buttons' },
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-modal-inside-buttons-cancel', onClick: this.closeModal },
+	        'cancel'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-modal-inside-buttons-save', onClick: this.savePlaylist },
+	        'save'
+	      )
+	    );
+	  },
+
 	  render: function () {
+	    var topButtons;
+	    if (this.state.tab === "tracks") {
+	      topButtons = this.cancelSaveButtons();
+	    }
 
 	    return React.createElement(
 	      'div',
@@ -36795,11 +36865,13 @@
 	            'Tracks'
 	          )
 	        ),
+	        topButtons,
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-modal-inside-container' },
 	          this.contentShow()
-	        )
+	        ),
+	        this.cancelSaveButtons()
 	      )
 	    );
 	  }

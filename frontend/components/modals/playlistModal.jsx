@@ -3,7 +3,7 @@ var React = require('react'),
     Modal = require("react-modal");
 
 var modalWidth = window.innerWidth*0.7;
-var modalHeight = window.innerHeight*0.8;
+var modalHeight = window.innerHeight*0.7;
 var selected;
 var style = {
   overlay : {
@@ -16,9 +16,8 @@ var style = {
 		    zIndex          : 1000,
 		  },
 		  content : {
-        minWidth        : modalWidth,
-        minHeight       : modalHeight,
-        width           : modalWidth,
+        Height       : modalHeight,
+        width           : '500px',
         height          : modalHeight,
 		    position        : 'fixed',
 				margin          : '0 auto',
@@ -38,7 +37,7 @@ placeholder.className = "placeholder";
 var PlaylistModal = React.createClass({
     mixins: [LinkedStateMixin],
     getInitialState: function(){
-      return({ modalOpen: false,tab: "info",playlist: this.props.playlist, tracks: this.props.playlist.tracks});
+      return({ modalOpen: false, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks.slice(0)});
     },
     componentWillMount: function(){
       var container = document.getElementById("content");
@@ -54,8 +53,12 @@ var PlaylistModal = React.createClass({
     },
 
     openModal: function() {
-      this.setState({modalIsOpen: true,tab: "info",playlist: this.props.playlist,tracks: this.props.playlist.tracks});
+
+      this.setState({modalIsOpen: true,tab: "info",title: this.props.playlist.title,description: this.props.playlist.description ,tracks: this.props.playlist.tracks.slice(0)});
+
     },
+
+
 
     afterOpenModal: function() {
       // references are now sync'd and can be accessed.
@@ -88,7 +91,7 @@ var PlaylistModal = React.createClass({
       var from = Number(this.dragged.dataset.id);
       var to = Number(this.over.dataset.id);
       if(from < to) to--;
-      if(this.nodePlacement == "after") to++;
+      if(this.nodePlacement === "after") to++;
       tracks.splice(to, 0, tracks.splice(from, 1)[0]);
       this.setState({tracks: tracks});
     },
@@ -96,12 +99,10 @@ var PlaylistModal = React.createClass({
     dragOver: function(e) {
        e.preventDefault();
        this.dragged.style.display = "none";
-       if(e.target.className == "placeholder") return;
+       if(e.target.className === "placeholder") return;
        this.over = e.target;
        // Inside the dragOver method
-       var relY = e.clientY -120 - (this.over.offsetTop-41);
-       console.log(this.over.offsetHeight)
-
+       var relY = e.clientY -125 - (this.over.offsetTop-41);
 
        var height = this.over.offsetHeight / 2;
        var parent = e.target.parentNode;
@@ -109,24 +110,56 @@ var PlaylistModal = React.createClass({
        if(relY > height) {
          this.nodePlacement = "after";
          parent.insertBefore(placeholder, e.target.nextElementSibling);
-       }
-       else if(relY <= height) {
+       }else if(relY <= height) {
          this.nodePlacement = "before";
          parent.insertBefore(placeholder, e.target);
        }
 
     },
 
+    changeTitle: function(event){
+      this.setState({title: event.target.value});
+    },
+
+    changeDescription: function(event){
+      this.setState({description: event.target.value});
+    },
+
+    deleteTrackFromPlaylist: function(event){
+      console.log(event.target.parentNode);
+    },
+
+    savePlaylist: function(event){
+      console.log(this.state.tracks);
+    },
+
     contentShow:function(){
+
       if(this.state.tab==="info"){
         return (
-          <div>
+          <form>
+            <div className = "playlist-modal-inside-title">Title</div>
+            <input className = "playlist-modal-inside-input"
+               defaultValue = {this.state.title}
+                onChange={this.changeTitle}></input>
 
-          </div>
+            <div className = "playlist-modal-inside-title">Tags</div>
+            <input className = "playlist-modal-inside-input"
+              defaultValue = {""}
+              ></input>
+
+            <div className = "playlist-modal-inside-title">Description</div>
+            <textarea className = "playlist-modal-inside-textarea"
+              defaultValue = {this.state.description}
+               onChange={this.changeDescription}></textarea>
+
+          </form>
         );
       }else if(this.state.tab==="tracks"){
-        return (<ul className = "playlist-modal-inside-container"
+        return (
+          <ul className = "playlist-modal-inside-container"
           onDragOver={this.dragOver}>
+
             {this.state.tracks.map(function(item,i){
               return (<li className = "playlist-modal-list"
                 data-id ={i}
@@ -137,16 +170,32 @@ var PlaylistModal = React.createClass({
                   <div className = "playlist-modal-list-number">{i+1+"."}</div>
                   <img className = "playlist-modal-list-items-image" src = {item.image_url}/>
                   <div className = "playlist-modal-list-items">{item.title}</div>
-                  <div className = "playlist-modal-list-items">{item.author}</div>
+                  <div className = "playlist-modal-list-author">{item.author}</div>
+                  <div className = "playlist-modal-list-delete"
+                    onClick = {this.deleteTrackFromPlaylist}>✕</div>
                 </li>);
               }, this)
             }
-          </ul>);
+          </ul>
+
+        );
       }
 
     },
 
+    cancelSaveButtons: function(){
+        return (<div className = "playlist-modal-inside-buttons">
+          <div className = "playlist-modal-inside-buttons-cancel" onClick = {this.closeModal}>cancel</div>
+          <div className = "playlist-modal-inside-buttons-save" onClick ={this.savePlaylist}>save</div>
+        </div>);
+    },
+
     render: function(){
+      var topButtons;
+    if(this.state.tab==="tracks"){
+      topButtons =   this.cancelSaveButtons();
+    }
+
 
     return (
        <div >
@@ -158,16 +207,17 @@ var PlaylistModal = React.createClass({
              style={style}>
 
 
-          <div className = "playlist-modal-inside-tabs">
-            <div className = {"playlist-modal-inside-tab" + this.tabbed("info")} onClick={this.setInfoTab}>Info</div>
-            <div className = {"playlist-modal-inside-tab"+ this.tabbed("tracks")} onClick={this.setTracksTab}>Tracks</div>
-          </div>
-
-          <div className = "playlist-modal-inside-container">
-            {this.contentShow()}
-          </div>
+              <div className = "playlist-modal-inside-tabs">
+                <div className = {"playlist-modal-inside-tab" + this.tabbed("info")} onClick={this.setInfoTab}>Info</div>
+                <div className = {"playlist-modal-inside-tab"+ this.tabbed("tracks")} onClick={this.setTracksTab}>Tracks</div>
+              </div>
 
 
+              {topButtons}
+              <div className = "playlist-modal-inside-container">
+                {this.contentShow()}
+              </div>
+              {this.cancelSaveButtons()}
 
 
 
