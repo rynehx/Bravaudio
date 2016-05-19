@@ -1,8 +1,8 @@
 //react
 var React = require('react');
 //components
-var YourContentItems = require('./YourContentItems'),
-    YourContentAll = require('./YourContentAll');
+var YourContentItems = require('./yourContentItems'),
+    YourContentAll = require('./yourContentAll');
 
 //stores
 var SessionStore = require('../../stores/sessionStore'),
