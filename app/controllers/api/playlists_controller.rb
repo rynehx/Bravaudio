@@ -101,6 +101,25 @@ class Api::PlaylistsController < ApplicationController
 
   def add_track
 
+    if (current_user.id.to_s == params[:user_id])
+      author = User.find(params[:user_id])
+      check = PlaylistTrackJoining.find_by(playlist_id: params[:playlist_id], track_id: params[:track_id])
+      if check
+        PlaylistTrackJoining.destroy(check.id)
+        @playlists = author.playlists
+        render "api/playlists/index"
+      else
+
+        count = PlaylistTrackJoining.count(playlist_id: params[:playlist_id])
+        PlaylistTrackJoining.create({order: count+1, playlist_id: params[:playlist_id], track_id: params[:track_id]})
+
+        @playlists = author.playlists
+        render "api/playlists/index"
+      end
+    else
+      @error = "not authorized user"
+      render "api/shared/error"
+    end
   end
 
 

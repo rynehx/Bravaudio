@@ -27,6 +27,7 @@ Rails.application.routes.draw do
     patch ":username/playlist/:title" , to: "playlists#edit"
 
     delete ":username/playlist/:title/:track_id", to: "playlists#delete_track"
+    post ":user_id/playlist/:playlist_id/:track_id",to: "playlists#add_track"
   end
 
     root "static_pages#root"

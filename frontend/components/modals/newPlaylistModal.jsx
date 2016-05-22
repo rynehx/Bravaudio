@@ -120,7 +120,8 @@ var EditPlaylistModal = React.createClass({
 
 
     pressAddButton: function(playlist){
-      PlaylistClientActions.addTrackToPlaylist(this.SessionStore.fetchCurrentUser() ,playlist, this.props.track);
+      PlaylistClientActions.addTrackToPlaylist(SessionStore.fetchCurrentUser() ,
+      playlist, this.props.track);
     },
 
 

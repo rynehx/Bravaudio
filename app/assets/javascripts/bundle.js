@@ -35876,7 +35876,7 @@
 	  },
 
 	  pressAddButton: function (playlist) {
-	    PlaylistClientActions.addTrackToPlaylist(this.SessionStore.fetchCurrentUser(), playlist, this.props.track);
+	    PlaylistClientActions.addTrackToPlaylist(SessionStore.fetchCurrentUser(), playlist, this.props.track);
 	  },
 
 	  contentShow: function () {
@@ -36092,13 +36092,16 @@
 
 	    $.ajax(request);
 	  },
-	  addTrackToPlaylist: function () {
+	  addTrackToPlaylist: function (user, playlist, track) {
 	    var request = {
 	      type: "post",
-	      url: "",
-	      data: {},
-	      success: function () {},
-	      error: function () {}
+	      url: "api/" + user.id + "/playlist/" + playlist.id + "/" + track.id,
+	      success: function (data) {
+	        PlaylistServerActions.receiveUserPlaylists(data);
+	      },
+	      error: function () {
+	        console.log("track not added");
+	      }
 	    };
 	    $.ajax(request);
 	  }

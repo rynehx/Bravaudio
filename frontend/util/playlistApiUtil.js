@@ -77,16 +77,15 @@ var PlaylistApiUtil = {
 
     $.ajax(request);
   },
-  addTrackToPlaylist: function(){
+  addTrackToPlaylist: function(user, playlist, track){
     var request = {
       type: "post",
-      url: "",
-      data: {},
-      success: function(){
-
+      url:  "api/" + user.id + "/playlist/" + playlist.id + "/" + track.id,
+      success: function(data){
+        PlaylistServerActions.receiveUserPlaylists(data);
       },
       error: function(){
-
+        console.log("track not added");
       }
     };
     $.ajax(request);
