@@ -15,6 +15,7 @@ playDisplayPlaylist: function(){
 
 
 render: function(){
+
 return(
   <div className = "playlist-foreground">
 

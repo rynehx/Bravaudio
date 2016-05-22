@@ -1,6 +1,9 @@
+//react
 var React = require('react'),
     TrackStore = require('../../stores/trackStore'),
     hashHistory = require('react-router').hashHistory;
+//components
+var NewPlaylistModal = require('../modals/newPlaylistModal');
 
 var TrackContent = React.createClass({
 
@@ -11,7 +14,20 @@ goToAuthor: function(){
 render: function(){
 return(
   <div className = "track-content">
-    <div className = "track-content-top"></div>
+    <div className = "track-content-top">
+      <div className = "track-content-top-writecomments">write comments</div>
+
+      <div className = "track-content-top-bottom">
+        <div className = "track-content-top-buttons">
+          <NewPlaylistModal track = {this.props.track}
+            icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
+        </div>
+
+        <div className = "track-content-top-stats">
+          stats
+        </div>
+      </div>
+    </div>
       <div className = "track-content-bottom">
         <div className = "track-content-bottom-user" >
           <img className = "track-content-user-image" onClick={this.goToAuthor}

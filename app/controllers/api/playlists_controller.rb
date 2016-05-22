@@ -28,12 +28,91 @@ class Api::PlaylistsController < ApplicationController
 
   end
 
-def delete
-  #@playlist = current_user.playlists.find_by(title: params[:title])
-  # if (current_user.username == params[:user])
-  #   @playlist = Playlist.find_by(title: params[:title])
-  # end
-end
+  def delete
+    #@playlist = current_user.playlists.find_by(title: params[:title])
+
+     if (current_user.username == params[:username])
+    #   @playlist = Playlist.find_by(title: params[:title])
+      @playlist = current_user.playlists.includes(:author).find_by(title: params[:title])
+
+      if @playlist.destroy
+        render "api/playlists/delete"
+      else
+        @errors = ['playlist not deleted']
+        render "api/shared/error", status: 404
+      end
+     end
+  end
+
+  def delete_track
+
+     if (current_user.username == params[:username])
+       @playlist = current_user.playlists.includes(:author, :tracks).find_by(title: params[:title])
+       @track =@playlist.tracks.find(params[:track_id])
+       @playlist_track_joining = @playlist.playlist_track_joinings.find_by(track_id: @track)
+
+
+
+       if @playlist_track_joining.destroy
+
+         @playlist_track_joinings = @playlist.playlist_track_joinings.each_with_index do |joining,i|
+           joining.update!({order: i+1})
+         end
+
+
+         render "api/playlists/deleteTrack"
+       else
+         @errors = ['track not deleted from playlist']
+         render "api/shared/error", status: 404
+       end
+     end
+
+  end
+
+  def edit
+    if (current_user.username == params[:username])
+      @playlist = current_user.playlists.includes(:author, :playlist_track_joinings).find_by(title: params[:title])
+
+      if(editing_params[:newTitle])
+        @playlist.update!({title: editing_params[:newTitle]})
+      end
+
+      if(editing_params[:description])
+        @playlist.update!({description: editing_params[:description]})
+        puts "editted"
+      end
+
+      params["form"]["tracks"].each_with_index do |id,i|
+        @playlist.playlist_track_joinings.where(track_id: id).first.update!({order: i+1})
+      end
+
+      @playlist = current_user.playlists.includes(:author, :tracks).find_by(title: editing_params[:newTitle])
+      @tracks = @playlist.tracks.includes(:author)
+      render "api/playlists/show"
+    end
+
+  end
+
+
+  def create
+
+  end
+
+
+  def add_track
+
+  end
+
+
+
+  private
+
+  def editing_params
+    params.require(:form).permit( :title, :newTitle, :author, :description)
+  end
+
+
+
 
 
 end

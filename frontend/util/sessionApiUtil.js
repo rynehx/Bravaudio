@@ -11,6 +11,7 @@ module.exports = {
 		});
 	},
 	logout: function(success, error){
+
 		$.ajax({
 			url: '/api/session',
 			type: 'delete',

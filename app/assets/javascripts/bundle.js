@@ -59,10 +59,10 @@
 	    HomePage = __webpack_require__(279),
 	    UploadPage = __webpack_require__(286),
 	    TrackPage = __webpack_require__(287),
-	    UserPage = __webpack_require__(292),
-	    PlaylistPage = __webpack_require__(301),
-	    SplashPage = __webpack_require__(313),
-	    YourPage = __webpack_require__(314);
+	    UserPage = __webpack_require__(297),
+	    PlaylistPage = __webpack_require__(306),
+	    SplashPage = __webpack_require__(314),
+	    YourPage = __webpack_require__(315);
 
 	//Mixins
 	var CurrentSessionState = __webpack_require__(269),
@@ -72,9 +72,9 @@
 	//need listener to update store
 
 	//userpage components
-	var UserContentTab = __webpack_require__(315);
+	var UserContentTab = __webpack_require__(316);
 	//yourpage components
-	var YourContent = __webpack_require__(317);
+	var YourContent = __webpack_require__(318);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -27649,6 +27649,7 @@
 			});
 		},
 		logout: function () {
+
 			SessionApiUtil.logout(SessionActions.removeCurrentUser, SessionActions.handleError);
 		}
 	};
@@ -27997,6 +27998,7 @@
 			});
 		},
 		logout: function (success, error) {
+
 			$.ajax({
 				url: '/api/session',
 				type: 'delete',
@@ -28041,6 +28043,7 @@
 	};
 
 	SessionStore.logout = function () {
+
 	  myLocStorage.setItem("currentUser", null);
 	  hashHistory.push("/");
 	};
@@ -35608,9 +35611,9 @@
 	var TrackClientActions = __webpack_require__(281);
 	//components
 	var TrackContent = __webpack_require__(288),
-	    TrackSideBar = __webpack_require__(289),
-	    TrackForeground = __webpack_require__(290),
-	    TrackNotFound = __webpack_require__(291);
+	    TrackSideBar = __webpack_require__(294),
+	    TrackForeground = __webpack_require__(295),
+	    TrackNotFound = __webpack_require__(296);
 
 	var TrackPage = React.createClass({
 	  displayName: 'TrackPage',
@@ -35667,9 +35670,12 @@
 /* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
 	    TrackStore = __webpack_require__(275),
 	    hashHistory = __webpack_require__(159).hashHistory;
+	//components
+	var NewPlaylistModal = __webpack_require__(289);
 
 	var TrackContent = React.createClass({
 	  displayName: 'TrackContent',
@@ -35683,7 +35689,30 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'track-content' },
-	      React.createElement('div', { className: 'track-content-top' }),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content-top' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-content-top-writecomments' },
+	          'write comments'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'track-content-top-bottom' },
+	          React.createElement(
+	            'div',
+	            { className: 'track-content-top-buttons' },
+	            React.createElement(NewPlaylistModal, { track: this.props.track,
+	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' })
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-content-top-stats' },
+	            'stats'
+	          )
+	        )
+	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'track-content-bottom' },
@@ -35719,6 +35748,414 @@
 
 /***/ },
 /* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(220),
+	    Modal = __webpack_require__(224),
+	    hashHistory = __webpack_require__(159).hashHistory;
+	//actions
+	var PlaylistClientActions = __webpack_require__(290);
+
+	//stores
+	var SessionStore = __webpack_require__(251),
+	    TrackStore = __webpack_require__(275),
+	    PlaylistStore = __webpack_require__(307),
+	    MusicStore = __webpack_require__(272);
+	//actions
+	var TrackClientActions = __webpack_require__(281);
+
+	var modalWidth = window.innerWidth * 0.7;
+	var modalHeight = window.innerHeight * 0.7;
+	var selected;
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.80)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    Height: modalHeight,
+	    width: '500px',
+	    height: modalHeight,
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: 'none',
+	    zIndex: 1001,
+	    maxWidth: '500px',
+	    overflowY: 'scroll',
+	    WebkitOverflowScrolling: 'touch'
+	  }
+	};
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+
+	var EditPlaylistModal = React.createClass({
+	  displayName: 'EditPlaylistModal',
+
+	  mixins: [LinkedStateMixin],
+	  getInitialState: function () {
+	    return { modalOpen: false, tab: "add", playlists: [] };
+	  },
+	  componentWillMount: function () {
+	    var container = document.getElementById("content");
+	    Modal.setAppElement(container);
+	    PlaylistStore.addListener(this._onAddToPlaylist);
+	    PlaylistClientActions.fetchUserPlaylists(SessionStore.fetchCurrentUser().username);
+	  },
+
+	  _onAddToPlaylist: function () {
+	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
+	  },
+
+	  _onCreateNewPlaylist: function () {},
+
+	  setInfoTab: function () {
+	    this.setState({ tab: "add" });
+	  },
+
+	  setTracksTab: function () {
+	    this.setState({ tab: "create" });
+	  },
+
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true, tab: "add" });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+
+	  tabbed: function (type) {
+	    if (this.state.tab === type) {
+	      return " playlist-modal-inside-tabbed";
+	    } else {
+	      return "";
+	    }
+	  },
+
+	  changeTitle: function (event) {
+	    this.setState({ title: event.target.value });
+	  },
+
+	  changeDescription: function (event) {
+	    this.setState({ description: event.target.value });
+	  },
+
+	  addButton: function (playlist) {
+	    var included = playlist.tracks.find(function (track) {
+	      return track.id === this.props.track.id;
+	    }.bind(this));
+	    if (included) {
+	      return React.createElement(
+	        'div',
+	        { className: "newplaylist-modal-inside-add newplaylist-modal-inside-added",
+	          onClick: function () {
+	            this.pressAddButton(playlist);
+	          }.bind(this) },
+	        'Added'
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: "newplaylist-modal-inside-add",
+	          onClick: function () {
+	            this.pressAddButton(playlist);
+	          }.bind(this) },
+	        'Add to Playlist'
+	      );
+	    }
+	  },
+
+	  pressAddButton: function (playlist) {
+	    PlaylistClientActions.addTrackToPlaylist(this.SessionStore.fetchCurrentUser(), playlist, this.props.track);
+	  },
+
+	  contentShow: function () {
+
+	    if (this.state.tab === "create") {
+	      return React.createElement(
+	        'form',
+	        null,
+	        React.createElement(
+	          'div',
+	          null,
+	          'Title'
+	        ),
+	        React.createElement('input', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Description'
+	        ),
+	        React.createElement('input', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Save'
+	        )
+	      );
+	    } else if (this.state.tab === "add") {
+	      return React.createElement(
+	        'ul',
+	        { className: '' },
+	        this.state.playlists.map(function (playlist) {
+	          return React.createElement(
+	            'li',
+	            { className: 'newplaylist-modal-inside-items', key: playlist.id },
+	            React.createElement('img', { className: 'newplaylist-modal-inside-image', src: playlist.image_url }),
+	            React.createElement(
+	              'div',
+	              { className: 'newplaylist-modal-inside-title' },
+	              playlist.title
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'newplaylist-modal-inside-trackcount' },
+	              playlist.tracks.length + " tracks"
+	            ),
+	            this.addButton(playlist)
+	          );
+	        }.bind(this))
+	      );
+	    }
+	  },
+
+	  cancelSaveButtons: function () {},
+
+	  render: function () {
+
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement('img', { className: 'new-playlist-button-image', src: this.props.icon, onClick: this.openModal }),
+	      React.createElement(
+	        Modal,
+	        { className: 'new-playlist-modal',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'div',
+	          { className: 'newplaylist-modal-inside-tabs' },
+	          React.createElement(
+	            'div',
+	            { className: "newplaylist-modal-inside-tab" + this.tabbed("add"), onClick: this.setInfoTab },
+	            'Add to playlist'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: "newplaylist-modal-inside-tab" + this.tabbed("create"), onClick: this.setTracksTab },
+	            'Create a playlist'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'newplaylist-modal-inside-container' },
+	          this.contentShow()
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = EditPlaylistModal;
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PlaylistApiUtil = __webpack_require__(291);
+
+	var PlaylistClientActions = {
+	  fetchDisplayPlaylist: function (user, playlist) {
+	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
+	  },
+
+	  fetchUserPlaylists: function (user) {
+	    PlaylistApiUtil.fetchUserPlaylists(user);
+	  },
+
+	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
+	    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
+	  },
+
+	  deletePlaylistTrack: function (user, playlist, track, updateModal) {
+	    PlaylistApiUtil.deletePlaylistTrack(user, playlist, track, updateModal);
+	  },
+
+	  editPlaylist: function (data, redirectOnSave) {
+	    PlaylistApiUtil.editPlaylist(data, redirectOnSave);
+	  },
+
+	  addTrackToPlaylist: function (user, playlist, track) {
+	    PlaylistApiUtil.addTrackToPlaylist(user, playlist, track);
+	  }
+
+	  // createPlaylist: function(user,playlist,track){
+	  //
+	  // }
+
+	};
+
+	module.exports = PlaylistClientActions;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var PlaylistServerActions = __webpack_require__(292);
+
+	var PlaylistApiUtil = {
+	  fetchDisplayPlaylist: function (user, playlist) {
+	    var request = {
+	      type: "get",
+	      url: "api/" + user + "/playlist/" + playlist,
+	      success: function (data) {
+	        PlaylistServerActions.receiveDisplayPlaylist(data);
+	      },
+	      error: function (error) {
+	        PlaylistServerActions.receiveNoPlaylist(error);
+	      }
+	    };
+
+	    $.ajax(request);
+	  },
+	  fetchUserPlaylists: function (user) {
+	    var request = {
+	      type: "get",
+	      url: "api/" + user + "/playlists",
+	      success: function (data) {
+	        PlaylistServerActions.receiveUserPlaylists(data);
+	      },
+	      error: function (error) {
+	        console.log("user playlists not fetched");
+	      }
+	    };
+
+	    $.ajax(request);
+	  },
+	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
+	    var request = {
+	      type: "DELETE",
+	      url: "api/" + user + "/playlist/" + playlist,
+	      success: function (data) {
+	        onSuccess(data);
+	      },
+	      error: function (error) {
+	        console.log("user playlists not deleted");
+	      }
+	    };
+	    $.ajax(request);
+	  },
+
+	  deletePlaylistTrack: function (user, playlist, track_id, updateModal) {
+	    var request = {
+	      type: "DELETE",
+	      url: "api/" + user + "/playlist/" + playlist + "/" + track_id,
+	      success: function (data) {
+
+	        updateModal(data);
+	        PlaylistServerActions.deletedTrackFromPlaylist(data);
+	      },
+	      error: function (error) {
+	        console.log("user playlists not deleted");
+	      }
+	    };
+
+	    $.ajax(request);
+	  },
+
+	  editPlaylist: function (form, redirectOnSave) {
+	    var request = {
+	      type: "PATCH",
+	      url: "api/" + form.author + "/playlist/" + form.title,
+	      data: { form: form },
+	      success: function (playlist) {
+
+	        redirectOnSave(playlist);
+	        //PlaylistServerActions.receiveDisplayPlaylist(playlist);
+	      },
+	      error: function (error) {
+	        console.log("user playlists not updated");
+	      }
+	    };
+
+	    $.ajax(request);
+	  },
+	  addTrackToPlaylist: function () {
+	    var request = {
+	      type: "post",
+	      url: "",
+	      data: {},
+	      success: function () {},
+	      error: function () {}
+	    };
+	    $.ajax(request);
+	  }
+
+	};
+
+	module.exports = PlaylistApiUtil;
+
+/***/ },
+/* 292 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(245),
+	    PlaylistConstants = __webpack_require__(293);
+
+	var PlaylistServerActions = {
+	  receiveDisplayPlaylist: function (playlist) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEDISPLAYPLAYLIST,
+	      playlist: playlist
+	    });
+	  },
+	  receiveNoPlaylist: function () {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
+	    });
+	  },
+	  receiveUserPlaylists: function (playlists) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.RECEIVEUSERPLAYLISTS,
+	      playlists: playlists
+	    });
+	  },
+	  deletedTrackFromPlaylist: function (track) {
+	    Dispatcher.dispatch({
+	      actionType: PlaylistConstants.DELETEDTRACKFROMPLAYLIST,
+	      track: track
+	    });
+	  }
+
+	};
+
+	module.exports = PlaylistServerActions;
+
+/***/ },
+/* 293 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  RECEIVEDISPLAYPLAYLIST: "RECEIVEDISPLAYPLAYLIST",
+	  RECEIVEDNOPLAYLIST: "RECEIVEDNOPLAYLIST",
+	  RECEIVEUSERPLAYLISTS: "RECEIVEUSERPLAYLISTS",
+	  DELETEDTRACKFROMPLAYLIST: "DELETEDTRACKFROMPLAYLIST"
+	};
+
+/***/ },
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35793,7 +36230,7 @@
 	module.exports = TrackSideBar;
 
 /***/ },
-/* 290 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35859,7 +36296,7 @@
 	module.exports = TrackForeground;
 
 /***/ },
-/* 291 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35881,20 +36318,20 @@
 	module.exports = TrackNotFound;
 
 /***/ },
-/* 292 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(293);
+	var UserStore = __webpack_require__(298);
 	//actions
-	var UserClientActions = __webpack_require__(295);
+	var UserClientActions = __webpack_require__(300);
 	//components
-	var UserForeground = __webpack_require__(298),
-	    UserSideBar = __webpack_require__(299),
-	    UserNotFound = __webpack_require__(300);
+	var UserForeground = __webpack_require__(303),
+	    UserSideBar = __webpack_require__(304),
+	    UserNotFound = __webpack_require__(305);
 
 	var page;
 
@@ -36003,12 +36440,12 @@
 	module.exports = UserPage;
 
 /***/ },
-/* 293 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    UserConstants = __webpack_require__(294);
+	    UserConstants = __webpack_require__(299);
 
 	var _displayUser = null;
 
@@ -36043,7 +36480,7 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 294 */
+/* 299 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -36052,10 +36489,10 @@
 	};
 
 /***/ },
-/* 295 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(296);
+	var UserApiUtil = __webpack_require__(301);
 
 	var UserClientActions = {
 
@@ -36067,10 +36504,10 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 296 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserServerActions = __webpack_require__(297);
+	var UserServerActions = __webpack_require__(302);
 
 	var UserApiUtil = {
 	  fetchDisplayUser: function (username) {
@@ -36093,11 +36530,11 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 297 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(245),
-	    UserConstants = __webpack_require__(294);
+	    UserConstants = __webpack_require__(299);
 
 	var UserServerActions = {
 	  receivedDisplayUser: function (user) {
@@ -36116,7 +36553,7 @@
 	module.exports = UserServerActions;
 
 /***/ },
-/* 298 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36175,11 +36612,11 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 299 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(293),
+	    UserStore = __webpack_require__(298),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var UserSideBar = React.createClass({
@@ -36193,7 +36630,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 300 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36215,7 +36652,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 301 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36223,14 +36660,14 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(251),
-	    PlaylistStore = __webpack_require__(302);
+	    PlaylistStore = __webpack_require__(307);
 	//actions
-	var PlaylistClientActions = __webpack_require__(304);
+	var PlaylistClientActions = __webpack_require__(290);
 	//components
-	var PlaylistContent = __webpack_require__(307),
-	    PlaylistSideBar = __webpack_require__(310),
-	    PlaylistForeground = __webpack_require__(311),
-	    PlaylistNotFound = __webpack_require__(312);
+	var PlaylistContent = __webpack_require__(308),
+	    PlaylistSideBar = __webpack_require__(311),
+	    PlaylistForeground = __webpack_require__(312),
+	    PlaylistNotFound = __webpack_require__(313);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -36284,12 +36721,12 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 302 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245),
 	    Store = __webpack_require__(252).Store,
-	    PlaylistConstants = __webpack_require__(303);
+	    PlaylistConstants = __webpack_require__(293);
 
 	var _displayPlaylist;
 	var _playlists;
@@ -36318,6 +36755,15 @@
 	  this.__emitChange();
 	};
 
+	PlaylistStore.deletedTrackFromPlaylist = function (deletedTrack) {
+	  var removedTrackIdx = _displayPlaylist.tracks.findIndex(function (track) {
+	    return track.id === deletedTrack.id;
+	  });
+
+	  _displayPlaylist.tracks.splice(removedTrackIdx, 1);
+	  this.__emitChange();
+	};
+
 	PlaylistStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
@@ -36329,6 +36775,9 @@
 	    case PlaylistConstants.RECEIVEUSERPLAYLISTS:
 	      PlaylistStore.receiveUserPlaylists(payload.playlists);
 	      break;
+	    case PlaylistConstants.DELETEDTRACKFROMPLAYLIST:
+	      PlaylistStore.deletedTrackFromPlaylist(payload.track);
+	      break;
 
 	  }
 	};
@@ -36336,135 +36785,26 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 303 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  RECEIVEDISPLAYPLAYLIST: "RECEIVEDISPLAYPLAYLIST",
-	  RECEIVEDNOPLAYLIST: "RECEIVEDNOPLAYLIST",
-	  RECEIVEUSERPLAYLISTS: "RECEIVEUSERPLAYLISTS"
-	};
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var PlaylistApiUtil = __webpack_require__(305);
-
-	var PlaylistClientActions = {
-	  fetchDisplayPlaylist: function (user, playlist) {
-	    PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
-	  },
-	  fetchUserPlaylists: function (user) {
-	    PlaylistApiUtil.fetchUserPlaylists(user);
-	  },
-	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
-	    PlaylistApiUtil.deleteDisplayPlaylist(user, playlist, onSuccess);
-	  }
-	};
-
-	module.exports = PlaylistClientActions;
-
-/***/ },
-/* 305 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var PlaylistServerActions = __webpack_require__(306);
-
-	var PlaylistApiUtil = {
-	  fetchDisplayPlaylist: function (user, playlist) {
-	    var request = {
-	      type: "get",
-	      url: "api/" + user + "/playlist/" + playlist,
-	      success: function (data) {
-	        PlaylistServerActions.receiveDisplayPlaylist(data);
-	      },
-	      error: function (error) {
-	        PlaylistServerActions.receiveNoPlaylist(error);
-	      }
-	    };
-
-	    $.ajax(request);
-	  },
-	  fetchUserPlaylists: function (user) {
-	    var request = {
-	      type: "get",
-	      url: "api/" + user + "/playlists",
-	      success: function (data) {
-	        PlaylistServerActions.receiveUserPlaylists(data);
-	      },
-	      error: function (error) {
-	        console.log("user playlists not fetched");
-	      }
-	    };
-
-	    $.ajax(request);
-	  },
-	  deleteDisplayPlaylist: function (user, playlist, onSuccess) {
-	    var request = {
-	      type: "delete",
-	      url: "api/" + user + "/playlists",
-	      success: function (data) {
-	        onSuccess();
-	      },
-	      error: function (error) {
-	        console.log("user playlists not fetched");
-	      }
-	    };
-	    $.ajax(request);
-	  }
-
-	};
-
-	module.exports = PlaylistApiUtil;
-
-/***/ },
-/* 306 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(245),
-	    PlaylistConstants = __webpack_require__(303);
-
-	var PlaylistServerActions = {
-	  receiveDisplayPlaylist: function (playlist) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.RECEIVEDISPLAYPLAYLIST,
-	      playlist: playlist
-	    });
-	  },
-	  receiveNoPlaylist: function () {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.RECEIVEDNOPLAYLIST
-	    });
-	  },
-	  receiveUserPlaylists: function (playlists) {
-	    Dispatcher.dispatch({
-	      actionType: PlaylistConstants.RECEIVEUSERPLAYLISTS,
-	      playlists: playlists
-	    });
-	  }
-
-	};
-
-	module.exports = PlaylistServerActions;
-
-/***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(304);
+	var PlaylistClientActions = __webpack_require__(290);
 	//components
-	var PlaylistContentItems = __webpack_require__(308);
-	var PlaylistModal = __webpack_require__(309);
-
+	var PlaylistContentItems = __webpack_require__(309);
+	var EditPlaylistModal = __webpack_require__(310);
+	///stores
+	var PlaylistStore = __webpack_require__(307);
 	var PlaylistContent = React.createClass({
 	  displayName: 'PlaylistContent',
 
+
+	  componentWillReceiveProps: function (newProps) {
+	    //re render when new props are received
+	  },
 
 	  goToAuthor: function () {
 	    hashHistory.push("/" + this.props.playlist.author);
@@ -36474,11 +36814,12 @@
 	    PlaylistClientActions.deleteDisplayPlaylist(this.props.playlist.author, this.props.playlist.title, this.onDeleteSuccess);
 	  },
 
-	  onDeleteSuccess: function () {
-	    hashHistory.push("/");
+	  onDeleteSuccess: function (data) {
+	    hashHistory.push("/" + data.username + "/playlists");
 	  },
 
 	  render: function () {
+
 	    return React.createElement(
 	      'div',
 	      { className: 'playlist-content' },
@@ -36488,7 +36829,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-content-top-buttons' },
-	          React.createElement(PlaylistModal, { className: 'playlist-content-top-button',
+	          React.createElement(EditPlaylistModal, { className: 'playlist-content-top-button',
 	            icon: 'http://simpleicon.com/wp-content/uploads/pen-15.svg',
 	            playlist: this.props.playlist }),
 	          React.createElement('img', { className: 'playlist-content-top-button',
@@ -36538,7 +36879,7 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36609,12 +36950,19 @@
 	module.exports = PlaylistContentItem;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
 	    LinkedStateMixin = __webpack_require__(220),
-	    Modal = __webpack_require__(224);
+	    Modal = __webpack_require__(224),
+	    hashHistory = __webpack_require__(159).hashHistory;
+	//actions
+	var PlaylistClientActions = __webpack_require__(290);
+
+	//stores
+	var SessionStore = __webpack_require__(251);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -36647,8 +36995,8 @@
 	var placeholder = document.createElement("li");
 	placeholder.className = "placeholder";
 
-	var PlaylistModal = React.createClass({
-	  displayName: 'PlaylistModal',
+	var EditPlaylistModal = React.createClass({
+	  displayName: 'EditPlaylistModal',
 
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
@@ -36714,7 +37062,7 @@
 	    if (e.target.className === "placeholder") return;
 	    this.over = e.target;
 	    // Inside the dragOver method
-	    var relY = e.clientY - 125 - (this.over.offsetTop - 41);
+	    var relY = e.clientY - 155 - (this.over.offsetTop - 41);
 
 	    var height = this.over.offsetHeight / 2;
 	    var parent = e.target.parentNode;
@@ -36736,12 +37084,34 @@
 	    this.setState({ description: event.target.value });
 	  },
 
-	  deleteTrackFromPlaylist: function (event) {
-	    console.log(event.target.parentNode);
+	  deleteTrackFromPlaylist: function (item) {
+	    PlaylistClientActions.deletePlaylistTrack(this.props.playlist.author, this.props.playlist.title, item.id, this.onTrackDeletion);
+	  },
+
+	  onTrackDeletion: function (deletedTrack) {
+	    var oldTracks = this.state.tracks;
+
+	    var removedTrackIdx = this.state.tracks.findIndex(function (track) {
+	      return track.id === deletedTrack.id;
+	    });
+
+	    oldTracks.splice(removedTrackIdx, 1);
+	    this.setState({ tracks: oldTracks });
+	  },
+	  redirectOnSave: function (newPlaylist) {
+	    this.closeModal();
+	    hashHistory.push("" + newPlaylist.author + "/playlist/" + newPlaylist.title);
 	  },
 
 	  savePlaylist: function (event) {
-	    console.log(this.state.tracks);
+
+	    var data = { title: this.props.playlist.title, author: this.props.playlist.author,
+	      description: this.state.description,
+	      newTitle: this.state.title,
+	      tracks: this.state.tracks.map(function (track) {
+	        return track.id;
+	      }) };
+	    PlaylistClientActions.editPlaylist(data, this.redirectOnSave);
 	  },
 
 	  contentShow: function () {
@@ -36788,6 +37158,7 @@
 	              draggable: 'true',
 	              onDragEnd: this.dragEnd,
 	              onDragStart: this.dragStart,
+	              self: item.title,
 	              key: item.id },
 	            React.createElement(
 	              'div',
@@ -36808,7 +37179,9 @@
 	            React.createElement(
 	              'div',
 	              { className: 'playlist-modal-list-delete',
-	                onClick: this.deleteTrackFromPlaylist },
+	                onClick: function () {
+	                  this.deleteTrackFromPlaylist(item);
+	                }.bind(this) },
 	              '✕'
 	            )
 	          );
@@ -36877,14 +37250,14 @@
 	  }
 	});
 
-	module.exports = PlaylistModal;
+	module.exports = EditPlaylistModal;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(307),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistSideBar = React.createClass({
@@ -36900,7 +37273,7 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36918,6 +37291,7 @@
 	  },
 
 	  render: function () {
+
 	    return React.createElement(
 	      'div',
 	      { className: 'playlist-foreground' },
@@ -36964,11 +37338,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(307),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -36989,7 +37363,7 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37007,7 +37381,7 @@
 	      { className: "splashpage" },
 	      React.createElement("video", {
 	        autoPlay: true, id: "splashvideo", loop: true, muted: true,
-	        src: "http://res.cloudinary.com/bravaudio/video/upload/v1463637610/My_Movie_lnjnby.mp4", type: "video/mp4" }),
+	        src: "https://s3-us-west-1.amazonaws.com/bravaudio/lights.mp4", type: "video/mp4" }),
 	      React.createElement(
 	        "div",
 	        { className: "splash-entry", onClick: this.goToLogin },
@@ -37020,7 +37394,7 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37029,7 +37403,7 @@
 	//stores
 
 	//actions
-	var UserClientActions = __webpack_require__(295);
+	var UserClientActions = __webpack_require__(300);
 
 	var YourPage = React.createClass({
 	  displayName: 'YourPage',
@@ -37122,21 +37496,21 @@
 	module.exports = YourPage;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
-	var UserStore = __webpack_require__(293),
+	var UserStore = __webpack_require__(298),
 	    TrackStore = __webpack_require__(275),
-	    PlaylistStore = __webpack_require__(302);
+	    PlaylistStore = __webpack_require__(307);
 
 	//actions
 	var TrackClientActions = __webpack_require__(281),
-	    PlaylistClientActions = __webpack_require__(304);
+	    PlaylistClientActions = __webpack_require__(290);
 	//components
-	var UserContentItem = __webpack_require__(316);
+	var UserContentItem = __webpack_require__(317);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -37213,7 +37587,7 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37283,23 +37657,23 @@
 	module.exports = UserContentItem;
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//components
-	var YourContentItems = __webpack_require__(318),
-	    YourContentAll = __webpack_require__(319);
+	var YourContentItems = __webpack_require__(319),
+	    YourContentAll = __webpack_require__(320);
 
 	//stores
 	var SessionStore = __webpack_require__(251),
 	    TrackStore = __webpack_require__(275),
-	    PlaylistStore = __webpack_require__(302),
+	    PlaylistStore = __webpack_require__(307),
 	    MusicStore = __webpack_require__(272);
 	//actions
 	var TrackClientActions = __webpack_require__(281),
-	    PlaylistClientActions = __webpack_require__(304);
+	    PlaylistClientActions = __webpack_require__(290);
 
 	var list = ["tracks", "playlists"];
 
@@ -37361,13 +37735,13 @@
 	module.exports = YourContent;
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var PlaylistModal = __webpack_require__(309);
+	var editPlaylistModal = __webpack_require__(310);
 	//stores
 	var MusicStore = __webpack_require__(272);
 
@@ -37382,20 +37756,18 @@
 	  // },
 
 	  setMusic: function () {
-	    return function (e) {
-	      debugger;
-	    };
+	    return function (e) {};
 	  },
 
 	  render: function () {
-
-	    var createButton;
-
-	    if (this.props.typing === "track") {
-	      createButton = React.createElement(PlaylistModal, { typing: 'Tracks', items: this.props.items });
-	    } else if (this.props.typing === "playlist") {
-	      createButton = React.createElement(PlaylistModal, { typing: 'Playlists', items: this.props.items });
-	    }
+	    //
+	    // var createButton;
+	    //
+	    // if(this.props.typing==="track"){
+	    //   createButton = <PlaylistModal typing = "Tracks" items = {this.props.items}/>;
+	    // }else if(this.props.typing==="playlist"){
+	    //   createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
+	    // }
 
 	    return React.createElement(
 	      'div',
@@ -37458,7 +37830,7 @@
 	module.exports = YourContentItems;
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

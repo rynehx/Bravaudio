@@ -20,7 +20,15 @@ var PlaylistServerActions = {
       actionType: PlaylistConstants.RECEIVEUSERPLAYLISTS,
       playlists: playlists
     });
+  },
+  deletedTrackFromPlaylist: function(track){
+    Dispatcher.dispatch({
+      actionType: PlaylistConstants.DELETEDTRACKFROMPLAYLIST,
+      track: track
+    });
   }
+
+
 
 };
 

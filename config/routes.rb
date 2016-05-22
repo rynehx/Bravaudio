@@ -20,9 +20,13 @@ Rails.application.routes.draw do
     get ":username", to: "users#username"
     get ":username/track/:title", to: "tracks#show"
     get ":username/tracks", to: "tracks#user_tracks"
-    get ":username/playlist/:title", to: "playlists#show"
     get ":username/playlists", to: "playlists#user_playlists"
+
+    get ":username/playlist/:title", to: "playlists#show"
     delete ":username/playlist/:title" , to: "playlists#delete"
+    patch ":username/playlist/:title" , to: "playlists#edit"
+
+    delete ":username/playlist/:title/:track_id", to: "playlists#delete_track"
   end
 
     root "static_pages#root"

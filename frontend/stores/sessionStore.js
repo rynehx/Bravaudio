@@ -22,6 +22,7 @@ SessionStore.login = function(user){
 
 
 SessionStore.logout = function(){
+
   myLocStorage.setItem("currentUser",null);
   hashHistory.push("/");
 };

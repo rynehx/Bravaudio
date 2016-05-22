@@ -31,13 +31,62 @@ var PlaylistApiUtil = {
   },
   deleteDisplayPlaylist: function(user, playlist, onSuccess){
     var request = {
-      type: "delete",
-      url: "api/" + user + "/playlists",
+      type: "DELETE",
+      url: "api/" + user + "/playlist/" + playlist,
       success: function(data){
-        onSuccess();
+        onSuccess(data);
       },
       error: function(error){
-        console.log("user playlists not fetched");
+        console.log("user playlists not deleted");
+      }
+    };
+    $.ajax(request);
+  },
+
+  deletePlaylistTrack: function(user, playlist, track_id, updateModal){
+    var request = {
+      type: "DELETE",
+      url: "api/" + user +"/playlist/" + playlist + "/" + track_id,
+      success: function(data){
+
+        updateModal(data);
+        PlaylistServerActions.deletedTrackFromPlaylist(data);
+      },
+      error: function(error){
+        console.log("user playlists not deleted");
+      }
+    };
+
+    $.ajax(request);
+  },
+
+  editPlaylist: function(form, redirectOnSave){
+    var request = {
+      type: "PATCH",
+      url: "api/" + form.author +"/playlist/" + form.title,
+      data: {form: form},
+      success: function(playlist){
+
+        redirectOnSave(playlist);
+        //PlaylistServerActions.receiveDisplayPlaylist(playlist);
+      },
+      error: function(error){
+        console.log("user playlists not updated");
+      }
+    };
+
+    $.ajax(request);
+  },
+  addTrackToPlaylist: function(){
+    var request = {
+      type: "post",
+      url: "",
+      data: {},
+      success: function(){
+
+      },
+      error: function(){
+
       }
     };
     $.ajax(request);

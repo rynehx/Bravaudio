@@ -30,6 +30,14 @@ PlaylistStore.receiveUserPlaylists = function(playlists){
   this.__emitChange();
 };
 
+PlaylistStore.deletedTrackFromPlaylist = function(deletedTrack){
+  var removedTrackIdx = _displayPlaylist.tracks.findIndex(
+  function(track){return track.id===deletedTrack.id;});
+
+  _displayPlaylist.tracks.splice(removedTrackIdx,1);
+  this.__emitChange();
+};
+
 PlaylistStore.__onDispatch = function(payload){
   switch(payload.actionType){
     case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
@@ -40,6 +48,9 @@ PlaylistStore.__onDispatch = function(payload){
       break;
     case PlaylistConstants.RECEIVEUSERPLAYLISTS:
       PlaylistStore.receiveUserPlaylists(payload.playlists);
+      break;
+    case PlaylistConstants.DELETEDTRACKFROMPLAYLIST:
+      PlaylistStore.deletedTrackFromPlaylist(payload.track);
       break;
 
   }

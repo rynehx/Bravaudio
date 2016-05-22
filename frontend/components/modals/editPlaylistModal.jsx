@@ -1,6 +1,13 @@
+//react
 var React = require('react'),
     LinkedStateMixin = require('react-addons-linked-state-mixin'),
-    Modal = require("react-modal");
+    Modal = require("react-modal"),
+    hashHistory = require('react-router').hashHistory;
+//actions
+var PlaylistClientActions = require('../../actions/playlistClientActions');
+
+//stores
+var SessionStore = require('../../stores/sessionStore');
 
 var modalWidth = window.innerWidth*0.7;
 var modalHeight = window.innerHeight*0.7;
@@ -34,7 +41,11 @@ var placeholder = document.createElement("li");
 placeholder.className = "placeholder";
 
 
-var PlaylistModal = React.createClass({
+
+
+
+
+var EditPlaylistModal = React.createClass({
     mixins: [LinkedStateMixin],
     getInitialState: function(){
       return({ modalOpen: false, tab: "info", playlist: this.props.playlist, tracks: this.props.playlist.tracks.slice(0)});
@@ -102,7 +113,7 @@ var PlaylistModal = React.createClass({
        if(e.target.className === "placeholder") return;
        this.over = e.target;
        // Inside the dragOver method
-       var relY = e.clientY -125 - (this.over.offsetTop-41);
+       var relY = e.clientY -155 - (this.over.offsetTop-41);
 
        var height = this.over.offsetHeight / 2;
        var parent = e.target.parentNode;
@@ -125,12 +136,34 @@ var PlaylistModal = React.createClass({
       this.setState({description: event.target.value});
     },
 
-    deleteTrackFromPlaylist: function(event){
-      console.log(event.target.parentNode);
+    deleteTrackFromPlaylist: function(item){
+      PlaylistClientActions.deletePlaylistTrack(
+      this.props.playlist.author,
+      this.props.playlist.title, item.id, this.onTrackDeletion);
+    },
+
+    onTrackDeletion: function(deletedTrack){
+      var oldTracks = this.state.tracks;
+
+      var removedTrackIdx = this.state.tracks.findIndex(
+      function(track){return track.id === deletedTrack.id;});
+
+      oldTracks.splice(removedTrackIdx,1);
+      this.setState({tracks: oldTracks});
+    },
+    redirectOnSave: function(newPlaylist){
+      this.closeModal();
+      hashHistory.push("" + newPlaylist.author +"/playlist/" + newPlaylist.title);
+
     },
 
     savePlaylist: function(event){
-      console.log(this.state.tracks);
+
+      var data = {title:this.props.playlist.title, author:this.props.playlist.author ,
+        description: this.state.description,
+        newTitle: this.state.title,
+        tracks: this.state.tracks.map(function(track){return track.id;})};
+      PlaylistClientActions.editPlaylist(data,this.redirectOnSave);
     },
 
     contentShow:function(){
@@ -166,13 +199,14 @@ var PlaylistModal = React.createClass({
                 draggable="true"
                 onDragEnd={this.dragEnd}
                 onDragStart={this.dragStart}
+                self={item.title}
                 key = {item.id}>
                   <div className = "playlist-modal-list-number">{i+1+"."}</div>
                   <img className = "playlist-modal-list-items-image" src = {item.image_url}/>
                   <div className = "playlist-modal-list-items">{item.title}</div>
                   <div className = "playlist-modal-list-author">{item.author}</div>
                   <div className = "playlist-modal-list-delete"
-                    onClick = {this.deleteTrackFromPlaylist}>✕</div>
+                    onClick = {function(){this.deleteTrackFromPlaylist(item)}.bind(this)}>✕</div>
                 </li>);
               }, this)
             }
@@ -229,4 +263,4 @@ var PlaylistModal = React.createClass({
 });
 
 
-module.exports = PlaylistModal;
+module.exports = EditPlaylistModal;

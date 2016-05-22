@@ -1,0 +1,116 @@
+.new-playlist-button{
+}
+
+
+.new-playlist-modal{
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  background-color: white;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  border-style: none;
+  outline:0;
+  display: flex;
+  justify-content: flex-start;;
+  align-items: center;
+  flex-direction: column;
+  padding: 2px;
+}
+
+
+.new-playlist-button-image{
+  margin: 0px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 16px;
+  padding: 5px 5px;
+  border-color: #CCCCCC;
+}
+
+.newplaylist-modal-inside-tabs{
+  width: 100%;
+  height: 40px;
+  min-height: 40px;
+  display: flex;
+  justify-content: flex-start;;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-color: #CCCCCC;
+}
+
+.newplaylist-modal-inside-tab{
+  width: 150px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+
+.newplaylist-modal-inside-container{
+  width: 100%;
+  list-style: none;
+  margin:0;
+  padding:0
+}
+
+
+.newplaylist-modal-inside-tabbed{
+  color: orange;
+  border-bottom: 1px solid;
+  border-color: orange;
+}
+
+.newplaylist-modal-inside-items{
+  width: 100%;
+  height: 46px;
+  display: flex;
+  justify-content:  space-around;
+  align-items: center;
+  border-bottom: 1px solid;
+  border-color: lightgrey;
+}
+
+.newplaylist-modal-inside-image{
+  width: 40px;
+  height: 40px;
+}
+
+.newplaylist-modal-inside-title{
+  font-size: 14px;
+  width: 80px;
+}
+
+.newplaylist-modal-inside-trackcount{
+  font-size: 12px;
+  width: 70px;
+}
+
+.newplaylist-modal-inside-add{
+  width: 80px;
+  height: 20px;
+  border: 1px solid;
+  border-color: orange;
+  border-radius: 5px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: orange;
+}
+
+.newplaylist-modal-inside-added{
+  background-color: orange;
+  color: white;
+}

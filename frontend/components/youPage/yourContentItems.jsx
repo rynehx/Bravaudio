@@ -1,7 +1,7 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 //components
-var PlaylistModal = require('../modals/playlistModal');
+var editPlaylistModal = require('../modals/editPlaylistModal');
 //stores
 var MusicStore = require('../../stores/musicStore');
 
@@ -19,20 +19,20 @@ var YourContentItems = React.createClass({
 
   setMusic: function(){
     return function(e){
-      debugger
+
 
     };
   },
 
   render: function(){
-
-    var createButton;
-
-    if(this.props.typing==="track"){
-      createButton = <PlaylistModal typing = "Tracks" items = {this.props.items}/>;
-    }else if(this.props.typing==="playlist"){
-      createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
-    }
+    //
+    // var createButton;
+    //
+    // if(this.props.typing==="track"){
+    //   createButton = <PlaylistModal typing = "Tracks" items = {this.props.items}/>;
+    // }else if(this.props.typing==="playlist"){
+    //   createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
+    // }
 
 
     return (

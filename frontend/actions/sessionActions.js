@@ -49,6 +49,7 @@ var SessionActions = {
 		});
 	},
 	logout: function(){
+
 		SessionApiUtil.logout(SessionActions.removeCurrentUser,
       SessionActions.handleError);
 	}

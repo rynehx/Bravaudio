@@ -1,15 +1,18 @@
 //react
 var React = require('react'),
-    PlaylistStore = require('../../stores/playlistStore'),
     hashHistory = require('react-router').hashHistory;
 //actions
 var PlaylistClientActions = require('../../actions/playlistClientActions');
 //components
 var PlaylistContentItems = require('./playlistContentItem');
-var PlaylistModal = require('../modals/playlistModal');
-
-
+var EditPlaylistModal = require('../modals/editPlaylistModal');
+///stores
+var  PlaylistStore = require('../../stores/playlistStore');
 var PlaylistContent = React.createClass({
+
+  componentWillReceiveProps: function(newProps){
+   //re render when new props are received
+  },
 
   goToAuthor: function(){
     hashHistory.push("/" + this.props.playlist.author);
@@ -19,16 +22,17 @@ var PlaylistContent = React.createClass({
     PlaylistClientActions.deleteDisplayPlaylist(this.props.playlist.author, this.props.playlist.title, this.onDeleteSuccess);
   },
 
-  onDeleteSuccess: function(){
-    hashHistory.push("/");
+  onDeleteSuccess: function(data){
+    hashHistory.push("/"+data.username+"/playlists");
   },
 
   render: function(){
+
   return(
     <div className = "playlist-content">
       <div className = "playlist-content-top">
         <div className = "playlist-content-top-buttons">
-          <PlaylistModal className = "playlist-content-top-button"
+          <EditPlaylistModal className = "playlist-content-top-button"
             icon="http://simpleicon.com/wp-content/uploads/pen-15.svg"
             playlist = {this.props.playlist}/>
           <img className = "playlist-content-top-button"
