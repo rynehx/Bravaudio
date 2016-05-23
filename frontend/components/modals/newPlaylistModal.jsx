@@ -50,20 +50,28 @@ var style = {
 var EditPlaylistModal = React.createClass({
     mixins: [LinkedStateMixin],
     getInitialState: function(){
-      return({ modalOpen: false, tab: "add", playlists:[] });
+      return({ modalOpen: false, tab: "add", playlists:[], newTitle:"", newDescription:"" });
     },
     componentWillMount: function(){
       var container = document.getElementById("content");
       Modal.setAppElement(container);
-      PlaylistStore.addListener(this._onAddToPlaylist);
+      this.playliststorelistener = PlaylistStore.addListener(this._onAddToPlaylist);
       PlaylistClientActions.fetchUserPlaylists(SessionStore.fetchCurrentUser().username);
+    },
+    componentWillUnmount: function(){
+      this.playliststorelistener.remove();
     },
 
     _onAddToPlaylist: function(){
       this.setState({playlists: PlaylistStore.displayUserPlaylists()});
     },
 
-    _onCreateNewPlaylist: function(){
+    createNewPlaylist: function(){
+      PlaylistClientActions.createNewPlaylist({title: this.state.newTitle,
+        description: this.state.newDescription, track: this.props.track.id});
+    },
+
+    _createNewPlaylistSuccess: function(){
 
     },
 
@@ -96,11 +104,11 @@ var EditPlaylistModal = React.createClass({
     },
 
     changeTitle: function(event){
-      this.setState({title: event.target.value});
+      this.setState({newTitle: event.target.value});
     },
 
     changeDescription: function(event){
-      this.setState({description: event.target.value});
+      this.setState({newDescription: event.target.value});
     },
 
     addButton: function(playlist){
@@ -108,11 +116,11 @@ var EditPlaylistModal = React.createClass({
           return track.id === this.props.track.id;}.bind(this));
       if(included){
         return <div className =
-          {"newplaylist-modal-inside-add newplaylist-modal-inside-added"}
+          {"newplaylist-modal-list-add newplaylist-modal-list-added"}
           onClick = {function(){this.pressAddButton(playlist);}.bind(this)}>
           Added</div>;
       }else{
-        return <div className = {"newplaylist-modal-inside-add"}
+        return <div className = {"newplaylist-modal-list-add"}
           onClick = {function(){this.pressAddButton(playlist);}.bind(this)}>
           Add to Playlist</div>;
       }
@@ -124,19 +132,35 @@ var EditPlaylistModal = React.createClass({
       playlist, this.props.track);
     },
 
+    newPlaylistSaveButton: function(){
+      if(this.state.newTitle.replace(/\s/g, "").length>0 &&
+       this.state.newDescription.replace(/\s/g, "").length>0 ){
+         return <div className = "newplaylist-modal-inside-save" onClick= {this.createNewPlaylist}>Save</div>;
+      }else{
+        return <div className = "newplaylist-modal-inside-save save-null" >Save</div>;
+      }
+    },
 
     contentShow:function(){
 
       if(this.state.tab==="create"){
         return (
           <form>
-            <div>Title</div>
-            <input></input>
+            <div className = "newplaylist-modal-inside-title">Title</div>
+            <input defaultValue = {this.state.newTitle}
+              className = "newplaylist-modal-inside-input"
+              onChange={this.changeTitle}></input>
 
-            <div>Description</div>
-            <input></input>
+            <div className = "newplaylist-modal-inside-tags">Tags</div>
+            <input className = "newplaylist-modal-inside-input"
+              defaultValue = {""}></input>
 
-            <div>Save</div>
+            <div className = "newplaylist-modal-inside-description">Description</div>
+            <textarea className = "newplaylist-modal-inside-textarea"
+              defaultValue = {this.state.newDescription}
+              onChange={this.changeDescription}></textarea>
+
+            {this.newPlaylistSaveButton()}
 
           </form>
         );
@@ -145,10 +169,10 @@ var EditPlaylistModal = React.createClass({
           <ul className = "">
             {
               this.state.playlists.map(function(playlist){
-                return (<li className = "newplaylist-modal-inside-items" key = {playlist.id}>
-                  <img className = "newplaylist-modal-inside-image" src = {playlist.image_url}/>
-                  <div className = "newplaylist-modal-inside-title">{playlist.title}</div>
-                  <div className = "newplaylist-modal-inside-trackcount">{playlist.tracks.length + " tracks"}</div>
+                return (<li className = "newplaylist-modal-list-items" key = {playlist.id}>
+                  <img className = "newplaylist-modal-list-image" src = {playlist.image_url}/>
+                  <div className = "newplaylist-modal-list-title">{playlist.title}</div>
+                  <div className = "newplaylist-modal-list-trackcount">{playlist.tracks.length + " tracks"}</div>
                   {this.addButton(playlist)}
 
                 </li>);

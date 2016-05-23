@@ -35799,20 +35799,28 @@
 
 	  mixins: [LinkedStateMixin],
 	  getInitialState: function () {
-	    return { modalOpen: false, tab: "add", playlists: [] };
+	    return { modalOpen: false, tab: "add", playlists: [], newTitle: "", newDescription: "" };
 	  },
 	  componentWillMount: function () {
 	    var container = document.getElementById("content");
 	    Modal.setAppElement(container);
-	    PlaylistStore.addListener(this._onAddToPlaylist);
+	    this.playliststorelistener = PlaylistStore.addListener(this._onAddToPlaylist);
 	    PlaylistClientActions.fetchUserPlaylists(SessionStore.fetchCurrentUser().username);
+	  },
+	  componentWillUnmount: function () {
+	    this.playliststorelistener.remove();
 	  },
 
 	  _onAddToPlaylist: function () {
 	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
 	  },
 
-	  _onCreateNewPlaylist: function () {},
+	  createNewPlaylist: function () {
+	    PlaylistClientActions.createNewPlaylist({ title: this.state.newTitle,
+	      description: this.state.newDescription, track: this.props.track.id });
+	  },
+
+	  _createNewPlaylistSuccess: function () {},
 
 	  setInfoTab: function () {
 	    this.setState({ tab: "add" });
@@ -35843,11 +35851,11 @@
 	  },
 
 	  changeTitle: function (event) {
-	    this.setState({ title: event.target.value });
+	    this.setState({ newTitle: event.target.value });
 	  },
 
 	  changeDescription: function (event) {
-	    this.setState({ description: event.target.value });
+	    this.setState({ newDescription: event.target.value });
 	  },
 
 	  addButton: function (playlist) {
@@ -35857,7 +35865,7 @@
 	    if (included) {
 	      return React.createElement(
 	        'div',
-	        { className: "newplaylist-modal-inside-add newplaylist-modal-inside-added",
+	        { className: "newplaylist-modal-list-add newplaylist-modal-list-added",
 	          onClick: function () {
 	            this.pressAddButton(playlist);
 	          }.bind(this) },
@@ -35866,7 +35874,7 @@
 	    } else {
 	      return React.createElement(
 	        'div',
-	        { className: "newplaylist-modal-inside-add",
+	        { className: "newplaylist-modal-list-add",
 	          onClick: function () {
 	            this.pressAddButton(playlist);
 	          }.bind(this) },
@@ -35879,6 +35887,22 @@
 	    PlaylistClientActions.addTrackToPlaylist(SessionStore.fetchCurrentUser(), playlist, this.props.track);
 	  },
 
+	  newPlaylistSaveButton: function () {
+	    if (this.state.newTitle.replace(/\s/g, "").length > 0 && this.state.newDescription.replace(/\s/g, "").length > 0) {
+	      return React.createElement(
+	        'div',
+	        { className: 'newplaylist-modal-inside-save', onClick: this.createNewPlaylist },
+	        'Save'
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'newplaylist-modal-inside-save save-null' },
+	        'Save'
+	      );
+	    }
+	  },
+
 	  contentShow: function () {
 
 	    if (this.state.tab === "create") {
@@ -35887,21 +35911,28 @@
 	        null,
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'newplaylist-modal-inside-title' },
 	          'Title'
 	        ),
-	        React.createElement('input', null),
+	        React.createElement('input', { defaultValue: this.state.newTitle,
+	          className: 'newplaylist-modal-inside-input',
+	          onChange: this.changeTitle }),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'newplaylist-modal-inside-tags' },
+	          'Tags'
+	        ),
+	        React.createElement('input', { className: 'newplaylist-modal-inside-input',
+	          defaultValue: "" }),
+	        React.createElement(
+	          'div',
+	          { className: 'newplaylist-modal-inside-description' },
 	          'Description'
 	        ),
-	        React.createElement('input', null),
-	        React.createElement(
-	          'div',
-	          null,
-	          'Save'
-	        )
+	        React.createElement('textarea', { className: 'newplaylist-modal-inside-textarea',
+	          defaultValue: this.state.newDescription,
+	          onChange: this.changeDescription }),
+	        this.newPlaylistSaveButton()
 	      );
 	    } else if (this.state.tab === "add") {
 	      return React.createElement(
@@ -35910,16 +35941,16 @@
 	        this.state.playlists.map(function (playlist) {
 	          return React.createElement(
 	            'li',
-	            { className: 'newplaylist-modal-inside-items', key: playlist.id },
-	            React.createElement('img', { className: 'newplaylist-modal-inside-image', src: playlist.image_url }),
+	            { className: 'newplaylist-modal-list-items', key: playlist.id },
+	            React.createElement('img', { className: 'newplaylist-modal-list-image', src: playlist.image_url }),
 	            React.createElement(
 	              'div',
-	              { className: 'newplaylist-modal-inside-title' },
+	              { className: 'newplaylist-modal-list-title' },
 	              playlist.title
 	            ),
 	            React.createElement(
 	              'div',
-	              { className: 'newplaylist-modal-inside-trackcount' },
+	              { className: 'newplaylist-modal-list-trackcount' },
 	              playlist.tracks.length + " tracks"
 	            ),
 	            this.addButton(playlist)

@@ -72,7 +72,7 @@
   border-color: orange;
 }
 
-.newplaylist-modal-inside-items{
+.newplaylist-modal-list-items{
   width: 100%;
   height: 46px;
   display: flex;
@@ -82,22 +82,22 @@
   border-color: lightgrey;
 }
 
-.newplaylist-modal-inside-image{
+.newplaylist-modal-list-image{
   width: 40px;
   height: 40px;
 }
 
-.newplaylist-modal-inside-title{
+.newplaylist-modal-list-title{
   font-size: 14px;
   width: 80px;
 }
 
-.newplaylist-modal-inside-trackcount{
+.newplaylist-modal-list-trackcount{
   font-size: 12px;
   width: 70px;
 }
 
-.newplaylist-modal-inside-add{
+.newplaylist-modal-list-add{
   width: 80px;
   height: 20px;
   border: 1px solid;
@@ -111,7 +111,51 @@
   cursor: pointer;
 }
 
-.newplaylist-modal-inside-added{
+.newplaylist-modal-list-added{
   background-color: orange;
   color: white;
+}
+
+.newplaylist-modal-inside-title{
+  font-size: 12px;
+}
+
+.newplaylist-modal-inside-tags{
+  font-size: 12px;
+}
+
+.newplaylist-modal-inside-description{
+  font-size: 12px;
+}
+
+.newplaylist-modal-inside-save{
+  border: 2px solid orange;
+  background-color: orange;
+  color: white;
+  border-radius: 5px;
+  margin: 0px 20px;
+  padding: 3px 9px;
+  font-size: 14px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.save-null{
+  border: 2px solid lightgrey;
+  background-color: lightgrey;
+
+}
+
+
+.newplaylist-modal-inside-input{
+  height: 20px;
+  margin-bottom: 20px;
+}
+
+.newplaylist-modal-inside-textarea{
+  height: 200px;
+  width: 400px;
 }
