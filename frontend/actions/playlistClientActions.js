@@ -24,8 +24,11 @@ var PlaylistClientActions = {
 
   addTrackToPlaylist: function(user, playlist, track){
     PlaylistApiUtil.addTrackToPlaylist(user, playlist, track);
-  }
+  },
 
+  createNewPlaylist: function(playlist, successCallback){
+    PlaylistApiUtil.createNewPlaylist(playlist, successCallback);
+  }
 
 
   // createPlaylist: function(user,playlist,track){

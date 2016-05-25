@@ -68,11 +68,12 @@ var EditPlaylistModal = React.createClass({
 
     createNewPlaylist: function(){
       PlaylistClientActions.createNewPlaylist({title: this.state.newTitle,
-        description: this.state.newDescription, track: this.props.track.id});
+        description: this.state.newDescription, track: this.props.track.id, author:SessionStore.fetchCurrentUser().id }, this._createNewPlaylistSuccess);
     },
 
     _createNewPlaylistSuccess: function(){
-
+      this.setInfoTab();
+      this.setState({newTitle:"", newDescription:""} );
     },
 
     setInfoTab: function(){
@@ -111,6 +112,9 @@ var EditPlaylistModal = React.createClass({
       this.setState({newDescription: event.target.value});
     },
 
+    goToPlaylist: function(playlist){
+      hashHistory.push(SessionStore.fetchCurrentUser().username +  "/playlist/" + playlist);
+    },
     addButton: function(playlist){
         var included =  playlist.tracks.find(function(track){
           return track.id === this.props.track.id;}.bind(this));
@@ -170,9 +174,12 @@ var EditPlaylistModal = React.createClass({
             {
               this.state.playlists.map(function(playlist){
                 return (<li className = "newplaylist-modal-list-items" key = {playlist.id}>
-                  <img className = "newplaylist-modal-list-image" src = {playlist.image_url}/>
-                  <div className = "newplaylist-modal-list-title">{playlist.title}</div>
-                  <div className = "newplaylist-modal-list-trackcount">{playlist.tracks.length + " tracks"}</div>
+                  <img className = "newplaylist-modal-list-image"
+                     src = {playlist.image_url}/>
+                  <div className = "newplaylist-modal-list-title"
+                    onClick={function(){  this.goToPlaylist(playlist.title);}.bind(this)}>{playlist.title}</div>
+
+                  <div className = "newplaylist-modal-list-trackcount" onClick={function(){  this.goToPlaylist(playlist.title);}.bind(this)}>{playlist.tracks.length + " tracks"}</div>
                   {this.addButton(playlist)}
 
                 </li>);

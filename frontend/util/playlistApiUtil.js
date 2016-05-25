@@ -89,7 +89,26 @@ var PlaylistApiUtil = {
       }
     };
     $.ajax(request);
+  },
+
+  createNewPlaylist: function(playlist, onSuccess){
+    var request ={
+      type: "post",
+      url: "api/" + playlist.author + "/playlists",
+      data: {form: playlist},
+      success: function(data){
+        PlaylistServerActions.receiveUserPlaylists(data);
+        onSuccess();
+      },
+      error: function(){
+        console.log("playlist not created");
+      }
+    };
+
+    $.ajax(request);
   }
+
+
 
 };
 

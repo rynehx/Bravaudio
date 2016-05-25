@@ -96,6 +96,20 @@ class Api::PlaylistsController < ApplicationController
 
   def create
 
+      if (current_user.id.to_s == editing_params[:author])
+        playlist = editing_params
+        track = Track.find( params["form"]["track"])
+
+        newplaylist = Playlist.create(title: playlist[:title],
+        author_id: playlist[:author], description: playlist[:description], image_url: track[:image_url])
+        if newplaylist
+          PlaylistTrackJoining.create(order: 1 , playlist_id: newplaylist.id, track_id: track.id)
+        end
+
+      end
+      author = User.find(editing_params[:author])
+      @playlists = author.playlists
+      render "api/playlists/index"
   end
 
 

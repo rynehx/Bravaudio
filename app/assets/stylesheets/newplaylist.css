@@ -90,6 +90,9 @@
 .newplaylist-modal-list-title{
   font-size: 14px;
   width: 80px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .newplaylist-modal-list-trackcount{
