@@ -36949,9 +36949,12 @@
 /* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory,
 	    MusicStore = __webpack_require__(272);
+	//components
+	var NewPlaylistModal = __webpack_require__(289);
 
 	var PlaylistContentItem = React.createClass({
 	  displayName: 'PlaylistContentItem',
@@ -37008,6 +37011,12 @@
 	            hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
 	          }.bind(this) },
 	        this.props.track.title
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-buttons' },
+	        React.createElement(NewPlaylistModal, { track: this.props.track,
+	          icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' })
 	      )
 	    );
 	  }

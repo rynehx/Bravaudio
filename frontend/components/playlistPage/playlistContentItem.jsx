@@ -1,6 +1,10 @@
+//react
 var React = require('react'),
     hashHistory = require('react-router').hashHistory,
     MusicStore = require('../../stores/musicStore');
+//components
+var NewPlaylistModal = require('../modals/newPlaylistModal');
+
 
 var PlaylistContentItem = React.createClass({
   goToTrack: function(){
@@ -34,16 +38,23 @@ var PlaylistContentItem = React.createClass({
       <div className = "playlist-content-items-index">{this.props.index}</div>
 
       <a className = "playlist-content-items-author"
-        onClick= {function(){this.goToAuthor()}.bind(this)}>
+        onClick= {function(){this.goToAuthor();}.bind(this)}>
         {this.props.track.author}
       </a>
 
       <div className = "playlist-content-items-spacer">-</div>
 
       <a className = "playlist-content-items-title"
-        onClick= {function(){hashHistory.push("/" + this.props.track.author+"/track/"+ this.props.track.title)}.bind(this)} >
+        onClick= {function(){hashHistory.push("/" + this.props.track.author+"/track/"+ this.props.track.title);}.bind(this)} >
         {this.props.track.title}
       </a>
+
+      <div className = "playlist-content-items-buttons">
+        <NewPlaylistModal track = {this.props.track}
+          icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
+
+      </div>
+
   </li>);
   }
 
