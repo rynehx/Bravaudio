@@ -18,7 +18,7 @@ class Playlist < ActiveRecord::Base
     class_name: "User"
   )
 
-  has_many :likes, as: :likeable
+  has_many :likes, as: :likeable, dependent: :destroy
 
   has_many :likings, :through => :likes, :source => :likeable,
     :source_type => "Playlist"

@@ -39,6 +39,7 @@
   min-width: 500px;
   justify-content: flex-start;
   align-items: center;
+  padding-bottom: 100px;
 }
 
 
@@ -50,6 +51,7 @@
   border-color: lightgrey;
   background-color: pink;
   min-width:315px;
+  padding-bottom: 100px;
 }
 
 
@@ -251,7 +253,7 @@
 .playlist-content-items-author{
   min-width: 50px;
   width: 50px;
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
   margin: 0 5px 0px 10px;
   color: #BFBFBF;
@@ -262,6 +264,7 @@
 }
 
 .playlist-content-items-title{
+  font-size: 11px;
   min-width: 200px;
   text-align: center;
   margin: 0 10px 0px 5px;

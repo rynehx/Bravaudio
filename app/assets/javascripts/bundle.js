@@ -34616,10 +34616,12 @@
 	    trackConstants = __webpack_require__(273);
 
 	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
-	    _currentTrack = { title: "", audio_url: "", image_url: "" },
+	    _currentTrack = { title: "", audio_url: "", image_url: "", id: null },
 	    _playedTracks = {},
 	    _onRepeat = true,
 	    _repeatedSong = false;
+
+	var TrackClientActions = __webpack_require__(281);
 
 	var MusicStore = new Store(AppDispatcher);
 
@@ -34645,6 +34647,10 @@
 
 	MusicStore.currentPlaylist = function () {
 	  return _currentPlaylist;
+	};
+
+	MusicStore.recordPlayed = function () {
+	  TrackClientActions.recordPlayed();
 	};
 
 	MusicStore.setMusic = function (track, playlist) {
@@ -34681,6 +34687,9 @@
 	  } else {
 	    _currentPlaylist = { tracks: [track] };
 	  }
+
+	  MusicStore.recordPlayed(_currentTrack);
+	  this.__emitChange();
 	};
 
 	MusicStore.updateToPreviousTrack = function (action) {
@@ -34697,7 +34706,7 @@
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) - 1];
 	  }
-
+	  MusicStore.recordPlayed(_currentTrack);
 	  this.__emitChange();
 	};
 
@@ -34715,9 +34724,11 @@
 	    this.__emitChange();
 	    this.__emitChange();
 	  } else if (toRepeat) {
-	    console.log("mid");
+	    console.log("");
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
+
+	    MusicStore.recordPlayed(_currentTrack);
 	    this.__emitChange();
 	  }
 	};
@@ -34727,7 +34738,6 @@
 	  switch (payload.actionType) {
 	    case "UPDATEMUSICBAR":
 	      MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
-	      this.__emitChange();
 	      break;
 	    case "PREVIOUSTRACK":
 	      MusicStore.updateToPreviousTrack();
@@ -35392,7 +35402,9 @@
 	    TrackApiUtil.fetchUserTracks(username);
 	  },
 
-	  fetchPlaylistTracks: function (playlist) {}
+	  recordPlayed: function (track) {
+	    TrackApiUtil.recordPlayed(track);
+	  }
 
 	};
 
@@ -35427,6 +35439,19 @@
 	    $.ajax(request);
 	  },
 	  fetchUserTracks: function (user) {
+	    var request = {
+	      type: "GET",
+	      url: "api/" + user + "/tracks",
+	      success: TrackServerActions.receiveUserTracks,
+	      error: function () {
+	        console.log("did not retrieve user tracks");
+	      }
+	    };
+
+	    $.ajax(request);
+	  },
+
+	  recordPlayed: function () {
 	    var request = {
 	      type: "GET",
 	      url: "api/" + user + "/tracks",

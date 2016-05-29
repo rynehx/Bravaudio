@@ -3,8 +3,10 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
     trackConstants = require('../constants/trackConstants');
 
 var _currentPlaylist = {title:"",audio_url: "", image_url:""},
-    _currentTrack = {title:"",audio_url: "", image_url:""},
+    _currentTrack = {title:"",audio_url: "", image_url:"", id:null},
     _playedTracks={}, _onRepeat = true, _repeatedSong = false;
+
+var TrackClientActions = require('../actions/trackClientActions');
 
 var MusicStore = new Store(AppDispatcher);
 
@@ -35,6 +37,11 @@ MusicStore.currentTrack = function(){
 MusicStore.currentPlaylist = function(){
   return _currentPlaylist;
 };
+
+MusicStore.recordPlayed = function(){
+  TrackClientActions.recordPlayed();
+};
+
 
 MusicStore.setMusic = function(track,playlist){
   AppDispatcher.dispatch({
@@ -75,6 +82,8 @@ MusicStore.updateMusicBar= function(track,playlist){
     _currentPlaylist = {tracks:[track]};
   }
 
+  MusicStore.recordPlayed(_currentTrack);
+  this.__emitChange();
 };
 
 
@@ -90,7 +99,7 @@ MusicStore.updateToPreviousTrack = function(action){
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)-1];
     }
-
+    MusicStore.recordPlayed(_currentTrack);
     this.__emitChange();
 };
 
@@ -109,9 +118,11 @@ MusicStore.updateToNextTrack = function(){
       this.__emitChange();
       this.__emitChange();
     }else if(toRepeat){
-      console.log("mid")
+      console.log("");
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
+
+      MusicStore.recordPlayed(_currentTrack);
       this.__emitChange();
     }
 
@@ -124,7 +135,6 @@ MusicStore.__onDispatch = function(payload){
   switch(payload.actionType){
     case "UPDATEMUSICBAR":
       MusicStore.updateMusicBar(payload.music.track, payload.music.playlist);
-        this.__emitChange();
       break;
     case "PREVIOUSTRACK":
       MusicStore.updateToPreviousTrack();

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get ":username", to: "users#username"
     get ":username/track/:title", to: "tracks#show"
     get ":username/tracks", to: "tracks#user_tracks"
+    patch ":username/track/:title", to: "tracks#played"
     get ":username/playlists", to: "playlists#user_playlists"
 
     get ":username/playlist/:title", to: "playlists#show"
@@ -28,7 +29,6 @@ Rails.application.routes.draw do
 
     delete ":username/playlist/:title/:track_id", to: "playlists#delete_track"
     post ":user_id/playlist/:playlist_id/:track_id",to: "playlists#add_track"
-
     post ":user_id/playlists",to: "playlists#create"
   end
 

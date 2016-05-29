@@ -6,10 +6,8 @@ end
 
 
 def index
-
   @tracks = Track.all
   render 'api/tracks/index'
-
 end
 
 def show
@@ -32,6 +30,19 @@ def user_tracks
     @errors = ['track not found']
     render "api/shared/error", status: 404
   end
+end
+
+def played
+
+  @track = Track.find(params[:track_id])
+  if @track
+    @track.update!({played: @track.played+=1})
+    render "api/tracks/show"
+  else
+    @errors = ['track not found']
+    render "api/shared/error", status: 404
+  end
+
 end
 
 # def show
