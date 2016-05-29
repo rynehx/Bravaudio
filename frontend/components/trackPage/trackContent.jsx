@@ -24,7 +24,10 @@ return(
         </div>
 
         <div className = "track-content-top-stats">
-          stats
+          <div className = "track-content-top-stats-plays">
+            <img className = "track-content-top-stats-playsicon" src = "https://s3-us-west-1.amazonaws.com/bravaudio/times_played.svg"/>
+            {this.props.track.times_played}
+          </div>
         </div>
       </div>
     </div>

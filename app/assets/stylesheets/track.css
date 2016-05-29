@@ -177,7 +177,6 @@
 
 .track-content-top-stats{
   height: 30px;
-
   display: flex;
   justify-content: center;
   align-items: center
@@ -310,4 +309,19 @@ width: 60px;
 
 .track-sidebar-inplaylists-title{
 
+}
+
+.track-content-top-stats-plays{
+  font-size: 14px;
+  color: #c2c2c2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 30px;
+}
+
+.track-content-top-stats-playsicon{
+  width: 12px;
+  height: 12px;
+  margin-right: 5px;
 }

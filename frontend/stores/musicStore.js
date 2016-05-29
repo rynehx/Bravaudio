@@ -38,8 +38,8 @@ MusicStore.currentPlaylist = function(){
   return _currentPlaylist;
 };
 
-MusicStore.recordPlayed = function(){
-  TrackClientActions.recordPlayed();
+MusicStore.recordPlayed = function(track){
+  TrackClientActions.recordPlayed(track);
 };
 
 
@@ -99,6 +99,7 @@ MusicStore.updateToPreviousTrack = function(action){
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)-1];
     }
+
     MusicStore.recordPlayed(_currentTrack);
     this.__emitChange();
 };
@@ -115,17 +116,17 @@ MusicStore.updateToNextTrack = function(){
     if(toRepeat && _onRepeat){
       if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
       _currentTrack =  _currentPlaylist.tracks[0];
-      this.__emitChange();
-      this.__emitChange();
+
+  
     }else if(toRepeat){
       console.log("");
     }else{
       _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
 
-      MusicStore.recordPlayed(_currentTrack);
-      this.__emitChange();
-    }
 
+    }
+    MusicStore.recordPlayed(_currentTrack);
+    this.__emitChange();
 
 
 };

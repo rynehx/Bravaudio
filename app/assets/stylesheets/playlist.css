@@ -252,9 +252,9 @@
 
 .playlist-content-items-author{
   min-width: 50px;
-  width: 50px;
+  width: 80px;
   font-size: 10px;
-  text-align: center;
+  text-align: left;
   margin: 0 5px 0px 10px;
   color: #BFBFBF;
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
@@ -311,6 +311,16 @@
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
 }
 
+.playlist-content-items-stats{
+  height: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+}
+
+
 .playlist-content-items-buttons{
   height: 30px;
   width: 100%;
@@ -319,8 +329,10 @@
 }
 
 
-  .playlist-content-bottom-items:hover .playlist-content-items-buttons{
-
+.playlist-content-bottom-items:hover .playlist-content-items-buttons{
   display: flex;
+}
 
+.playlist-content-bottom-items:hover .playlist-content-items-stats{
+  display: none;
 }

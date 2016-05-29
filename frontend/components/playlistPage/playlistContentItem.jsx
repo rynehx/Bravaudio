@@ -49,10 +49,16 @@ var PlaylistContentItem = React.createClass({
         {this.props.track.title}
       </a>
 
+      <div className = "playlist-content-items-stats">
+        <div className = "track-content-top-stats-plays">
+          <img className = "track-content-top-stats-playsicon" src = "https://s3-us-west-1.amazonaws.com/bravaudio/times_played.svg"/>
+          {this.props.track.times_played}
+        </div>
+      </div>
+
       <div className = "playlist-content-items-buttons">
         <NewPlaylistModal track = {this.props.track}
           icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
-
       </div>
 
   </li>);

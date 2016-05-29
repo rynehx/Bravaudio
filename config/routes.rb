@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     get ":username", to: "users#username"
     get ":username/track/:title", to: "tracks#show"
     get ":username/tracks", to: "tracks#user_tracks"
-    patch ":username/track/:title", to: "tracks#played"
+    patch "tracks/:track_id", to: "tracks#played"
     get ":username/playlists", to: "playlists#user_playlists"
 
     get ":username/playlist/:title", to: "playlists#show"

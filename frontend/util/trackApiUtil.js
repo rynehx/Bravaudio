@@ -37,15 +37,19 @@ var TrackApiUtil = {
 
   },
 
-  recordPlayed: function(){
+  recordPlayed: function(track){
     var request = {
-      type:"GET",
-      url: "api/"+ user +"/tracks",
-      success: TrackServerActions.receiveUserTracks,
+      type:"PATCH",
+      url: "api/tracks/"+ (track.id),
+      success: function(){console.log("track play recorded");},
       error: function(){console.log("did not retrieve user tracks");}
     };
 
     $.ajax(request);
+  },
+
+  liked: function(){
+
   }
   // fetchTrack: function(options){
   //   var request = {

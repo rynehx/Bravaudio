@@ -34649,8 +34649,8 @@
 	  return _currentPlaylist;
 	};
 
-	MusicStore.recordPlayed = function () {
-	  TrackClientActions.recordPlayed();
+	MusicStore.recordPlayed = function (track) {
+	  TrackClientActions.recordPlayed(track);
 	};
 
 	MusicStore.setMusic = function (track, playlist) {
@@ -34706,6 +34706,7 @@
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) - 1];
 	  }
+
 	  MusicStore.recordPlayed(_currentTrack);
 	  this.__emitChange();
 	};
@@ -34721,16 +34722,13 @@
 	      _repeatedSong = true;
 	    }
 	    _currentTrack = _currentPlaylist.tracks[0];
-	    this.__emitChange();
-	    this.__emitChange();
 	  } else if (toRepeat) {
 	    console.log("");
 	  } else {
 	    _currentTrack = _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack) + 1];
-
-	    MusicStore.recordPlayed(_currentTrack);
-	    this.__emitChange();
 	  }
+	  MusicStore.recordPlayed(_currentTrack);
+	  this.__emitChange();
 	};
 
 	MusicStore.__onDispatch = function (payload) {
@@ -35451,18 +35449,22 @@
 	    $.ajax(request);
 	  },
 
-	  recordPlayed: function () {
+	  recordPlayed: function (track) {
 	    var request = {
-	      type: "GET",
-	      url: "api/" + user + "/tracks",
-	      success: TrackServerActions.receiveUserTracks,
+	      type: "PATCH",
+	      url: "api/tracks/" + track.id,
+	      success: function () {
+	        console.log("track play recorded");
+	      },
 	      error: function () {
 	        console.log("did not retrieve user tracks");
 	      }
 	    };
 
 	    $.ajax(request);
-	  }
+	  },
+
+	  liked: function () {}
 	  // fetchTrack: function(options){
 	  //   var request = {
 	  //     type: options.type,
@@ -35734,7 +35736,12 @@
 	          React.createElement(
 	            'div',
 	            { className: 'track-content-top-stats' },
-	            'stats'
+	            React.createElement(
+	              'div',
+	              { className: 'track-content-top-stats-plays' },
+	              React.createElement('img', { className: 'track-content-top-stats-playsicon', src: 'https://s3-us-west-1.amazonaws.com/bravaudio/times_played.svg' }),
+	              this.props.track.times_played
+	            )
 	          )
 	        )
 	      ),
@@ -36194,7 +36201,8 @@
 	    };
 
 	    $.ajax(request);
-	  }
+	  },
+	  liked: function () {}
 
 	};
 
@@ -37037,6 +37045,16 @@
 	            hashHistory.push("/" + this.props.track.author + "/track/" + this.props.track.title);
 	          }.bind(this) },
 	        this.props.track.title
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-stats' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-content-top-stats-plays' },
+	          React.createElement('img', { className: 'track-content-top-stats-playsicon', src: 'https://s3-us-west-1.amazonaws.com/bravaudio/times_played.svg' }),
+	          this.props.track.times_played
+	        )
 	      ),
 	      React.createElement(
 	        'div',
