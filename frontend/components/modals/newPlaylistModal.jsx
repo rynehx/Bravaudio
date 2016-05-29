@@ -113,6 +113,7 @@ var EditPlaylistModal = React.createClass({
     },
 
     goToPlaylist: function(playlist){
+      this.closeModal();
       hashHistory.push(SessionStore.fetchCurrentUser().username +  "/playlist/" + playlist);
     },
     addButton: function(playlist){

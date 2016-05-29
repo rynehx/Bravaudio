@@ -40,8 +40,9 @@
 
 
 #content{
-  background-color: #EDEDED;
 
+  height: 100%;
+  min-height: 100%;
 }
 
 html{
@@ -51,12 +52,13 @@ html{
 
 
 body {
-
+    background-color: #EDEDED;
 
 }
 
 .background{
-
+height: 100%;
+min-height: 100%;
 }
 
 
@@ -73,7 +75,8 @@ body {
   width: auto;
   margin: 40px 30px;
   background-color: white;
-
+  height: 100%;
+  min-height: 100%;
 }
 
 .trendingTracks{
@@ -83,7 +86,7 @@ body {
 }
 
 .content-container{
-  margin: 42px auto 45px auto;
+  margin: 42px auto 0 auto;
   max-width: 1130px;
   width: 87%;
   min-height: 100%;

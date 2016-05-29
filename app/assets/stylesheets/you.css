@@ -8,6 +8,8 @@
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   justify-content: center;
   align-items: center;
+  height: 100%;
+  min-height: 100%;
 }
 
 .yourpage-yourtabs {

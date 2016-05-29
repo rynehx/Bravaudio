@@ -16,6 +16,17 @@ ActiveRecord::Schema.define(version: 20160501062828) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "likes", force: :cascade do |t|
+    t.integer  "author_id",     null: false
+    t.integer  "likeable_id"
+    t.string   "likeable_type"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "likes", ["author_id"], name: "index_likes_on_author_id", using: :btree
+  add_index "likes", ["likeable_type", "likeable_id"], name: "index_likes_on_likeable_type_and_likeable_id", using: :btree
+
   create_table "playlist_track_joinings", force: :cascade do |t|
     t.integer  "track_id",    null: false
     t.integer  "playlist_id", null: false
