@@ -46,11 +46,9 @@ var TrackApiUtil = {
     };
 
     $.ajax(request);
-  },
-
-  liked: function(){
-
   }
+
+
   // fetchTrack: function(options){
   //   var request = {
   //     type: options.type,

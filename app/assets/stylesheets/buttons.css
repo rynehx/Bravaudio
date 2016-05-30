@@ -1,0 +1,17 @@
+.like-button{
+  margin: 0px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 16px;
+  padding: 5px 5px;
+  border-color: #CCCCCC;
+  cursor: pointer;
+}
+
+.like-heart{
+
+}

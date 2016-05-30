@@ -1,4 +1,5 @@
 .new-playlist-button{
+
 }
 
 
@@ -33,6 +34,7 @@
   width: 16px;
   padding: 5px 5px;
   border-color: #CCCCCC;
+  cursor: pointer;
 }
 
 .newplaylist-modal-inside-tabs{

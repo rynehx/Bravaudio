@@ -27986,6 +27986,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(245);
+	//actions
+	var LikeServerActions = __webpack_require__(325);
 
 	module.exports = {
 		post: function (options) {
@@ -28013,7 +28015,42 @@
 				success: success,
 				error: error
 			});
+		},
+		fetchLikes: function (type, item) {
+			if (type === "playlist" || type === "track" || type === "user") {
+				var request = {
+					type: "get",
+					url: "api/likes/" + type + "/" + item.id,
+					success: function (data) {
+						LikeServerActions.receiveLikes(data);
+					},
+					error: function () {
+						console.log("likes not fetched");
+					}
+				};
+
+				$.ajax(request);
+			}
+		},
+
+		postLike: function (type, item, updateCallback) {
+			if (type === "playlist" || type === "track") {
+				var request = {
+					type: "post",
+					url: "api/likes/" + type + "/" + item.id,
+					success: function (data) {
+						updateCallback();
+						LikeServerActions.receiveLikes(data);
+					},
+					error: function () {
+						console.log("not liked");
+					}
+				};
+
+				$.ajax(request);
+			}
 		}
+
 	};
 
 /***/ },
@@ -35462,9 +35499,8 @@
 	    };
 
 	    $.ajax(request);
-	  },
+	  }
 
-	  liked: function () {}
 	  // fetchTrack: function(options){
 	  //   var request = {
 	  //     type: options.type,
@@ -35703,6 +35739,8 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
 	var NewPlaylistModal = __webpack_require__(289);
+	//actions
+	var LikeClientActions = __webpack_require__(322);
 
 	var TrackContent = React.createClass({
 	  displayName: 'TrackContent',
@@ -35710,6 +35748,10 @@
 
 	  goToAuthor: function () {
 	    hashHistory.push("/" + this.props.track.author);
+	  },
+
+	  likeTrack: function () {
+	    LikeClientActions.postLike("track", this.props.track);
 	  },
 
 	  render: function () {
@@ -35731,7 +35773,12 @@
 	            'div',
 	            { className: 'track-content-top-buttons' },
 	            React.createElement(NewPlaylistModal, { track: this.props.track,
-	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' })
+	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' }),
+	            React.createElement(
+	              'div',
+	              { className: 'like-button', onClick: this.likeTrack },
+	              'like'
+	            )
 	          ),
 	          React.createElement(
 	            'div',
@@ -36201,8 +36248,7 @@
 	    };
 
 	    $.ajax(request);
-	  },
-	  liked: function () {}
+	  }
 
 	};
 
@@ -37964,6 +38010,48 @@
 	});
 
 	module.exports = YourContentAll;
+
+/***/ },
+/* 321 */,
+/* 322 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionApiUtil = __webpack_require__(250);
+
+	var LikeClientActions = {
+	  postLike: SessionApiUtil.postLike,
+	  fetchLikes: SessionApiUtil.fetchLikes
+	};
+
+	module.exports = LikeClientActions;
+
+/***/ },
+/* 323 */,
+/* 324 */,
+/* 325 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(245),
+	    LikeConstants = __webpack_require__(326);
+
+	var LikeServerActions = {
+	  receiveLikes: function (items) {
+	    Dispatcher.dispatch({
+	      actionType: LikeConstants.RECEIVELIKES,
+	      items: items
+	    });
+	  }
+	};
+
+	module.exports = LikeServerActions;
+
+/***/ },
+/* 326 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  RECEIVELIKES: "RECEIVELIKES"
+	};
 
 /***/ }
 /******/ ]);

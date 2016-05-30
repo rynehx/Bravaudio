@@ -106,9 +106,6 @@ var PlaylistApiUtil = {
     };
 
     $.ajax(request);
-  },
-  liked: function(){
-
   }
 
 

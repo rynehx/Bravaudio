@@ -4,11 +4,18 @@ var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 //components
 var NewPlaylistModal = require('../modals/newPlaylistModal');
+//actions
+var LikeClientActions = require('../../actions/likeClientActions');
+
 
 var TrackContent = React.createClass({
 
 goToAuthor: function(){
   hashHistory.push("/" + this.props.track.author);
+},
+
+likeTrack: function(){
+  LikeClientActions.postLike("track",this.props.track);
 },
 
 render: function(){
@@ -19,8 +26,12 @@ return(
 
       <div className = "track-content-top-bottom">
         <div className = "track-content-top-buttons">
+
           <NewPlaylistModal track = {this.props.track}
             icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
+          <div className = "like-button" onClick = {this.likeTrack}>
+            like
+          </div>
         </div>
 
         <div className = "track-content-top-stats">

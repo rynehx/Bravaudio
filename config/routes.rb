@@ -30,6 +30,16 @@ Rails.application.routes.draw do
     delete ":username/playlist/:title/:track_id", to: "playlists#delete_track"
     post ":user_id/playlist/:playlist_id/:track_id",to: "playlists#add_track"
     post ":user_id/playlists",to: "playlists#create"
+
+    get "likes/playlist/playlist_id", to: "likes#playlist_likes"
+    get "likes/track/track_id", to: "likes#track_likes"
+    get "likes/user/user_id", to: "likes#user_likes"
+    post "likes/track/:track_id", to: "likes#likes_track"
+    post "likes/playlist/:playlist_id", to: "likes#likes_playlist"
+
+
+
+
   end
 
     root "static_pages#root"

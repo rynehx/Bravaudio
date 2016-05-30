@@ -9,15 +9,6 @@
     display: flex;
 }
 
-.track-foreground{
-  height: 340px;
-  background-color: grey;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width:815px;
-}
-
 .track-content{
   width: 100%;
   min-height: 490px;
@@ -26,10 +17,24 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  min-width: 500px;
+  min-width: 600px;
   justify-content: flex-start;
   align-items: center;
+  padding-bottom: 100px;
+
 }
+
+
+.track-foreground{
+  height: 340px;
+  background-color: grey;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width:915px;
+}
+
+
 
 
 .track-foreground-box{
@@ -126,18 +131,7 @@
 
 }
 
-.track-content{
-  width: 100%;
-  min-height: 490px;
-  border: 1px;
-  border-color: lightgrey;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  min-width: 500px;
-  justify-content: flex-start;
-  align-items: center;
-}
+
 
 .track-content-top{
   width: 90%;
@@ -262,6 +256,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  padding-bottom: 100px;
 }
 
 
@@ -318,10 +313,12 @@ width: 60px;
   justify-content: flex-start;
   align-items: center;
   width: 30px;
+  cursor: default;
 }
 
 .track-content-top-stats-playsicon{
   width: 12px;
   height: 12px;
   margin-right: 5px;
+  cursor: pointer;
 }
