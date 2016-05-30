@@ -34,8 +34,10 @@ Rails.application.routes.draw do
     get "likes/playlist/playlist_id", to: "likes#playlist_likes"
     get "likes/track/track_id", to: "likes#track_likes"
     get "likes/user/user_id", to: "likes#user_likes"
-    post "likes/track/:track_id", to: "likes#likes_track"
-    post "likes/playlist/:playlist_id", to: "likes#likes_playlist"
+    post "likes/track/:track_id", to: "likes#like_track"
+    post "likes/playlist/:playlist_id", to: "likes#like_playlist"
+    delete "likes/track/:track_id", to: "likes#unlike_track"
+    delete "likes/playlist/:playlist_id", to: "likes#unlike_playlist"
 
 
 

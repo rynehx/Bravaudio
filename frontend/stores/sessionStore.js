@@ -15,6 +15,7 @@ SessionStore.fetchCurrentUser = function(){
 };
 
 SessionStore.login = function(user){
+  console.log(user);
   myLocStorage.setItem("currentUser",JSON.stringify(user));
     hashHistory.push("/home");
 };

@@ -12,6 +12,14 @@ var SessionStore = require('../stores/sessionStore'),
     MusicStore = require('../stores/musicStore');
 
 var NavBar = React.createClass({
+  getInitialState: function () {
+    return { users: null };
+  },
+
+  componentWillMount: function(){
+    this.setState({user: SessionStore.fetchCurrentUser()});
+
+  },
 
 	errors: function(){
 		if (SessionStore.fetchError() === null){
@@ -69,7 +77,7 @@ var NavBar = React.createClass({
     var homeButton="";
     var youButton="";
 
-    if(SessionStore.fetchCurrentUser()){
+    if(this.state.user){
       homeButton =  "home";
       youButton = "collection";
     }

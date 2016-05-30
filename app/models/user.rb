@@ -20,9 +20,18 @@ class User < ActiveRecord::Base
 	:playlists,
 	-> { order(:created_at => :desc) },
 	foreign_key: :author_id,
-
 	)
 
+	has_many(
+	:likes,
+	foreign_key: :author_id
+	)
+
+	has_many :liked_tracks, :through => :likes, :source => :likeable,
+	   :source_type => "Track"
+
+	has_many :liked_playlists, :through => :likes, :source => :likeable,
+	 	  :source_type => "Playlist"
 
 
 	def password= password

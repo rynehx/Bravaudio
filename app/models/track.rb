@@ -17,8 +17,8 @@ class Track < ActiveRecord::Base
   )
 
   has_many :likes, as: :likeable, dependent: :destroy
-
-  has_many :likings, :through => :likes, :source => :likeable,
-    :source_type => "Track"
+  has_many :likings, :through => :likes, :source => :author
+  # has_many :likings, :through => :likes, :source => :likeable,
+  #   :source_type => "Track"
 
 end

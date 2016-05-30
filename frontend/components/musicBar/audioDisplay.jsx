@@ -15,6 +15,8 @@ var AudioDisplay = React.createClass({
   },
 
   componentDidMount: function(){
+    console.log(SessionStore)
+        debugger
     this.musicstorelistener = MusicStore.addListener(this._onChange);
     this.setState({track: MusicStore.currentTrack(),
       playlist: MusicStore.currentPlaylist()});
@@ -38,6 +40,7 @@ var AudioDisplay = React.createClass({
 
 
   render: function(){
+
     return (
       <div className="musicbar-audio-display">
         <img className = "musicbar-track-image" onClick = {this.goToCurrentTrack} src={this.state.track.image_url} />

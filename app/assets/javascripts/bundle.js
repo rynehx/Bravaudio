@@ -25167,6 +25167,13 @@
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
 
+	  getInitialState: function () {
+	    return { users: null };
+	  },
+
+	  componentWillMount: function () {
+	    this.setState({ user: SessionStore.fetchCurrentUser() });
+	  },
 
 	  errors: function () {
 	    if (SessionStore.fetchError() === null) {
@@ -25234,7 +25241,7 @@
 	    var homeButton = "";
 	    var youButton = "";
 
-	    if (SessionStore.fetchCurrentUser()) {
+	    if (this.state.user) {
 	      homeButton = "home";
 	      youButton = "collection";
 	    }
@@ -28075,6 +28082,7 @@
 	};
 
 	SessionStore.login = function (user) {
+	  console.log(user);
 	  myLocStorage.setItem("currentUser", JSON.stringify(user));
 	  hashHistory.push("/home");
 	};
@@ -35288,6 +35296,8 @@
 	  },
 
 	  componentDidMount: function () {
+	    console.log(SessionStore);
+	    debugger;
 	    this.musicstorelistener = MusicStore.addListener(this._onChange);
 	    this.setState({ track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
@@ -35310,6 +35320,7 @@
 	  },
 
 	  render: function () {
+
 	    return React.createElement(
 	      'div',
 	      { className: 'musicbar-audio-display' },
@@ -35754,6 +35765,8 @@
 	    LikeClientActions.postLike("track", this.props.track);
 	  },
 
+	  _liked: function () {},
+
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -35776,8 +35789,8 @@
 	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' }),
 	            React.createElement(
 	              'div',
-	              { className: 'like-button', onClick: this.likeTrack },
-	              'like'
+	              { className: "like-button" + " " + "like-button-" + this._liked(), onClick: this.likeTrack },
+	              this._liked()
 	            )
 	          ),
 	          React.createElement(

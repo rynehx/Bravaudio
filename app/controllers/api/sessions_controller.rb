@@ -5,7 +5,9 @@ class Api::SessionsController < ApplicationController
   		@user = User.find_by_credentials(params[:user][:username], params[:user][:password])
   		if @user
   			login(@user)
-  			render "api/users/show"
+        @liked_playlists = @user.liked_playlists
+        @liked_tracks = @user.liked_tracks
+  			render "api/sessions/show"
   		else
   			@errors = ['invalid credentials']
   			render "api/shared/error", status: 401
@@ -26,7 +28,9 @@ class Api::SessionsController < ApplicationController
   	def show
   		if current_user
   			@user = current_user
-  			render "api/users/show"
+        @liked_playlists = @user.liked_playlists
+        @liked_tracks = @user.liked_tracks
+  			render "api/sessions/show"
   		else
   			@errors = nil
   			render "api/shared/error", status: 404
