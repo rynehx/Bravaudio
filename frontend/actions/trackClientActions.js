@@ -18,7 +18,6 @@ var TrackClientActions = {
 
   recordPlayed: function(track){
     TrackApiUtil.recordPlayed(track);
-
   }
 
 };

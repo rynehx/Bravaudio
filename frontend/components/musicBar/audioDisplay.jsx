@@ -15,8 +15,7 @@ var AudioDisplay = React.createClass({
   },
 
   componentDidMount: function(){
-    console.log(SessionStore)
-        debugger
+
     this.musicstorelistener = MusicStore.addListener(this._onChange);
     this.setState({track: MusicStore.currentTrack(),
       playlist: MusicStore.currentPlaylist()});

@@ -64,7 +64,27 @@ module.exports = {
 	    $.ajax(request);
 		}
 
-  }
+  },
+
+	deleteLike: function(type,item,updateCallback){
+		if(type ==="playlist" || type ==="track"){
+			var request ={
+				type: "delete",
+				url: "api/likes/"+type+"/" + item.id,
+				success: function(data){
+					updateCallback();
+					LikeServerActions.receiveLikes(data);
+
+				},
+				error: function(){
+					console.log("not liked");
+				}
+			};
+
+			$.ajax(request);
+		}
+
+	},
 
 
 };

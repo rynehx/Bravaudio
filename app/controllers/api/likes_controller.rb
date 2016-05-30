@@ -50,6 +50,9 @@ class Api::LikesController < ApplicationController
     @like = Like.find_by(author_id: current_user.id, likeable_id: params[:track_id], likeable_type: "Track")
     if @like
       @like.destroy
+      @track = Track.find(params[:track_id])
+      @likes = @track.likings
+      render "api/likes/show_track"
     else
       @errors = ['like error']
       render "api/shared/error", status: 404
@@ -60,6 +63,9 @@ class Api::LikesController < ApplicationController
     @like = Like.find_by(author_id: current_user.id, likeable_id: params[:playlist_id], likeable_type: "Playlist")
     if @like
       @like.destroy
+      @playlist = Playlist.find(params[:playlist_id])
+      @likes = @playlist.likings
+      render "api/likes/show_playlist"
     else
       @errors = ['like error']
       render "api/shared/error", status: 404

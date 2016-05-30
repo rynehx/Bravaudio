@@ -7,6 +7,7 @@ var NewPlaylistModal = require('../modals/newPlaylistModal');
 //actions
 var LikeClientActions = require('../../actions/likeClientActions');
 var TrackClientActions = require('../../actions/trackClientActions');
+var SessionActions = require('../../actions/sessionActions');
 //stores
 var SessionStore = require('../../stores/sessionStore');
 
@@ -14,33 +15,45 @@ var SessionStore = require('../../stores/sessionStore');
 var TrackContent = React.createClass({
 
 
+
+componentDidMount: function(){
+  this.sessionlistener = SessionStore.addListener(function(){
+    this.setState({user: SessionStore.fetchCurrentUser()
+    });}.bind(this));
+},
+
+componentWillUnmount: function(){
+  this.sessionlistener.remove();
+},
+
+
 goToAuthor: function(){
   hashHistory.push("/" + this.props.track.author);
 },
 
+
 likeTrack: function(){
   LikeClientActions.postLike("track",this.props.track,
-  function(){TrackClientActions.fetchDisplayTrack(
-    this.props.track.author,this.props.track.title);});
+  function(){SessionActions.fetchCurrentUser();});
 },
 
 unlikeTrack: function(){
-  LikeClientActions.postLike("track",this.props.track,
-  function(){TrackClientActions.fetchDisplayTrack(
-    this.props.track.author,this.props.track.title);});
+  LikeClientActions.deleteLike("track",this.props.track,
+  function(){SessionActions.fetchCurrentUser();});
 },
 
 _liked: function(){
+
   var currentUserTracks = SessionStore.fetchCurrentUser().liked_tracks;
 
 
   if(currentUserTracks.find(function(el){ return el['id='] ===this.props.track.id; }.bind(this))){
     return <div className = {"like-button"+ " " + "like-button-unlike"} onClick = {this.unlikeTrack}>
-      unlike
+      ♥ unlike
     </div>;
   }else{
     return <div className = {"like-button"} onClick = {this.likeTrack}>
-      like
+      ♥ like
     </div>;
   }
 
