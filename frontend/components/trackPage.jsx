@@ -17,7 +17,7 @@ var TrackContent = require('./trackPage/trackContent'),
 var TrackPage = React.createClass({
 
   getInitialState: function () {
-    return { track: {title:"", audio_url: "", image_url: "" } };
+    return { track: {id: "",title:"", audio_url: "", image_url: "" } };
   },
 
   componentDidMount: function(){

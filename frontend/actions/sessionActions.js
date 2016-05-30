@@ -5,10 +5,16 @@ var AppDispatcher = require('../dispatcher/dispatcher'),
 
 
 var SessionActions = {
+
 	fetchCurrentUser: function(){
-		SessionApiUtil.fetchCurrentUser(SessionActions.receiveCurrentUser,
+      SessionApiUtil.fetchCurrentUser(SessionActions.refetchedCurrentUser,
       SessionActions.handleError);
+
 	},
+
+
+
+
 	signup: function(user){
 
 		SessionApiUtil.post({
@@ -29,6 +35,8 @@ var SessionActions = {
 	guestLogin: function(){
 		SessionActions.login({username: "guest", password: "password"});
 	},
+
+
 	receiveCurrentUser: function(user){
 
 		AppDispatcher.dispatch({
@@ -36,6 +44,18 @@ var SessionActions = {
 			user: user
 		});
 	},
+
+
+  refetchedCurrentUser: function(user){
+
+		AppDispatcher.dispatch({
+			actionType: SessionConstants.REFETCH,
+			user: user
+		});
+	},
+
+
+
 	handleError: function(error) {
 		AppDispatcher.dispatch({
 			actionType: SessionConstants.ERROR,

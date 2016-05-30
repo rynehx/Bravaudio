@@ -6,19 +6,43 @@ var React = require('react'),
 var NewPlaylistModal = require('../modals/newPlaylistModal');
 //actions
 var LikeClientActions = require('../../actions/likeClientActions');
+var TrackClientActions = require('../../actions/trackClientActions');
+//stores
+var SessionStore = require('../../stores/sessionStore');
 
 
 var TrackContent = React.createClass({
+
 
 goToAuthor: function(){
   hashHistory.push("/" + this.props.track.author);
 },
 
 likeTrack: function(){
-  LikeClientActions.postLike("track",this.props.track);
+  LikeClientActions.postLike("track",this.props.track,
+  function(){TrackClientActions.fetchDisplayTrack(
+    this.props.track.author,this.props.track.title);});
+},
+
+unlikeTrack: function(){
+  LikeClientActions.postLike("track",this.props.track,
+  function(){TrackClientActions.fetchDisplayTrack(
+    this.props.track.author,this.props.track.title);});
 },
 
 _liked: function(){
+  var currentUserTracks = SessionStore.fetchCurrentUser().liked_tracks;
+
+
+  if(currentUserTracks.find(function(el){ return el['id='] ===this.props.track.id; }.bind(this))){
+    return <div className = {"like-button"+ " " + "like-button-unlike"} onClick = {this.unlikeTrack}>
+      unlike
+    </div>;
+  }else{
+    return <div className = {"like-button"} onClick = {this.likeTrack}>
+      like
+    </div>;
+  }
 
 },
 
@@ -33,9 +57,7 @@ return(
 
           <NewPlaylistModal track = {this.props.track}
             icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
-          <div className = {"like-button"+ " " + "like-button-"+this._liked()} onClick = {this.likeTrack}>
-            {this._liked()}
-          </div>
+          {this._liked()}
         </div>
 
         <div className = "track-content-top-stats">

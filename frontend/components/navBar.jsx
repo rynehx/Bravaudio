@@ -17,6 +17,8 @@ var NavBar = React.createClass({
   },
 
   componentWillMount: function(){
+
+    SessionActions.fetchCurrentUser();
     this.setState({user: SessionStore.fetchCurrentUser()});
 
   },

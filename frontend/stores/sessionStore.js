@@ -15,11 +15,16 @@ SessionStore.fetchCurrentUser = function(){
 };
 
 SessionStore.login = function(user){
-  console.log(user);
+
   myLocStorage.setItem("currentUser",JSON.stringify(user));
     hashHistory.push("/home");
 };
 
+SessionStore.refetchCurrentUser = function(user){
+
+  myLocStorage.setItem("currentUser",JSON.stringify(user));
+
+};
 
 
 SessionStore.logout = function(){
@@ -47,8 +52,10 @@ SessionStore.__onDispatch = function(payload){
     SessionStore.login(payload.user);
       break;
     case SessionConstants.LOGOUT:
-
       SessionStore.logout();
+      break;
+    case SessionConstants.REFETCH:
+      SessionStore.refetchCurrentUser(payload.user);
       break;
     case SessionConstants.ERROR:
       SessionStore.updateError(payload.errors);

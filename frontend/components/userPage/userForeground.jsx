@@ -1,14 +1,11 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
-
+var Vibrant = require('node-vibrant');
 
 
 var UserForeground = React.createClass({
 
-  getInitialState: function () {
 
-    return { posts: [] };
-  },
   componentDidMount: function(){
 
     // var img = document.createElement('img');
@@ -17,14 +14,19 @@ var UserForeground = React.createClass({
     //
     // var lol = new Vibrant(img,3);
 
+
+    // Vibrant.from('path/to/image').getPalette(function(err, palette){
+    //   console.log(palette);
+    // });
   },
 
 
   render: function(){
+
     return (
       <div className = "user-foreground">
         <div className = "user-profile-pic-container">
-        <img className = "user-profile-pic" src={this.props.user.profile_picture_url} id = "profile-image"/>
+        <img className = "user-profile-pic" onClick = {this.click} src={this.props.user.profile_picture_url} id = "profile-image"/>
         </div>
 
         <div className = "user-profile-info">
