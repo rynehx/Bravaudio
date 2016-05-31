@@ -25,7 +25,6 @@ goToUser: function(user){
 render: function(){
   var that = this;
 
-
   if(this.props.playlists && this.props.playlists.length > 0){
 
     var playlists = this.props.playlists.slice(0,3).map(function(playlist){
@@ -58,7 +57,7 @@ render: function(){
       }
 
     var likes = this.props.likes.slice(0,5).map(function(like){
-  
+
       return (
         <div key = {like.id} className = 'track-sidebar-like-info' >
           <img className = "track-sidebar-like-image" src = {like.image_url}
@@ -97,8 +96,6 @@ return(
         {likes}
       </div>
     </div>
-
-
 
   </div>
 );

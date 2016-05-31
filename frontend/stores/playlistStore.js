@@ -49,6 +49,7 @@ PlaylistStore.deletedTrackFromPlaylist = function(deletedTrack){
 };
 
 PlaylistStore.__onDispatch = function(payload){
+
   switch(payload.actionType){
     case PlaylistConstants.RECEIVEDISPLAYPLAYLIST:
       PlaylistStore.receiveDisplayPlaylist(payload.playlist);

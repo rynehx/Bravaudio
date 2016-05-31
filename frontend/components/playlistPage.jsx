@@ -16,7 +16,7 @@ var PlaylistContent = require('./playlistPage/playlistContent'),
 
 var PlaylistPage = React.createClass({
   getInitialState: function () {
-    return { playlist: {tracks:[] } };
+    return { playlist: {tracks:[]}, likes:[] };
   },
 
   componentDidMount: function(){
@@ -34,11 +34,13 @@ var PlaylistPage = React.createClass({
   },
 
   componentWillReceiveProps: function(nextprops){
+
     PlaylistClientActions.fetchDisplayPlaylist(nextprops.params.user,
       nextprops.params.playlist);
   },
 
   _onChange: function(){
+
     this.setState({playlist: PlaylistStore.displayPlaylist()});
     LikeClientActions.fetchLikes("playlist", PlaylistStore.displayPlaylist());
   },
@@ -61,7 +63,7 @@ var PlaylistPage = React.createClass({
           <PlaylistForeground playlist = {this.state.playlist}/>
           <div className = "playlist-bottom">
             <PlaylistContent playlist = {this.state.playlist}/>
-            <PlaylistSideBar playlist = {this.state.playlist}/>
+            <PlaylistSideBar playlist = {this.state.playlist} likes = {this.state.likes}/>
           </div>
         </div>
       );

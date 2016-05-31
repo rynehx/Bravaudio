@@ -53,6 +53,7 @@ var EditPlaylistModal = React.createClass({
       return({ modalOpen: false, tab: "add", playlists:[], newTitle:"", newDescription:"" });
     },
     componentWillMount: function(){
+
       var container = document.getElementById("content");
       Modal.setAppElement(container);
       this.playliststorelistener = PlaylistStore.addListener(this._onAddToPlaylist);
