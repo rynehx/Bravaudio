@@ -6,6 +6,11 @@ var PlaylistClientActions = {
     PlaylistApiUtil.fetchDisplayPlaylist(user, playlist);
   },
 
+  fetchTrackPlaylists: function(track){
+
+    PlaylistApiUtil.fetchTrackPlaylists(track);
+  },
+
   fetchUserPlaylists: function(user){
     PlaylistApiUtil.fetchUserPlaylists(user);
   },

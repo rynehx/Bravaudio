@@ -26,7 +26,7 @@ var numberToTime = function(num) {
 
 var AudioPlayer = React.createClass({
   getInitialState: function () {
-    return { audioAction: "play" ,initial: "0:00", track: {title:"",audio_url: "", image_url:""},
+    return { audioAction: "pause" ,initial: "0:00", track: {title:"",audio_url: "", image_url:""},
     playlist: {}, onRepeat : MusicStore.repeat() };
   },
 

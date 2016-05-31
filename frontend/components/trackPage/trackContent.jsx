@@ -14,7 +14,9 @@ var SessionStore = require('../../stores/sessionStore');
 
 var TrackContent = React.createClass({
 
-
+getInitialState: function () {
+  return { user: {liked_tracks:[]} };
+},
 
 componentDidMount: function(){
   this.sessionlistener = SessionStore.addListener(function(){
@@ -44,7 +46,7 @@ unlikeTrack: function(){
 
 _liked: function(){
 
-  var currentUserTracks = SessionStore.fetchCurrentUser().liked_tracks;
+  var currentUserTracks = this.state.user.liked_tracks;
 
 
   if(currentUserTracks.find(function(el){ return el['id='] ===this.props.track.id; }.bind(this))){

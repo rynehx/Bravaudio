@@ -46,6 +46,21 @@ class Api::TracksController < ApplicationController
 
   end
 
+
+  def track_playlists
+    @track = Track.find(params[:track_id])
+
+      if @track
+        @playlists = @track.playlists
+        render "api/playlists/index"
+      else
+        @errors = ['track not found']
+        render "api/shared/error", status: 404
+      end
+
+
+  end
+
   # def show
   #   @playlist = Playlist.find(params[:id])
   #   start_idx = params[:start_idx] || 1

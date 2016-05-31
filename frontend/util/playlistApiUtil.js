@@ -15,6 +15,24 @@ var PlaylistApiUtil = {
 
     $.ajax(request);
   },
+
+  fetchTrackPlaylists: function(track){
+
+    var request = {
+      type: "get",
+      url: "api/track/" + track.id + "/playlists",
+      success: function(data){
+        PlaylistServerActions.receiveTrackPlaylists(data);
+      },
+      error: function(error){
+        console.log("user playlists not fetched");
+      }
+    };
+
+    $.ajax(request);
+  },
+
+
   fetchUserPlaylists: function(user){
     var request = {
       type: "get",

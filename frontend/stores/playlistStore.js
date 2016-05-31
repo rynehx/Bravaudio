@@ -3,12 +3,17 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
     PlaylistConstants = require('../constants/playlistConstants');
 
 
-var _displayPlaylist;
+var _displayPlaylist=[];
 var _playlists;
+var _trackPlaylists=[];
 var PlaylistStore = new Store(AppDispatcher);
 
 PlaylistStore.displayPlaylist = function(){
   return _displayPlaylist;
+};
+
+PlaylistStore.trackPlaylists = function(){
+  return _trackPlaylists;
 };
 
 PlaylistStore.displayUserPlaylists = function(){
@@ -17,6 +22,11 @@ PlaylistStore.displayUserPlaylists = function(){
 
 PlaylistStore.receiveDisplayPlaylist = function(playlist){
   _displayPlaylist = playlist;
+  this.__emitChange();
+};
+
+PlaylistStore.receiveTrackPlaylists = function(playlists){
+  _trackPlaylists = playlists;
   this.__emitChange();
 };
 
@@ -51,6 +61,9 @@ PlaylistStore.__onDispatch = function(payload){
       break;
     case PlaylistConstants.DELETEDTRACKFROMPLAYLIST:
       PlaylistStore.deletedTrackFromPlaylist(payload.track);
+      break;
+    case PlaylistConstants.RECEIVETRACKPLAYLIST:
+      PlaylistStore.receiveTrackPlaylists(payload.playlists);
       break;
 
   }

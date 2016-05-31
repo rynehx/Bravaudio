@@ -32,7 +32,7 @@ module.exports = {
 	fetchLikes: function(type,item){
 		if(type ==="playlist" || type ==="track" || type === "user"){
 			var request ={
-				type: "get",
+				type: "GET",
 				url: "api/likes/" + type+ "/" + item.id,
 				success: function(data){
 					LikeServerActions.receiveLikes(data);

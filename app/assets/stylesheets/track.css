@@ -27,7 +27,7 @@
 
 .track-foreground{
   height: 340px;
-  background-color: grey;
+  background-color: lightgrey;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -263,7 +263,7 @@
 .track-sidebar-inplaylists{
   margin: 0px auto;
   width: 80%;
-  height: 300px;
+
 
 }
 
@@ -276,34 +276,47 @@
   font-size: 14px;
   margin: 10px 0px;
   color: grey;
+  justify-content: space-between;
+  cursor: default;
 }
+
+.track-sidebar-inplaylists-viewall{
+  cursor: pointer;
+}
+
 
 .track-sidebar-inplaylists-items{
   width: 100%;
-  height: 60px;
+  height: 50px;
   display: flex;
-align-items: center;
+  align-items: center;
+  padding-top:10px;
 }
 
-.track-sidebar-inplaylists-image{
-height: 60px;
-width: 60px;
 
+
+.track-sidebar-inplaylists-image{
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
 }
 
 .track-sidebar-inplaylists-info{
   height: 100%;
   margin-left: 10px;
+
 }
 
 .track-sidebar-inplaylists-author{
   font-size: 12px;
   color: gray;
-
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .track-sidebar-inplaylists-title{
-
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .track-content-top-stats-plays{
@@ -321,4 +334,47 @@ width: 60px;
   height: 12px;
   margin-right: 5px;
   cursor: pointer;
+}
+
+
+
+.track-sidebar-likes{
+  margin: 0px auto;
+  width: 80%;
+}
+
+
+.track-sidebar-likes-header{
+  height: 30px;
+  border-bottom: 1px;
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin: 10px 0px;
+  color: grey;
+  justify-content: space-between;
+  cursor: default;
+}
+
+
+.track-sidebar-like-items{
+  margin: 0px auto;
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.track-sidebar-like-info{
+  display: flex;
+  flex-direction: column;
+}
+
+.track-sidebar-like-image{
+  width: 50px;
+  height: 50px;
+}
+
+.track-sidebar-like-author{
+  width: 50px;
 }

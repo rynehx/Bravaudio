@@ -6,7 +6,7 @@
 
 .playlist-foreground{
   height: 340px;
-  background-color: grey;
+  background-color: lightgrey;
   display: flex;
   align-items: center;
   justify-content: space-between;

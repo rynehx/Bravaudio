@@ -55,7 +55,6 @@ var PlaylistContent = React.createClass({
             {this.props.playlist.tracks.map(function(track,i){
 
               return (
-
                 <PlaylistContentItems key = {track.id} track = {track}
                   playlist = {this.props.playlist} index = {i+1}/>
               );

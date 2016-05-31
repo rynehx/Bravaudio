@@ -10,6 +10,14 @@ var PlaylistServerActions = {
     }
     );
   },
+  receiveTrackPlaylists: function(playlists){
+
+    Dispatcher.dispatch({
+      actionType: PlaylistConstants.RECEIVETRACKPLAYLIST,
+      playlists: playlists
+    }
+    );
+  },
   receiveNoPlaylist: function(){
     Dispatcher.dispatch({
       actionType: PlaylistConstants.RECEIVEDNOPLAYLIST

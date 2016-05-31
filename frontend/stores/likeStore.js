@@ -4,9 +4,12 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
 var _likes =[];
 var LikeStore = new Store(AppDispatcher);
 
+LikeStore.fetchLikes = function(){
+  return _likes;
+};
 
 LikeStore.receiveLikes = function(items){
-
+  debugger
   _likes = items;
   this.__emitChange();
 };
@@ -23,3 +26,5 @@ LikeStore.__onDispatch = function(payload){
 
 
 };
+
+module.exports = LikeStore;
