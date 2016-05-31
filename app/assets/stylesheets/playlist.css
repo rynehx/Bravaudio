@@ -81,6 +81,9 @@
   display: flex;
   flex-wrap: wrap;
 }
+.playlist-sidebar-like-item{
+  cursor: pointer;
+}
 
 .playlist-sidebar-like-image{
   width: 50px;
@@ -105,6 +108,7 @@
   color: white;
   padding: 2px 8px;
   margin: 5px;
+  cursor: default;
 
 }
 
@@ -116,7 +120,7 @@
   color: white;
   padding: 2px 8px;
   margin: 5px;
-
+  cursor: default;
 }
 
 
@@ -144,6 +148,7 @@
   background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462339116/Untitled_Diagram_2_gil7ay.svg");
   background-size: 75px;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 
@@ -340,6 +345,7 @@
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   font-size: 12px;
   color: #303030;
+  cursor: default;
 }
 
 .playlist-content-bottom-description{
@@ -392,4 +398,7 @@
 
 .playlist-content-bottom-items:hover .playlist-content-items-stats{
   display: none;
+}
+.playlist-content-bottom-items:hover{
+  background-color: #F5F5F5;
 }

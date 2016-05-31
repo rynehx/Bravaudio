@@ -25275,8 +25275,8 @@
 	  },
 
 	  componentWillMount: function () {
-	    SessionActions.fetchCurrentUser();
-	    this.setState({ user: SessionStore.fetchCurrentUser() });
+	    //SessionActions.fetchCurrentUser();
+	    //this.setState({user: SessionStore.fetchCurrentUser()});
 	  },
 
 	  errors: function () {
@@ -28183,6 +28183,40 @@
 					success: function (data) {
 						updateCallback();
 						LikeServerActions.receiveLikes(data);
+					},
+					error: function () {
+						console.log("not liked");
+					}
+				};
+
+				$.ajax(request);
+			}
+		},
+
+		postSecondaryLike: function (type, item, updateCallback) {
+			if (type === "playlist" || type === "track") {
+				var request = {
+					type: "post",
+					url: "api/likes/" + type + "/" + item.id,
+					success: function (data) {
+						updateCallback();
+					},
+					error: function () {
+						console.log("not liked");
+					}
+				};
+
+				$.ajax(request);
+			}
+		},
+
+		deleteSecondaryLike: function (type, item, updateCallback) {
+			if (type === "playlist" || type === "track") {
+				var request = {
+					type: "delete",
+					url: "api/likes/" + type + "/" + item.id,
+					success: function (data) {
+						updateCallback();
 					},
 					error: function () {
 						console.log("not liked");
@@ -36284,7 +36318,9 @@
 	var LikeClientActions = {
 	  postLike: SessionApiUtil.postLike,
 	  fetchLikes: SessionApiUtil.fetchLikes,
-	  deleteLike: SessionApiUtil.deleteLike
+	  deleteLike: SessionApiUtil.deleteLike,
+	  postSecondaryLike: SessionApiUtil.postSecondaryLike,
+	  deleteSecondaryLike: SessionApiUtil.deleteSecondaryLike
 	};
 
 	module.exports = LikeClientActions;
@@ -36380,9 +36416,9 @@
 	          React.createElement(
 	            'div',
 	            { className: 'track-content-top-buttons' },
+	            this._liked(),
 	            React.createElement(NewPlaylistModal, { track: this.props.track,
-	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' }),
-	            this._liked()
+	              icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' })
 	          ),
 	          React.createElement(
 	            'div',
@@ -37761,14 +37797,14 @@
 
 	  likeTrack: function () {
 
-	    LikeClientActions.postLike("track", this.props.track, function () {
+	    LikeClientActions.postSecondaryLike("track", this.props.track, function () {
 	      SessionActions.fetchCurrentUser();
 	      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
 	    }.bind(this));
 	  },
 
 	  unlikeTrack: function () {
-	    LikeClientActions.deleteLike("track", this.props.track, function () {
+	    LikeClientActions.deleteSecondaryLike("track", this.props.track, function () {
 	      SessionActions.fetchCurrentUser();
 	      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
 	    }.bind(this));
@@ -38200,7 +38236,7 @@
 
 	        return React.createElement(
 	          'div',
-	          { key: like.id, className: 'playlist-sidebar-like-items' },
+	          { key: like.id, className: 'playlist-sidebar-like-item' },
 	          React.createElement('img', { className: 'playlist-sidebar-like-image', src: like.image_url,
 	            onClick: function () {
 	              this.goToUser(like.username);

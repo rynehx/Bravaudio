@@ -30,7 +30,7 @@ var PlaylistSideBar = React.createClass({
       var likes = this.props.likes.slice(0,5).map(function(like){
 
         return (
-          <div key = {like.id} className = 'playlist-sidebar-like-items' >
+          <div key = {like.id} className = 'playlist-sidebar-like-item' >
             <img className = "playlist-sidebar-like-image" src = {like.image_url}
             onClick = {function(){this.goToUser(like.username);}.bind(this)}></img>
 

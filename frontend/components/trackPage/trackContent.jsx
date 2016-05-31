@@ -69,10 +69,10 @@ return(
 
       <div className = "track-content-top-bottom">
         <div className = "track-content-top-buttons">
-
+          {this._liked()}
           <NewPlaylistModal track = {this.props.track}
             icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
-          {this._liked()}
+
         </div>
 
         <div className = "track-content-top-stats">

@@ -25,7 +25,7 @@ var PlaylistContentItem = React.createClass({
 
   likeTrack: function(){
 
-    LikeClientActions.postLike("track",this.props.track,
+    LikeClientActions.postSecondaryLike("track",this.props.track,
     function(){
       SessionActions.fetchCurrentUser();
       PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
@@ -33,12 +33,14 @@ var PlaylistContentItem = React.createClass({
   },
 
   unlikeTrack: function(){
-    LikeClientActions.deleteLike("track",this.props.track,
+    LikeClientActions.deleteSecondaryLike("track",this.props.track,
     function(){
       SessionActions.fetchCurrentUser();
       PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
     }.bind(this));
   },
+
+
 
   _liked: function(){
     var currentUserTracks = this.props.user.liked_tracks;

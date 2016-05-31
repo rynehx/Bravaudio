@@ -173,7 +173,8 @@
   height: 30px;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  cursor: default;
 }
 
 .track-content-bottom{
@@ -201,7 +202,7 @@
   border-radius: 50%;
   margin-top: 15px;
   margin-bottom: 10px;
-
+  cursor: pointer;
 }
 
 .track-content-user-name{
@@ -211,7 +212,7 @@
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   font-size: 12px;
   color: #303030;
-
+  cursor: default;
 }
 
 
@@ -326,14 +327,13 @@
   justify-content: flex-start;
   align-items: center;
   width: 30px;
-  cursor: default;
+
 }
 
 .track-content-top-stats-playsicon{
   width: 12px;
   height: 12px;
   margin-right: 5px;
-  cursor: pointer;
 }
 
 

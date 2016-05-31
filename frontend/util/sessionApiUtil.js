@@ -87,4 +87,44 @@ module.exports = {
 	},
 
 
+	postSecondaryLike: function(type,item,updateCallback){
+		if(type ==="playlist" || type ==="track"){
+	    var request ={
+	      type: "post",
+	      url: "api/likes/"+type+"/" + item.id,
+	      success: function(data){
+					updateCallback();
+			
+	      },
+	      error: function(){
+	        console.log("not liked");
+	      }
+	    };
+
+	    $.ajax(request);
+		}
+
+  },
+
+	deleteSecondaryLike: function(type,item,updateCallback){
+		if(type ==="playlist" || type ==="track"){
+			var request ={
+				type: "delete",
+				url: "api/likes/"+type+"/" + item.id,
+				success: function(data){
+					updateCallback();
+
+
+				},
+				error: function(){
+					console.log("not liked");
+				}
+			};
+
+			$.ajax(request);
+		}
+
+	},
+
+
 };
