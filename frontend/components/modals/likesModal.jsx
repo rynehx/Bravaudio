@@ -48,15 +48,9 @@ var style = {
 
 
 var LikesModal = React.createClass({
-    mixins: [LinkedStateMixin],
+
     getInitialState: function(){
       return({ modalOpen: false });
-    },
-    componentWillMount: function(){
-
-    },
-    componentWillUnmount: function(){
-
     },
 
 
@@ -79,16 +73,25 @@ var LikesModal = React.createClass({
 
     return (
        <div >
-         <img className="" src={this.props.icon}  onClick={this.openModal}/>
-           <Modal className = ""
+         <div className="track-sidebar-likes-viewall" onClick={this.openModal}>view all</div>
+           <Modal className = "likes-modal"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}
              style={style}>
-
-
-
-           </Modal>
+              <div className = "likes-modal-container">
+                {
+                  this.props.items.map(function(item){
+                    return (
+                      <div key = {item.id} className = "likes-modal-items" onClick = {function(username){this.props.goToUser(item.username);}.bind(this)}>
+                          <img className = 'likes-modal-image' src={item.image_url} />
+                          <div className = "likes-modal-user">{item.username}</div>
+                      </div>
+                    );
+                  }.bind(this))
+                }
+              </div>
+          </Modal>
        </div>
      );
     }

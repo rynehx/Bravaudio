@@ -48,7 +48,7 @@ var style = {
 
 
 var InPlaylistModal = React.createClass({
-    mixins: [LinkedStateMixin],
+
     getInitialState: function(){
       return({ modalOpen: false });
     },

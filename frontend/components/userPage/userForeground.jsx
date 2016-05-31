@@ -1,6 +1,5 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
-var ColorThief = require('../../util/color-thief');
 
 
 var UserForeground = React.createClass({
@@ -20,8 +19,7 @@ var UserForeground = React.createClass({
     // });
   },
   click: function(){
-    ColorThief
-    debugger
+
 
 
   },

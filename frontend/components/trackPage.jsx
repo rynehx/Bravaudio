@@ -56,7 +56,7 @@ var TrackPage = React.createClass({
     this.setState({track: TrackStore.displayTrack()});
 
     PlaylistClientActions.fetchTrackPlaylists(TrackStore.displayTrack());
-        LikeClientActions.fetchLikes("track",TrackStore.displayTrack());
+    LikeClientActions.fetchLikes("track",TrackStore.displayTrack());
   },
 
   _onChangeLike: function(){
@@ -64,7 +64,7 @@ var TrackPage = React.createClass({
   },
 
   render: function(){
-    
+
     if(this.state.track === null){
       return(
         <div>

@@ -7,7 +7,6 @@ var PlaylistClientActions = {
   },
 
   fetchTrackPlaylists: function(track){
-
     PlaylistApiUtil.fetchTrackPlaylists(track);
   },
 

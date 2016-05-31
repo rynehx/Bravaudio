@@ -9,7 +9,7 @@ LikeStore.fetchLikes = function(){
 };
 
 LikeStore.receiveLikes = function(items){
-  debugger
+
   _likes = items;
   this.__emitChange();
 };
