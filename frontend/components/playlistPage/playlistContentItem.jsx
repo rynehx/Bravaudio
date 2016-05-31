@@ -4,6 +4,11 @@ var React = require('react'),
     MusicStore = require('../../stores/musicStore');
 //components
 var NewPlaylistModal = require('../modals/newPlaylistModal');
+//actions
+var LikeClientActions = require('../../actions/likeClientActions');
+var SessionActions = require('../../actions/sessionActions');
+var PlaylistClientActions = require('../../actions/playlistClientActions');
+
 
 
 var PlaylistContentItem = React.createClass({
@@ -16,6 +21,40 @@ var PlaylistContentItem = React.createClass({
   },
   playPlaylistTrack: function(){
     MusicStore.setMusic(this.props.track,this.props.playlist);
+  },
+
+  likeTrack: function(){
+
+    LikeClientActions.postLike("track",this.props.track,
+    function(){
+      SessionActions.fetchCurrentUser();
+      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
+    }.bind(this));
+  },
+
+  unlikeTrack: function(){
+    LikeClientActions.deleteLike("track",this.props.track,
+    function(){
+      SessionActions.fetchCurrentUser();
+      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
+    }.bind(this));
+  },
+
+  _liked: function(){
+    var currentUserTracks = this.props.user.liked_tracks;
+
+
+
+    if(currentUserTracks.find(function(el){ return el['id='] ===this.props.track.id; }.bind(this))){
+      return <div className = {"playlist-content-items-likebutton" +" " + "like-button-unlike"} onClick={this.unlikeTrack}>
+        {"♥ " + this.props.track.likes }</div>;
+    }else{
+      return <div className = "playlist-content-items-likebutton" onClick = {this.likeTrack}>
+        {"♥ " + this.props.track.likes }
+      </div>;
+    }
+
+
   },
 
   render: function(){
@@ -57,6 +96,7 @@ var PlaylistContentItem = React.createClass({
       </div>
 
       <div className = "playlist-content-items-buttons">
+        {this._liked()}
         <NewPlaylistModal track = {this.props.track}
           icon = "https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg"/>
       </div>

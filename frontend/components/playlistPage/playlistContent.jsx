@@ -106,7 +106,7 @@ var PlaylistContent = React.createClass({
 
               return (
                 <PlaylistContentItems key = {track.id} track = {track}
-                  playlist = {this.props.playlist} index = {i+1}/>
+                  playlist = {this.props.playlist} index = {i+1} user = {this.state.user}/>
               );
             }.bind(this))}
           </ol>

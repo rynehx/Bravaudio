@@ -37718,7 +37718,7 @@
 	            this.props.playlist.tracks.map(function (track, i) {
 
 	              return React.createElement(PlaylistContentItems, { key: track.id, track: track,
-	                playlist: this.props.playlist, index: i + 1 });
+	                playlist: this.props.playlist, index: i + 1, user: this.state.user });
 	            }.bind(this))
 	          )
 	        )
@@ -37740,6 +37740,10 @@
 	    MusicStore = __webpack_require__(276);
 	//components
 	var NewPlaylistModal = __webpack_require__(300);
+	//actions
+	var LikeClientActions = __webpack_require__(298);
+	var SessionActions = __webpack_require__(246);
+	var PlaylistClientActions = __webpack_require__(295);
 
 	var PlaylistContentItem = React.createClass({
 	  displayName: 'PlaylistContentItem',
@@ -37753,6 +37757,41 @@
 	  },
 	  playPlaylistTrack: function () {
 	    MusicStore.setMusic(this.props.track, this.props.playlist);
+	  },
+
+	  likeTrack: function () {
+
+	    LikeClientActions.postLike("track", this.props.track, function () {
+	      SessionActions.fetchCurrentUser();
+	      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
+	    }.bind(this));
+	  },
+
+	  unlikeTrack: function () {
+	    LikeClientActions.deleteLike("track", this.props.track, function () {
+	      SessionActions.fetchCurrentUser();
+	      PlaylistClientActions.fetchDisplayPlaylist(this.props.playlist.author, this.props.playlist.title);
+	    }.bind(this));
+	  },
+
+	  _liked: function () {
+	    var currentUserTracks = this.props.user.liked_tracks;
+
+	    if (currentUserTracks.find(function (el) {
+	      return el['id='] === this.props.track.id;
+	    }.bind(this))) {
+	      return React.createElement(
+	        'div',
+	        { className: "playlist-content-items-likebutton" + " " + "like-button-unlike", onClick: this.unlikeTrack },
+	        "♥ " + this.props.track.likes
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'playlist-content-items-likebutton', onClick: this.likeTrack },
+	        "♥ " + this.props.track.likes
+	      );
+	    }
 	  },
 
 	  render: function () {
@@ -37810,6 +37849,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'playlist-content-items-buttons' },
+	        this._liked(),
 	        React.createElement(NewPlaylistModal, { track: this.props.track,
 	          icon: 'https://s3-us-west-1.amazonaws.com/bravaudio/addplaylist.svg' })
 	      )

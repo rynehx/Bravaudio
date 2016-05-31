@@ -5,7 +5,7 @@ class Api::PlaylistsController < ApplicationController
     author_id = User.find_by(username: params[:username])
     @playlist = Playlist.includes(:tracks).find_by(title: params[:title], author_id: author_id)
 
-    @tracks = @playlist.tracks.includes(:author)
+    @tracks = @playlist.tracks.includes(:author, :likes)
 
     if @playlist
       render "api/playlists/show"

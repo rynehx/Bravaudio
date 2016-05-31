@@ -355,7 +355,7 @@
 .playlist-content-items-stats{
   height: 30px;
   width: 100%;
-  min-width: 50px;
+  min-width: 100px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -366,11 +366,25 @@
 .playlist-content-items-buttons{
   height: 30px;
   width: 100%;
+  min-width: 100px;
   display: none;
   justify-content: flex-end;
 
 }
 
+.playlist-content-items-likebutton{
+  margin: 0px 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16px;
+  border: 1px solid;
+  border-radius: 5px;
+  width: 25px;
+  padding: 5px 5px;
+  border-color: #CCCCCC;
+  cursor: pointer;
+}
 
 .playlist-content-bottom-items:hover .playlist-content-items-buttons{
   display: flex;

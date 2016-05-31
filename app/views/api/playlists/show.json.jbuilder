@@ -15,6 +15,6 @@ json.tracks  do
     json.times_played track.times_played
     json.created_at track.created_at
     json.author  track.author.username
-
+    json.likes track.likes.length
    end
 end
