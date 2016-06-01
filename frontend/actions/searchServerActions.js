@@ -3,7 +3,13 @@ var Dispatcher = require('../dispatcher/dispatcher'),
 
 
 var SearchServerActions = {
-
+  receiveSearchBarQuery: function(searches){
+    Dispatcher.dispatch({
+      actionType: SearchConstants.RECEIVESEARCHBAR,
+      searches: searches
+    }
+    );
+  }
 };
 
 module.exports = SearchServerActions;

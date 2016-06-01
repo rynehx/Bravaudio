@@ -34838,16 +34838,57 @@
 /* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//react
 	var React = __webpack_require__(1);
+	//stores
+	var SearchStore = __webpack_require__(331);
+	//actions
+	var SearchClientActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/clientSearchActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var SearchBar = React.createClass({
-	  displayName: "SearchBar",
+	  displayName: 'SearchBar',
+
+
+	  getInitialState: function () {
+	    return { searches: [], searchquery: "" };
+	  },
+
+	  componentDidMount: function () {
+	    this.searchstorelistener = SearchStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.searchstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ searches: SearchStore.fetchSearchBar() });
+	  },
+
+	  search: function () {
+	    SearchClientActions.getSearchBarQuery(this.state.searchquery);
+	  },
+
+	  changeSearchQuery: function (event) {
+	    this.setState({ searchquery: event.target.value });
+	    if (event.target.value.length > 4) {
+	      this.search();
+	    }
+	  },
+
+	  goToSearchPage: function () {},
 
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "searchbar" },
-	      React.createElement("input", { className: "searchbar-inner", placeholder: "search" })
+	      'div',
+	      { className: 'searchbar' },
+	      React.createElement('input', { className: 'searchbar-inner', placeholder: 'search',
+	        onChange: this.changeSearchQuery }),
+	      React.createElement(
+	        'div',
+	        { onClick: this.goToSearchPage },
+	        'go'
+	      )
 	    );
 	  }
 	});
@@ -39182,20 +39223,85 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var SearchStore = __webpack_require__(331);
 
 	var SearchPage = React.createClass({
-	  displayName: "SearchPage",
+	  displayName: 'SearchPage',
+
+	  getInitialState: function () {
+	    return { searches: [] };
+	  },
+
+	  componentDidMount: function () {
+	    this.searchstorelistener = SearchStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.searchstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ searches: SearchStore.fetchSearchPage() });
+	  },
 
 	  render: function () {
 	    return React.createElement(
-	      "div",
-	      { className: "searchpage" },
-	      "search page"
+	      'div',
+	      { className: 'searchpage' },
+	      'search page'
 	    );
 	  }
 	});
 
 	module.exports = SearchPage;
+
+/***/ },
+/* 331 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(247),
+	    Store = __webpack_require__(256).Store,
+	    SearchConstants = __webpack_require__(332);
+
+	var _searches = [];
+
+	var SearchStore = new Store(AppDispatcher);
+	SearchStore.fetchSearchBar = function () {
+	  return _searches;
+	};
+
+	SearchStore.fetchSearchPage = function () {
+	  return _searches;
+	};
+
+	SearchStore.receivedSearchBar = function (searches) {
+	  _searches = searches;
+	  this.__emitChange();
+	};
+
+	SearchStore.receivedSearchPage = function (searches) {
+	  _searches = searches;
+	  this.__emitChange();
+	};
+
+	SearchStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVESEARCHBAR:
+	      SearchStore.receivedSearchBar(payload.searches);
+	      break;
+	    case SearchConstants.RECEIVESEARCHPAGE:
+	      SearchStore.receivedSearchPage(payload.searches);
+	      break;
+	  }
+	};
+
+	module.exports = SearchStore;
+
+/***/ },
+/* 332 */
+/***/ function(module, exports) {
+
+	module.exports = {};
 
 /***/ }
 /******/ ]);

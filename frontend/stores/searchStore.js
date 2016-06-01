@@ -11,16 +11,18 @@ SearchStore.fetchSearchBar = function(){
   return _searches;
 };
 
-SearchStore.fetchSearchStore = function(){
+SearchStore.fetchSearchPage = function(){
   return _searches;
 };
 
 SearchStore.receivedSearchBar = function(searches){
   _searches = searches;
+  this.__emitChange();
 };
 
 SearchStore.receivedSearchPage = function(searches){
   _searches = searches;
+  this.__emitChange();
 };
 
 SearchStore.__onDispatch = function(payload){
