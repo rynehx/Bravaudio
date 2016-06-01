@@ -34843,7 +34843,7 @@
 	//stores
 	var SearchStore = __webpack_require__(331);
 	//actions
-	var SearchClientActions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/clientSearchActions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var SearchClientActions = __webpack_require__(333);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -39301,7 +39301,64 @@
 /* 332 */
 /***/ function(module, exports) {
 
-	module.exports = {};
+	module.exports = {
+	  RECEIVESEARCHBAR: "RECEIVESEARCHBAR"
+	};
+
+/***/ },
+/* 333 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchApiUtils = __webpack_require__(334);
+
+	var SearchClientActions = {
+	  getSearchBarQuery: SearchApiUtils.getSearchBarQuery
+	};
+
+	module.exports = SearchClientActions;
+
+/***/ },
+/* 334 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(247);
+	//actions
+	var SearchServerActions = __webpack_require__(335);
+
+	var SearchApiUtils = {
+	  getSearchBarQuery: function (query) {
+	    var request = {
+	      url: "",
+	      type: "GET",
+	      success: SearchServerActions.receiveSearchBarQuery,
+	      error: function () {
+	        console.log("search not fetches");
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = SearchApiUtils;
+
+/***/ },
+/* 335 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(247),
+	    SearchConstants = __webpack_require__(332);
+
+	var SearchServerActions = {
+	  receiveSearchBarQuery: function (searches) {
+	    Dispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVESEARCHBAR,
+	      searches: searches
+	    });
+	  }
+	};
+
+	module.exports = SearchServerActions;
 
 /***/ }
 /******/ ]);

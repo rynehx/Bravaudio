@@ -7,9 +7,9 @@ var SearchApiUtils = {
     var request = {
       url:"",
       type:"GET",
-      success: SearchServerActions.,
-      error: funciton(){
-        console.log("search not fetches")
+      success: SearchServerActions.receiveSearchBarQuery,
+      error: function(){
+        console.log("search not fetches");
       }
     };
 

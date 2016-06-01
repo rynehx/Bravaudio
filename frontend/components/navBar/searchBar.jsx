@@ -3,7 +3,7 @@ var React = require('react');
 //stores
 var SearchStore = require('../../stores/searchStore');
 //actions
-var SearchClientActions = require('../../actions/clientSearchActions');
+var SearchClientActions = require('../../actions/searchClientActions');
 
 
 var SearchBar = React.createClass({
