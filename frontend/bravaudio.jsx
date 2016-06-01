@@ -16,14 +16,13 @@ var NavBar = require('./components/navBar'),
     UserPage = require('./components/userPage'),
     PlaylistPage = require('./components/playlistPage'),
     SplashPage = require('./components/splashPage'),
-    YourPage = require('./components/yourPage');
+    YourPage = require('./components/yourPage'),
+    SearchPage = require('./components/searchPage');
 
-//Mixins
+//Sessions
 var CurrentSessionState = require('./mixins/currentSessionState'),
     SessionActions = require('./actions/sessionActions'),
     SessionStore = require('./stores/sessionStore');
-
-//need listener to update store
 
 
 //userpage components
@@ -59,17 +58,26 @@ var AppRouter = (
     <Route path="/" components={App}>
       <IndexRoute component={SplashPage}/>
       <Route path="home" components={HomePage}/>
+
       <Route path="you" components={YourPage}>
         <IndexRoute component={YourContent}/>
         <Route path=":tabtype" component = {YourContent}/>
       </Route>
+
+      <Route path="search" components = {SearchPage}>
+
+      </Route>
+
       <Route path="upload" components={UploadPage}/>
       <Route path=":user" components={UserPage}>
         <IndexRoute component={UserContentTab}/>
         <Route path=":tabtype" components={UserContentTab}/>
       </Route>
+
       <Route path=":user/track/:track" components={TrackPage}/>
       <Route path=":user/playlist/:playlist" components={PlaylistPage}/>
+
+
 
     </Route>
   </Router>

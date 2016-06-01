@@ -106,7 +106,7 @@
 .searchbar{
   height: 70%;
   width: 500px;
-  min-width: 100px;
+  min-width: 400px;
   background-color: white;
   margin: 0px 50px;
   border-radius: 5px;

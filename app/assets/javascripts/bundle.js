@@ -62,14 +62,13 @@
 	    UserPage = __webpack_require__(306),
 	    PlaylistPage = __webpack_require__(316),
 	    SplashPage = __webpack_require__(323),
-	    YourPage = __webpack_require__(324);
+	    YourPage = __webpack_require__(324),
+	    SearchPage = __webpack_require__(330);
 
-	//Mixins
+	//Sessions
 	var CurrentSessionState = __webpack_require__(273),
 	    SessionActions = __webpack_require__(246),
 	    SessionStore = __webpack_require__(255);
-
-	//need listener to update store
 
 	//userpage components
 	var UserContentTab = __webpack_require__(325);
@@ -114,6 +113,7 @@
 	      React.createElement(IndexRoute, { component: YourContent }),
 	      React.createElement(Route, { path: ':tabtype', component: YourContent })
 	    ),
+	    React.createElement(Route, { path: 'search', components: SearchPage }),
 	    React.createElement(Route, { path: 'upload', components: UploadPage }),
 	    React.createElement(
 	      Route,
@@ -39176,6 +39176,26 @@
 	});
 
 	module.exports = YourContentAll;
+
+/***/ },
+/* 330 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	var SearchPage = React.createClass({
+	  displayName: "SearchPage",
+
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "searchpage" },
+	      "search page"
+	    );
+	  }
+	});
+
+	module.exports = SearchPage;
 
 /***/ }
 /******/ ]);
