@@ -90,7 +90,7 @@ return(
         likes
         <LikesModal
           items = {this.props.likes}
-          goToUser = {that.goToUser}  />
+          goToUser = {that.goToUser}/>
       </div>
       <div className = "track-sidebar-like-items">
         {likes}

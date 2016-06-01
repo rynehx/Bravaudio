@@ -27,7 +27,7 @@ var TrackApiUtil = {
   fetchUserTracks: function(user){
     var request = {
       type:"GET",
-      url: "api/"+ user +"/tracks",
+      url: "api/"+ user.username +"/tracks",
       success: TrackServerActions.receiveUserTracks,
       error: function(){console.log("did not retrieve user tracks");}
     };

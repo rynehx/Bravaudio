@@ -14,8 +14,10 @@ class Api::LikesController < ApplicationController
 
   def user_likes
     @user = User.find(params[:user_id])
-    @likes = @user.likings
-    render "api/likes/user_track"
+    # @likes = @user.likings
+    #
+      @likes = (@user.liked_tracks.includes(:author) + @user.liked_playlists.includes(:author,:tracks)).shuffle!
+    render "api/likes/show_user"
   end
 
   def like_track

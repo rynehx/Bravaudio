@@ -34,9 +34,10 @@ var PlaylistApiUtil = {
 
 
   fetchUserPlaylists: function(user){
+
     var request = {
       type: "get",
-      url: "api/" + user + "/playlists",
+      url: "api/" + user.username + "/playlists",
       success: function(data){
         PlaylistServerActions.receiveUserPlaylists(data);
       },

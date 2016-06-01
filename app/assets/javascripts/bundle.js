@@ -25275,8 +25275,8 @@
 	  },
 
 	  componentWillMount: function () {
-	    //SessionActions.fetchCurrentUser();
-	    //this.setState({user: SessionStore.fetchCurrentUser()});
+	    SessionActions.fetchCurrentUser();
+	    this.setState({ user: SessionStore.fetchCurrentUser() });
 	  },
 
 	  errors: function () {
@@ -35070,7 +35070,7 @@
 	  fetchUserTracks: function (user) {
 	    var request = {
 	      type: "GET",
-	      url: "api/" + user + "/tracks",
+	      url: "api/" + user.username + "/tracks",
 	      success: TrackServerActions.receiveUserTracks,
 	      error: function () {
 	        console.log("did not retrieve user tracks");
@@ -35453,13 +35453,19 @@
 	    }
 
 	    if (this.state.onRepeat) {
-	      repeatButton = React.createElement('img', { className: 'musicbar-repeat',
-	        src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462432562/Untitled_Diagram_4_xrzaz3.svg',
-	        onClick: this.clickRepeat });
+	      repeatButton = React.createElement(
+	        'div',
+	        { className: 'musicbar-repeat',
+	          onClick: this.clickRepeat },
+	        '⟳'
+	      );
 	    } else {
-	      repeatButton = React.createElement('img', { className: 'musicbar-repeat',
-	        src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462432563/Untitled_Diagram_5_zuegqw.svg',
-	        onClick: this.clickRepeat });
+	      repeatButton = React.createElement(
+	        'div',
+	        { className: 'musicbar-repeat',
+	          onClick: this.clickRepeat },
+	        '⤨'
+	      );
 	    }
 
 	    return React.createElement(
@@ -36170,9 +36176,10 @@
 	  },
 
 	  fetchUserPlaylists: function (user) {
+
 	    var request = {
 	      type: "get",
-	      url: "api/" + user + "/playlists",
+	      url: "api/" + user.username + "/playlists",
 	      success: function (data) {
 	        PlaylistServerActions.receiveUserPlaylists(data);
 	      },
@@ -36525,7 +36532,7 @@
 	    var container = document.getElementById("content");
 	    Modal.setAppElement(container);
 	    this.playliststorelistener = PlaylistStore.addListener(this._onAddToPlaylist);
-	    PlaylistClientActions.fetchUserPlaylists(SessionStore.fetchCurrentUser().username);
+	    PlaylistClientActions.fetchUserPlaylists({ username: SessionStore.fetchCurrentUser().username });
 	  },
 	  componentWillUnmount: function () {
 	    this.playliststorelistener.remove();
@@ -37212,9 +37219,11 @@
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(307);
+	var UserStore = __webpack_require__(307),
+	    LikeStore = __webpack_require__(294);
 	//actions
-	var UserClientActions = __webpack_require__(309);
+	var UserClientActions = __webpack_require__(309),
+	    LikeClientActions = __webpack_require__(298);
 	//components
 	var UserForeground = __webpack_require__(312),
 	    UserSideBar = __webpack_require__(313),
@@ -37227,7 +37236,7 @@
 
 	  getInitialState: function () {
 	    return { user: { username: "", name: "", city: "",
-	        country: "", state: "" }, tabtype: this.initialTabSet() };
+	        country: "", state: "" }, tabtype: this.initialTabSet(), likes: [] };
 	  },
 
 	  initialTabSet: function () {
@@ -37240,19 +37249,32 @@
 
 	  componentDidMount: function () {
 	    UserClientActions.fetchDisplayUser(this.props.params.user);
+
 	    this.userStoreListener = UserStore.addListener(this._onChange);
+	    this.likesStoreListener = LikeStore.addListener(this._onLikeChange);
 	  },
 
 	  componentWillUnmount: function () {
 	    this.userStoreListener.remove();
+	    this.likesStoreListener.remove();
 	  },
 
 	  componentWillReceiveProps: function (newprops) {
 	    UserClientActions.fetchDisplayUser(newprops.params.user);
+	    // LikeClientActions.fetchLikes("user",
+	    // {username: newprops.params.user}, function(){1;});
 	  },
 
 	  _onChange: function () {
 	    this.setState({ user: UserStore.currentDisplayUser(), tabtype: this.initialTabSet() });
+
+	    LikeClientActions.fetchLikes("user", UserStore.currentDisplayUser(), function () {
+	      1;
+	    });
+	  },
+
+	  _onLikeChange: function () {
+	    this.setState({ likes: LikeStore.fetchLikes() });
 	  },
 
 	  tabbed: function (type) {
@@ -37270,6 +37292,7 @@
 	  },
 
 	  render: function () {
+
 	    if (this.state.user === null) {
 	      return React.createElement(
 	        'div',
@@ -37317,7 +37340,7 @@
 	            ),
 	            this.props.children
 	          ),
-	          React.createElement(UserSideBar, { user: this.state.user })
+	          React.createElement(UserSideBar, { user: this.state.user, likes: this.state.likes })
 	        )
 	      );
 	    }
@@ -37506,12 +37529,73 @@
 	var React = __webpack_require__(1),
 	    UserStore = __webpack_require__(307),
 	    hashHistory = __webpack_require__(159).hashHistory;
+	//components
+	var LikedItemModal = __webpack_require__(329);
 
 	var UserSideBar = React.createClass({
 	  displayName: 'UserSideBar',
 
+
+	  goToLike: function (like) {
+	    hashHistory.push("/" + like.author + "/" + like.type + "/" + like.title);
+	  },
+
+	  goToAuthor: function (user) {
+	    hashHistory.push("/" + user.author);
+	  },
+
 	  render: function () {
-	    return React.createElement('div', { className: 'user-sidebar' });
+	    console.log(this.props.likes);
+	    if (this.props.likes && this.props.likes.length > 0) {
+
+	      var likes = this.props.likes.slice(0, 5).map(function (like) {
+	        return React.createElement(
+	          'div',
+	          { key: like.id + like.type, className: 'user-sidebar-likes-items' },
+	          React.createElement('img', { className: 'user-sidebar-likes-image', src: like.image_url,
+	            onClick: function () {
+	              this.goToLike(like);
+	            }.bind(this) }),
+	          React.createElement(
+	            'div',
+	            { className: 'user-sidebar-likes-info' },
+	            React.createElement(
+	              'div',
+	              { className: 'user-sidebar-likes-author', onClick: function () {
+	                  this.goToAuthor(like);
+	                }.bind(this) },
+	              like.author
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'user-sidebar-likes-title', onClick: function () {
+	                  this.goToLike(like);
+	                }.bind(this) },
+	              like.title
+	            )
+	          )
+	        );
+	      }.bind(this));
+	    } else {
+	      var likes = null;
+	    }
+
+	    return React.createElement(
+	      'div',
+	      { className: 'user-sidebar' },
+	      React.createElement(
+	        'div',
+	        { className: 'user-sidebar-likes' },
+	        React.createElement(
+	          'div',
+	          { className: 'user-sidebar-likes-header' },
+	          'likes',
+	          React.createElement(LikedItemModal, {
+	            likes: this.props.likes })
+	        ),
+	        likes
+	      )
+	    );
 	  }
 	});
 
@@ -38489,6 +38573,14 @@
 	              this.pushTabs("playlists");
 	            }.bind(this) },
 	          'Playlists'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: "your-content-tabitems" + this.tabbed("likes"),
+	            onClick: function () {
+	              this.pushTabs("likes");
+	            }.bind(this) },
+	          'Likes'
 	        )
 	      ),
 	      this.props.children
@@ -38536,8 +38628,8 @@
 	  componentDidMount: function () {
 	    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
 	    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
-	    PlaylistClientActions.fetchUserPlaylists(this.props.params.user);
-	    TrackClientActions.fetchUserTracks(this.props.params.user);
+	    PlaylistClientActions.fetchUserPlaylists({ username: this.props.params.user });
+	    TrackClientActions.fetchUserTracks({ username: this.props.params.user });
 	  },
 
 	  _onChangeTracks: function () {
@@ -38641,7 +38733,7 @@
 	            React.createElement(
 	              "a",
 	              { className: "user-content-items-author" },
-	              this.props.user
+	              this.props.item.author
 	            ),
 	            React.createElement(
 	              "a",
@@ -38673,10 +38765,12 @@
 	var SessionStore = __webpack_require__(255),
 	    TrackStore = __webpack_require__(282),
 	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276);
+	    MusicStore = __webpack_require__(276),
+	    LikeStore = __webpack_require__(294);
 	//actions
 	var TrackClientActions = __webpack_require__(278),
-	    PlaylistClientActions = __webpack_require__(295);
+	    PlaylistClientActions = __webpack_require__(295),
+	    LikeClientActions = __webpack_require__(298);
 
 	var list = ["tracks", "playlists"];
 
@@ -38685,17 +38779,21 @@
 
 	  getInitialState: function () {
 	    return {
-	      user: SessionStore.fetchCurrentUser().username,
+	      user: SessionStore.fetchCurrentUser(),
 	      tracks: [],
-	      playlists: []
+	      playlists: [],
+	      likes: []
 	    };
 	  },
 
 	  componentDidMount: function () {
 	    this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
 	    this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
+	    this.likesStoreListener = LikeStore.addListener(this._onLikeChange);
+
 	    PlaylistClientActions.fetchUserPlaylists(this.state.user);
 	    TrackClientActions.fetchUserTracks(this.state.user);
+	    LikeClientActions.fetchLikes("user", this.state.user);
 	  },
 
 	  _onChangeTracks: function () {
@@ -38706,6 +38804,9 @@
 	    this.setState({ playlists: PlaylistStore.displayUserPlaylists() });
 	  },
 
+	  _onLikeChange: function () {
+	    this.setState({ likes: LikeStore.fetchLikes() });
+	  },
 	  // componentWillReceiveProps: function(newprops){
 	  //   PlaylistClientActions.fetchUserPlaylists(newprops.params.user);
 	  //   TrackClientActions.fetchUserTracks(newprops.params.user);
@@ -38714,6 +38815,7 @@
 	  componentWillUnmount: function () {
 	    this.trackstorelistener.remove();
 	    this.playliststorelistener.remove();
+	    this.likesStoreListener.remove();
 	  },
 
 	  render: function () {
@@ -38723,6 +38825,8 @@
 	      return React.createElement(YourContentItems, { items: this.state.tracks, typing: 'track' });
 	    } else if (this.props.params.tabtype === "playlists") {
 	      return React.createElement(YourContentItems, { items: this.state.playlists, typing: 'playlist' });
+	    } else if (this.props.params.tabtype === "likes") {
+	      return React.createElement(YourContentItems, { items: this.state.likes, typing: 'like' });
 	    } else {
 	      return React.createElement(YourContentAll, { tracks: this.state.tracks, playlists: this.state.playlists });
 	    }
@@ -38788,9 +38892,10 @@
 	        'ul',
 	        { className: 'your-content-list' },
 	        this.props.items.map(function (item) {
+	          var key = item.type ? item.id + item.type : item.id;
 	          return React.createElement(
 	            'li',
-	            { key: item.id, className: 'your-content-items' },
+	            { key: key, className: 'your-content-items' },
 	            React.createElement(
 	              'div',
 	              { className: 'your-content-items-image-container', onClick: function () {
@@ -38810,7 +38915,7 @@
 	                'div',
 	                { className: 'your-content-items-title',
 	                  onClick: function () {
-	                    hashHistory.push("" + item.author + "/" + this.props.typing + "/" + item.title);
+	                    hashHistory.push("" + item.author + "/" + item.type + "/" + item.title);
 	                  }.bind(this) },
 	                item.title
 	              ),
@@ -38847,6 +38952,159 @@
 	});
 
 	module.exports = YourContentAll;
+
+/***/ },
+/* 329 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//react
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(222),
+	    Modal = __webpack_require__(226),
+	    hashHistory = __webpack_require__(159).hashHistory;
+	//actions
+	var PlaylistClientActions = __webpack_require__(295);
+
+	//stores
+	var SessionStore = __webpack_require__(255),
+	    TrackStore = __webpack_require__(282),
+	    PlaylistStore = __webpack_require__(292),
+	    MusicStore = __webpack_require__(276);
+	//actions
+	var TrackClientActions = __webpack_require__(278);
+
+	var modalWidth = window.innerWidth * 0.7;
+	var modalHeight = window.innerHeight * 0.7;
+	var selected;
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.80)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    Height: modalHeight,
+	    width: '500px',
+	    height: modalHeight,
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: 'none',
+	    zIndex: 1001,
+	    maxWidth: '500px',
+	    overflowY: 'scroll',
+	    WebkitOverflowScrolling: 'touch'
+	  }
+	};
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+
+	var LikedItemModal = React.createClass({
+	  displayName: 'LikedItemModal',
+
+
+	  getInitialState: function () {
+	    return { modalOpen: false };
+	  },
+
+	  componentWillMount: function () {
+	    Modal.setAppElement('body');
+	  },
+
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+
+	  goToItem: function (like) {
+	    this.closeModal();
+	    hashHistory.push("/" + like.author + "/" + like.type + "/" + like.title);
+	  },
+
+	  goToAuthor: function (like) {
+
+	    this.closeModal();
+	    hashHistory.push("/" + like.author);
+	  },
+
+	  render: function () {
+
+	    var items;
+	    if (this.props.likes) {
+	      items = this.props.likes;
+	    } else {
+	      items = [];
+	    }
+	    console.log(items);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'track-sidebar-inplaylists-viewall', onClick: this.openModal },
+	        'view all'
+	      ),
+	      React.createElement(
+	        Modal,
+	        { className: 'likeditem-modal',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'ul',
+	          { className: 'inplaylists-modal-list' },
+	          items.map(function (item) {
+
+	            return React.createElement(
+	              'li',
+	              { key: item.id + item.type, className: 'inplaylists-modal-items' },
+	              React.createElement(
+	                'div',
+	                { className: 'inplaylists-modal-image-container',
+	                  onClick: function () {
+	                    if (item.type === "track") {
+	                      MusicStore.setMusic(item);
+	                    } else {
+	                      MusicStore.setMusic(undefined, item);
+	                    }
+	                  } },
+	                React.createElement('img', { className: 'inplaylists-modal-items-image', src: item.image_url }),
+	                React.createElement('img', { className: 'inplaylists-modal-items-play',
+	                  src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" })
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'inplaylists-modal-items-title', onClick: function () {
+	                    this.goToItem(item);
+	                  }.bind(this) },
+	                item.title
+	              ),
+	              React.createElement(
+	                'div',
+	                { className: 'inplaylists-modal-items-author', onClick: function () {
+	                    this.goToAuthor(item);
+	                  }.bind(this) },
+	                item.author
+	              )
+	            );
+	          }.bind(this))
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = LikedItemModal;
 
 /***/ }
 /******/ ]);

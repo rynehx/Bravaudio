@@ -180,13 +180,11 @@ var AudioPlayer = React.createClass({
 
 
     if(this.state.onRepeat){
-      repeatButton = <img className = "musicbar-repeat"
-        src ="http://res.cloudinary.com/bravaudio/image/upload/v1462432562/Untitled_Diagram_4_xrzaz3.svg"
-        onClick = {this.clickRepeat}></img>;
+      repeatButton = <div className = "musicbar-repeat"
+        onClick = {this.clickRepeat}>⟳</div>;
     }else{
-      repeatButton = <img className = "musicbar-repeat"
-        src ="http://res.cloudinary.com/bravaudio/image/upload/v1462432563/Untitled_Diagram_5_zuegqw.svg"
-        onClick = {this.clickRepeat}></img>;
+      repeatButton = <div className = "musicbar-repeat"
+        onClick = {this.clickRepeat}>⤨</div>;
     }
 
 

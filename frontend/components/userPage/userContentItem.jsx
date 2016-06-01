@@ -38,7 +38,7 @@ var UserContentItem = React.createClass({
             <div className = "user-content-items-play"
               onClick ={this.setMusic}></div>
             <div className = "user-content-items-header">
-              <a className = "user-content-items-author">{this.props.user}</a>
+              <a className = "user-content-items-author">{this.props.item.author}</a>
               <a className = "user-content-items-title" onClick = {this.gotToItem}>{this.props.item.title}</a>
             </div>
           </div>
@@ -48,7 +48,7 @@ var UserContentItem = React.createClass({
           </div>
 
           <div className = "user-content-items-bottom" >
-            
+
           </div>
 
         </div>

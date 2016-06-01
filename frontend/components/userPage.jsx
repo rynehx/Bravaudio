@@ -2,9 +2,11 @@
 var React = require('react'),
     hashHistory = require('react-router').hashHistory;
 //stores
-var UserStore = require('../stores/userStore');
+var UserStore = require('../stores/userStore'),
+    LikeStore = require('../stores/likeStore');
 //actions
-var UserClientActions = require('../actions/userClientActions');
+var UserClientActions = require('../actions/userClientActions'),
+    LikeClientActions = require('../actions/likeClientActions');
 //components
 var UserForeground = require('./userPage/userForeground'),
     UserSideBar = require('./userPage/userSideBar'),
@@ -17,7 +19,7 @@ var page;
 var UserPage = React.createClass({
   getInitialState: function () {
     return { user: {username: "", name: "", city: "",
-      country:"", state: ""} ,tabtype: this.initialTabSet()};
+      country:"", state: ""} ,tabtype: this.initialTabSet(), likes:[]};
   },
 
   initialTabSet: function(){
@@ -30,19 +32,32 @@ var UserPage = React.createClass({
 
   componentDidMount: function(){
     UserClientActions.fetchDisplayUser(this.props.params.user);
+
     this.userStoreListener = UserStore.addListener(this._onChange);
+    this.likesStoreListener = LikeStore.addListener(this._onLikeChange);
   },
 
   componentWillUnmount: function(){
     this.userStoreListener.remove();
+    this.likesStoreListener.remove();
   },
 
   componentWillReceiveProps: function(newprops){
     UserClientActions.fetchDisplayUser(newprops.params.user);
+    // LikeClientActions.fetchLikes("user",
+    // {username: newprops.params.user}, function(){1;});
   },
 
   _onChange: function(){
     this.setState({user:UserStore.currentDisplayUser(),tabtype: this.initialTabSet()});
+
+    LikeClientActions.fetchLikes("user",
+    UserStore.currentDisplayUser(), function(){1;});
+
+  },
+
+  _onLikeChange: function(){
+    this.setState({likes:LikeStore.fetchLikes()});
   },
 
   tabbed: function(type){
@@ -61,6 +76,7 @@ var UserPage = React.createClass({
   },
 
   render: function(){
+
     if(this.state.user === null){
       return (
         <div>
@@ -99,7 +115,7 @@ var UserPage = React.createClass({
 
           </div>
 
-          <UserSideBar user = {this.state.user}/>
+          <UserSideBar user = {this.state.user} likes = {this.state.likes}/>
         </div>
       </div>
       );

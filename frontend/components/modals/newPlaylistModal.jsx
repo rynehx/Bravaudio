@@ -57,7 +57,7 @@ var EditPlaylistModal = React.createClass({
       var container = document.getElementById("content");
       Modal.setAppElement(container);
       this.playliststorelistener = PlaylistStore.addListener(this._onAddToPlaylist);
-      PlaylistClientActions.fetchUserPlaylists(SessionStore.fetchCurrentUser().username);
+      PlaylistClientActions.fetchUserPlaylists({username: SessionStore.fetchCurrentUser().username});
     },
     componentWillUnmount: function(){
       this.playliststorelistener.remove();

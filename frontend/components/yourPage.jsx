@@ -83,6 +83,11 @@ var YourPage = React.createClass({
             Playlists
           </div>
 
+          <div className ={"your-content-tabitems"+this.tabbed("likes")}
+            onClick={function(){this.pushTabs("likes");
+                }.bind(this)} >
+            Likes
+          </div>
         </div>
         {this.props.children}
       </div>

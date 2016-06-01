@@ -33,8 +33,8 @@ var UserContentTab = React.createClass({
   componentDidMount: function(){
     this.trackstorelistener = TrackStore.addListener(this._onChangeTracks);
     this.playliststorelistener = PlaylistStore.addListener(this._onChangePlaylists);
-    PlaylistClientActions.fetchUserPlaylists(this.props.params.user);
-    TrackClientActions.fetchUserTracks(this.props.params.user);
+    PlaylistClientActions.fetchUserPlaylists({username: this.props.params.user});
+    TrackClientActions.fetchUserTracks({username: this.props.params.user});
    },
 
   _onChangeTracks: function(){

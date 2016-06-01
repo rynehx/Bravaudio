@@ -43,6 +43,7 @@
   font-weight: 200;
   font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .your-content-main{
@@ -115,6 +116,7 @@
   text-overflow: ellipsis;
   width: 140px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .your-content-items-author{
@@ -124,6 +126,7 @@
   white-space: nowrap;
   width: 140px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .your-content-topbar-text{

@@ -218,9 +218,9 @@ li.placeholder:before {
   position: absolute;
 }
 .inplaylists-modal-items-title{
-  font-size: 16px;
+  font-size: 12px;
   margin: 15px;
-  width: 130px;
+  width: 200px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -247,7 +247,7 @@ li.placeholder:before {
 
 
 .inplaylists-modal-items-author{
-  font-size: 12px;
+  font-size: 10px;
   margin: 15px;
   width: 100px;
   overflow: hidden;
@@ -305,4 +305,23 @@ li.placeholder:before {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.likeditem-modal{
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  background-color: white;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  border-style: none;
+  outline:0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;;
+  flex-direction: column;
+  padding: 5px;
 }

@@ -31,16 +31,16 @@
 .playlist-content{
   width: 100%;
   min-height: 490px;
-  border: 1px;
-  border-color: lightgrey;
+  border-right: 1px solid;
+  border-color: #CCCCCC;
   background-color: white;
   display: flex;
   flex-direction: column;
-  min-width: 500px;
   justify-content: flex-start;
   align-items: center;
   padding-bottom: 100px;
   min-width: 600px;
+
 }
 
 
@@ -49,8 +49,8 @@
 .playlist-sidebar{
   min-height: 490px;
   border: 1px;
-  border-color: lightgrey;
-  background-color: pink;
+  border-color: #CCCCCC;
+  background-color: white;
   min-width:315px;
   display: flex;
   flex-direction: column;
@@ -65,24 +65,29 @@
 }
 
 .playlist-sidebar-likes-header{
-  height: 30px;
+  height: 35px;
   border-bottom: 1px;
   border-style: solid;
   display: flex;
   align-items: center;
   font-size: 14px;
   margin: 10px 0px;
-  color: grey;
+  color: #CCCCCC;
   justify-content: space-between;
   cursor: default;
 }
 
-.playlist-sidebar-likes-items{
+.playlist-sidebar-like-items{
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
+
 }
 .playlist-sidebar-like-item{
-  cursor: pointer;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .playlist-sidebar-like-image{

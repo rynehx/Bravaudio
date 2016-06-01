@@ -32,6 +32,7 @@
   font-style: Sans-serif;
   width: 75px;
   height: 100%;
+  cursor: pointer;
 }
 
 .logged-out-nav {
@@ -89,7 +90,7 @@
   display: flex;
   align-items: center;
   border-radius: 20px 20px 20px 20px;
-
+  cursor: pointer;
 }
 
 .userprofile-image{

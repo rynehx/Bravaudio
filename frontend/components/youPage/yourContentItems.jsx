@@ -34,12 +34,11 @@ var YourContentItems = React.createClass({
     //   createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
     // }
 
-
     return (
       <div className = "your-content-main">
         <div className = "your-content-topbar">
           <div className = "your-content-topbar-text">
-          {"your " + this.props.typing + "s"}
+            {"your " + this.props.typing + "s"}
           </div>
 
         </div>
@@ -47,7 +46,8 @@ var YourContentItems = React.createClass({
         <ul className = "your-content-list">
           {
             this.props.items.map(function(item){
-              return <li key = {item.id} className = "your-content-items">
+              var key = item.type ? item.id+item.type : item.id;
+              return <li key = {key} className = "your-content-items">
                  <div className = "your-content-items-image-container" onClick = { function(){ if(item.tracks){
                    MusicStore.setMusic(undefined,item);
                  }else{
@@ -59,7 +59,7 @@ var YourContentItems = React.createClass({
                   <div className = "your-content-items-text" >
                     <div className = "your-content-items-title"
                       onClick = {function(){hashHistory.push("" + item.author +"/" +
-                        this.props.typing + "/" + item.title );}.bind(this)}>
+                        item.type + "/" + item.title );}.bind(this)}>
                       {item.title}
                     </div>
                     <div className = "your-content-items-author"
@@ -70,7 +70,7 @@ var YourContentItems = React.createClass({
                 </li>;
             }.bind(this))
           }
-      </ul>
+        </ul>
     </div>
     );
   }
