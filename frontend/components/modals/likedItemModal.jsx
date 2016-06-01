@@ -91,7 +91,7 @@ var LikedItemModal = React.createClass({
       }else{
         items = [];
       }
-      console.log(items)
+  
     return (
        <div >
          <div className="track-sidebar-inplaylists-viewall"   onClick={this.openModal}>view all</div>

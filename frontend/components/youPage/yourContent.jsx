@@ -65,13 +65,13 @@ var YourContent = React.createClass({
     //var content;
 
     if(this.props.params.tabtype==="tracks"){
-      return <YourContentItems items={this.state.tracks} typing = "track" />;
+      return <YourContentItems items={this.state.tracks} typing = "track"/>;
     }else if(this.props.params.tabtype==="playlists"){
-      return <YourContentItems items={this.state.playlists} typing = "playlist" />;
+      return <YourContentItems items={this.state.playlists} typing = "playlist"/>;
     }else if(this.props.params.tabtype==="likes"){
       return <YourContentItems items={this.state.likes} typing = "like" />;
     }else{
-      return <YourContentAll tracks={this.state.tracks} playlists = {this.state.playlists} />;
+      return <YourContentAll tracks={this.state.tracks} playlists = {this.state.playlists} likes = {this.state.likes} />;
     }
 
 

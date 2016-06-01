@@ -10,6 +10,7 @@
   align-items: center;
   height: 100%;
   min-height: 100%;
+  padding-bottom: 50px;
 }
 
 .yourpage-yourtabs {
@@ -48,7 +49,7 @@
 
 .your-content-main{
   width: 100%;
-  min-height: 700px;
+
   display: flex;
   flex-direction: column;
 }
@@ -58,7 +59,7 @@
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  padding-bottom: 100px;
+  min-height: 180px;
 }
 
 .your-content-topbar{
@@ -82,11 +83,69 @@
 
 .your-content-items{
   height: 190px;
-  width: 170px;
+  width: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin: 0px 15px;
+}
+
+.your-content-items-holder{
+  height: 190px;
+  width: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0px 15px;
+}
+
+.your-content-items-imageholder{
+  height: 136px;
+  width: 136px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #CCCCCC;
+}
+
+.your-content-items-textholder{
+  width: 140px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.your-content-items-viewall{
+  position: absolute;
+  min-height: 190px;
+  min-width: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.your-content-items-opaque{
+  opacity: 0.2;
+  background-color: white;
+  cursor: default;
+}
+
+.your-content-items-viewall-icon{
+  width: 100px;
+  height: 100px;
+  font-size: 20px;
+  background-color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  z-index: 11;
+  cursor: pointer;
+  margin-top: 20px;
 }
 
 .your-content-items-image-container{
@@ -103,11 +162,12 @@
 }
 
 .your-content-items-text{
+  width: 140px;
+  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
 }
 
 .your-content-items-title{

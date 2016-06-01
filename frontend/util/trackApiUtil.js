@@ -25,9 +25,15 @@ var TrackApiUtil = {
     $.ajax(request);
   },
   fetchUserTracks: function(user){
+    var field;
+    if(user.username){
+      field = user.username;
+    }else{
+      field = user;
+    }
     var request = {
       type:"GET",
-      url: "api/"+ user.username +"/tracks",
+      url: "api/"+ field +"/tracks",
       success: TrackServerActions.receiveUserTracks,
       error: function(){console.log("did not retrieve user tracks");}
     };

@@ -35068,9 +35068,15 @@
 	    $.ajax(request);
 	  },
 	  fetchUserTracks: function (user) {
+	    var field;
+	    if (user.username) {
+	      field = user.username;
+	    } else {
+	      field = user;
+	    }
 	    var request = {
 	      type: "GET",
-	      url: "api/" + user.username + "/tracks",
+	      url: "api/" + field + "/tracks",
 	      success: TrackServerActions.receiveUserTracks,
 	      error: function () {
 	        console.log("did not retrieve user tracks");
@@ -36176,10 +36182,15 @@
 	  },
 
 	  fetchUserPlaylists: function (user) {
-
+	    var field;
+	    if (user.username) {
+	      field = user.username;
+	    } else {
+	      field = user;
+	    }
 	    var request = {
 	      type: "get",
-	      url: "api/" + user.username + "/playlists",
+	      url: "api/" + field + "/playlists",
 	      success: function (data) {
 	        PlaylistServerActions.receiveUserPlaylists(data);
 	      },
@@ -37692,7 +37703,7 @@
 	    } else {
 	      items = [];
 	    }
-	    console.log(items);
+
 	    return React.createElement(
 	      'div',
 	      null,
@@ -38981,7 +38992,7 @@
 	    } else if (this.props.params.tabtype === "likes") {
 	      return React.createElement(YourContentItems, { items: this.state.likes, typing: 'like' });
 	    } else {
-	      return React.createElement(YourContentAll, { tracks: this.state.tracks, playlists: this.state.playlists });
+	      return React.createElement(YourContentAll, { tracks: this.state.tracks, playlists: this.state.playlists, likes: this.state.likes });
 	    }
 
 	    // return (
@@ -39005,6 +39016,8 @@
 	//stores
 	var MusicStore = __webpack_require__(276);
 
+	var threshold = 6;
+
 	var YourContentItems = React.createClass({
 	  displayName: 'YourContentItems',
 
@@ -39019,6 +39032,64 @@
 	    return function (e) {};
 	  },
 
+	  goToFullItems: function () {
+	    hashHistory.push("you/" + this.props.typing + "s");
+	  },
+
+	  _getItems: function (item, injElement) {
+	    if (injElement) {
+	      var opaque = " your-content-items-opaque";
+	    } else {
+	      var playbutton = React.createElement('img', { src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg',
+	        className: 'your-content-items-imageplay' });
+	      var opaque = "";
+	    }
+	    var typing;
+	    if (item.type) {
+	      typing = item.type;
+	    } else {
+	      typing = this.props.typing;
+	    }
+	    var key = item.type ? item.id + item.type : item.id;
+	    return React.createElement(
+	      'li',
+	      { key: key, className: "your-content-items" },
+	      injElement,
+	      React.createElement(
+	        'div',
+	        { className: 'your-content-items-image-container', onClick: function () {
+	            if (item.tracks) {
+	              MusicStore.setMusic(undefined, item);
+	            } else {
+	              MusicStore.setMusic(item);
+	            }
+	          } },
+	        React.createElement('img', { className: "your-content-items-image" + opaque, src: item.image_url }),
+	        playbutton
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: "your-content-items-text" + opaque },
+	        React.createElement(
+	          'div',
+	          { className: 'your-content-items-title',
+	            onClick: function () {
+	              hashHistory.push("" + item.author + "/" + typing + "/" + item.title);
+	            }.bind(this) },
+	          item.title
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'your-content-items-author',
+	            onClick: function () {
+	              hashHistory.push("" + item.author);
+	            } },
+	          item.author
+	        )
+	      )
+	    );
+	  },
+
 	  render: function () {
 	    //
 	    // var createButton;
@@ -39028,6 +39099,37 @@
 	    // }else if(this.props.typing==="playlist"){
 	    //   createButton = <PlaylistModal typing = "Playlists" items = {this.props.items}/>;
 	    // }
+
+	    var page = this.props.items.map(function (item) {
+	      return this._getItems(item);
+	    }.bind(this));
+
+	    var pageLength = page.length;
+	    if (this.props.all === true && page.length > 0) {
+	      var page = page.slice(0, threshold);
+
+	      if (pageLength < threshold) {
+	        for (var i = 0; i < threshold - pageLength; i++) {
+	          page.push(React.createElement(
+	            'div',
+	            { key: i + "holder", className: 'your-content-items-holder' },
+	            React.createElement('div', { className: 'your-content-items-imageholder' }),
+	            React.createElement('div', { className: 'your-content-items-textholder' })
+	          ));
+	        }
+	      } else {
+	        var viewAllDom = React.createElement(
+	          'div',
+	          { className: 'your-content-items-viewall' },
+	          React.createElement(
+	            'div',
+	            { className: 'your-content-items-viewall-icon', onClick: this.goToFullItems },
+	            'view all'
+	          )
+	        );
+	        page[threshold - 1] = this._getItems(this.props.items[threshold - 1], viewAllDom);
+	      }
+	    }
 
 	    return React.createElement(
 	      'div',
@@ -39044,45 +39146,7 @@
 	      React.createElement(
 	        'ul',
 	        { className: 'your-content-list' },
-	        this.props.items.map(function (item) {
-	          var key = item.type ? item.id + item.type : item.id;
-	          return React.createElement(
-	            'li',
-	            { key: key, className: 'your-content-items' },
-	            React.createElement(
-	              'div',
-	              { className: 'your-content-items-image-container', onClick: function () {
-	                  if (item.tracks) {
-	                    MusicStore.setMusic(undefined, item);
-	                  } else {
-	                    MusicStore.setMusic(item);
-	                  }
-	                } },
-	              React.createElement('img', { className: 'your-content-items-image', src: item.image_url }),
-	              React.createElement('img', { src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg', className: 'your-content-items-imageplay' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'your-content-items-text' },
-	              React.createElement(
-	                'div',
-	                { className: 'your-content-items-title',
-	                  onClick: function () {
-	                    hashHistory.push("" + item.author + "/" + item.type + "/" + item.title);
-	                  }.bind(this) },
-	                item.title
-	              ),
-	              React.createElement(
-	                'div',
-	                { className: 'your-content-items-author',
-	                  onClick: function () {
-	                    hashHistory.push("" + item.author);
-	                  } },
-	                item.author
-	              )
-	            )
-	          );
-	        }.bind(this))
+	        page
 	      )
 	    );
 	  }
@@ -39095,12 +39159,19 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var YourContentItems = __webpack_require__(328);
 
 	var YourContentAll = React.createClass({
 	  displayName: 'YourContentAll',
 
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      { className: 'your-content-main' },
+	      React.createElement(YourContentItems, { items: this.props.tracks, typing: 'track', all: true }),
+	      React.createElement(YourContentItems, { items: this.props.playlists, typing: 'playlist', all: true }),
+	      React.createElement(YourContentItems, { items: this.props.likes, typing: 'like', all: true })
+	    );
 	  }
 	});
 
