@@ -3,25 +3,32 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
     SearchConstants = require('../constants/searchConstants');
 
 
-var _searches = [];
-
+var _searchedTracks = [];
+var _searchedPlaylists = [];
+var _searchedUsers = [];
 
 var SearchStore = new Store(AppDispatcher);
 SearchStore.fetchSearchBar = function(){
-  return _searches;
+  return _searchedTracks.concat(_searchedPlaylists,_searchedUsers);
 };
 
 SearchStore.fetchSearchPage = function(){
-  return _searches;
+  return _searchedTracks.concat(_searchedPlaylists,_searchedUsers);
 };
 
+
+
 SearchStore.receivedSearchBar = function(searches){
-  _searches = searches;
+  _searchedTracks = searches.tracks;
+  _searchedPlaylists = searches.playlists;
+  _searchedUsers = searches.users;
   this.__emitChange();
 };
 
 SearchStore.receivedSearchPage = function(searches){
-  _searches = searches;
+  _searchedTracks = searches.tracks;
+  _searchedPlaylists = searches.playlists;
+  _searchedUsers = searches.users;
   this.__emitChange();
 };
 

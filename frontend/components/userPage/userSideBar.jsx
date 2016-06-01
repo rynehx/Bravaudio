@@ -18,7 +18,7 @@ var UserSideBar = React.createClass({
   },
 
   render: function(){
-    console.log(this.props.likes)
+
     if(this.props.likes && this.props.likes.length > 0){
 
       var likes = this.props.likes.slice(0,5).map(function(like){

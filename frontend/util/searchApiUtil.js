@@ -5,7 +5,7 @@ var SearchServerActions = require('../actions/searchServerActions');
 var SearchApiUtils = {
   getSearchBarQuery: function(query){
     var request = {
-      url:"",
+      url:"api/search/" + query,
       type:"GET",
       success: SearchServerActions.receiveSearchBarQuery,
       error: function(){

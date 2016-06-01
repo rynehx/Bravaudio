@@ -113,6 +113,44 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.searchbar-top{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchbar-bottom{
+  position: absolute;
+  width: 100%;
+}
+
+.searchbar-items{
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.searchbar-items-image{
+  width: 35px;
+  height: 35px;
+}
+
+.searchbar-items-main{
+  font-size: 12px;
+}
+
+.searchbar-items-author{
+  font-size: 10px;
+  color: lightgrey;
 }
 
 .searchbar-inner{

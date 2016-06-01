@@ -55,14 +55,14 @@
 	    hashHistory = ReactRouter.hashHistory;
 	//Components
 	var NavBar = __webpack_require__(220),
-	    MusicBar = __webpack_require__(281),
-	    HomePage = __webpack_require__(286),
-	    UploadPage = __webpack_require__(290),
-	    TrackPage = __webpack_require__(291),
-	    UserPage = __webpack_require__(306),
-	    PlaylistPage = __webpack_require__(316),
-	    SplashPage = __webpack_require__(323),
-	    YourPage = __webpack_require__(324),
+	    MusicBar = __webpack_require__(286),
+	    HomePage = __webpack_require__(291),
+	    UploadPage = __webpack_require__(295),
+	    TrackPage = __webpack_require__(296),
+	    UserPage = __webpack_require__(311),
+	    PlaylistPage = __webpack_require__(321),
+	    SplashPage = __webpack_require__(328),
+	    YourPage = __webpack_require__(329),
 	    SearchPage = __webpack_require__(330);
 
 	//Sessions
@@ -71,9 +71,9 @@
 	    SessionStore = __webpack_require__(255);
 
 	//userpage components
-	var UserContentTab = __webpack_require__(325);
+	var UserContentTab = __webpack_require__(331);
 	//yourpage components
-	var YourContent = __webpack_require__(327);
+	var YourContent = __webpack_require__(333);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -25265,7 +25265,7 @@
 	//Mixins
 	var SessionStore = __webpack_require__(255),
 	    SessionActions = __webpack_require__(246),
-	    MusicStore = __webpack_require__(276);
+	    MusicStore = __webpack_require__(281);
 
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -34839,11 +34839,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
-	var React = __webpack_require__(1);
+	var React = __webpack_require__(1),
+	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var SearchStore = __webpack_require__(331);
+	var SearchStore = __webpack_require__(276);
 	//actions
-	var SearchClientActions = __webpack_require__(333);
+	var SearchClientActions = __webpack_require__(278);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -34865,29 +34866,75 @@
 	    this.setState({ searches: SearchStore.fetchSearchBar() });
 	  },
 
-	  search: function () {
-	    SearchClientActions.getSearchBarQuery(this.state.searchquery);
+	  search: function (query) {
+	    SearchClientActions.getSearchBarQuery(query);
+	  },
+
+	  emptySearch: function () {
+	    this.setState({ searches: [] });
+	  },
+
+	  populateSearch: function () {
+	    this.setState({ searches: SearchStore.fetchSearchBar() });
 	  },
 
 	  changeSearchQuery: function (event) {
 	    this.setState({ searchquery: event.target.value });
-	    if (event.target.value.length > 4) {
-	      this.search();
+	    if (event.target.value.length > 0) {
+	      this.search(event.target.value);
+	    } else {
+	      this.emptySearch();
+	    }
+	  },
+
+	  goToPage: function (searchItem) {
+	    if (searchItem.type === "user") {
+	      hashHistory.push("/" + searchItem.title);
+	    } else {
+	      hashHistory.push("/" + searchItem.author + "/" + searchItem.type + "/" + searchItem.title);
 	    }
 	  },
 
 	  goToSearchPage: function () {},
 
 	  render: function () {
+
 	    return React.createElement(
 	      'div',
 	      { className: 'searchbar' },
-	      React.createElement('input', { className: 'searchbar-inner', placeholder: 'search',
-	        onChange: this.changeSearchQuery }),
 	      React.createElement(
 	        'div',
-	        { onClick: this.goToSearchPage },
-	        'go'
+	        { className: 'searchbar-top' },
+	        React.createElement('input', { className: 'searchbar-inner', placeholder: 'search',
+	          onChange: this.changeSearchQuery, onBlur: this.emptySearch, onFocus: this.populateSearch }),
+	        React.createElement(
+	          'div',
+	          { onClick: this.goToSearchPage },
+	          'go'
+	        )
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'searchbar-bottom' },
+	        this.state.searches.slice(0, 6).map(function (search) {
+	          return React.createElement(
+	            'li',
+	            { key: search.id + search.type, className: 'searchbar-items', onMouseDown: function () {
+	                this.goToPage(search);
+	              }.bind(this) },
+	            React.createElement('img', { className: 'searchbar-items-image', src: search.image_url }),
+	            React.createElement(
+	              'div',
+	              { className: 'searchbar-items-main' },
+	              search.title
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'searchbar-items-author' },
+	              search.author
+	            )
+	          );
+	        }.bind(this))
 	      )
 	    );
 	  }
@@ -34901,7 +34948,118 @@
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    trackConstants = __webpack_require__(277);
+	    SearchConstants = __webpack_require__(277);
+
+	var _searchedTracks = [];
+	var _searchedPlaylists = [];
+	var _searchedUsers = [];
+
+	var SearchStore = new Store(AppDispatcher);
+	SearchStore.fetchSearchBar = function () {
+	  return _searchedTracks.concat(_searchedPlaylists, _searchedUsers);
+	};
+
+	SearchStore.fetchSearchPage = function () {
+	  return _searchedTracks.concat(_searchedPlaylists, _searchedUsers);
+	};
+
+	SearchStore.receivedSearchBar = function (searches) {
+	  _searchedTracks = searches.tracks;
+	  _searchedPlaylists = searches.playlists;
+	  _searchedUsers = searches.users;
+	  this.__emitChange();
+	};
+
+	SearchStore.receivedSearchPage = function (searches) {
+	  _searchedTracks = searches.tracks;
+	  _searchedPlaylists = searches.playlists;
+	  _searchedUsers = searches.users;
+	  this.__emitChange();
+	};
+
+	SearchStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVESEARCHBAR:
+	      SearchStore.receivedSearchBar(payload.searches);
+	      break;
+	    case SearchConstants.RECEIVESEARCHPAGE:
+	      SearchStore.receivedSearchPage(payload.searches);
+	      break;
+	  }
+	};
+
+	module.exports = SearchStore;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  RECEIVESEARCHBAR: "RECEIVESEARCHBAR"
+	};
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchApiUtils = __webpack_require__(279);
+
+	var SearchClientActions = {
+	  getSearchBarQuery: SearchApiUtils.getSearchBarQuery
+	};
+
+	module.exports = SearchClientActions;
+
+/***/ },
+/* 279 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(247);
+	//actions
+	var SearchServerActions = __webpack_require__(280);
+
+	var SearchApiUtils = {
+	  getSearchBarQuery: function (query) {
+	    var request = {
+	      url: "api/search/" + query,
+	      type: "GET",
+	      success: SearchServerActions.receiveSearchBarQuery,
+	      error: function () {
+	        console.log("search not fetches");
+	      }
+	    };
+
+	    $.ajax(request);
+	  }
+	};
+
+	module.exports = SearchApiUtils;
+
+/***/ },
+/* 280 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(247),
+	    SearchConstants = __webpack_require__(277);
+
+	var SearchServerActions = {
+	  receiveSearchBarQuery: function (searches) {
+	    Dispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVESEARCHBAR,
+	      searches: searches
+	    });
+	  }
+	};
+
+	module.exports = SearchServerActions;
+
+/***/ },
+/* 281 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(247),
+	    Store = __webpack_require__(256).Store,
+	    trackConstants = __webpack_require__(282);
 
 	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
 	    _currentTrack = { title: "", audio_url: "", image_url: "", id: null },
@@ -34909,7 +35067,7 @@
 	    _onRepeat = true,
 	    _repeatedSong = false;
 
-	var TrackClientActions = __webpack_require__(278);
+	var TrackClientActions = __webpack_require__(283);
 
 	var MusicStore = new Store(AppDispatcher);
 
@@ -35040,7 +35198,7 @@
 	module.exports = MusicStore;
 
 /***/ },
-/* 277 */
+/* 282 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35052,10 +35210,10 @@
 	};
 
 /***/ },
-/* 278 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackApiUtil = __webpack_require__(279);
+	var TrackApiUtil = __webpack_require__(284);
 
 	var TrackClientActions = {
 	  fetchTopChart: function () {
@@ -35081,10 +35239,10 @@
 	module.exports = TrackClientActions;
 
 /***/ },
-/* 279 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackServerActions = __webpack_require__(280);
+	var TrackServerActions = __webpack_require__(285);
 
 	var TrackApiUtil = {
 
@@ -35158,11 +35316,11 @@
 	module.exports = TrackApiUtil;
 
 /***/ },
-/* 280 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    trackConstants = __webpack_require__(277);
+	    trackConstants = __webpack_require__(282);
 
 	var TrackServerActions = {
 	  receiveTracks: function (tracks) {
@@ -35199,7 +35357,7 @@
 	module.exports = TrackServerActions;
 
 /***/ },
-/* 281 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35208,11 +35366,11 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    MusicStore = __webpack_require__(281);
 	//components
-	var AudioPlayer = __webpack_require__(283),
-	    AudioDisplay = __webpack_require__(285);
+	var AudioPlayer = __webpack_require__(288),
+	    AudioDisplay = __webpack_require__(290);
 
 	var hidden;
 
@@ -35256,12 +35414,12 @@
 	module.exports = MusicBar;
 
 /***/ },
-/* 282 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    TrackConstants = __webpack_require__(277);
+	    TrackConstants = __webpack_require__(282);
 
 	var _tracks = {};
 	var _displayTrack;
@@ -35331,15 +35489,15 @@
 	module.exports = TrackStore;
 
 /***/ },
-/* 283 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(284);
+	    classNames = __webpack_require__(289);
 
 	//stores
-	var MusicStore = __webpack_require__(276);
+	var MusicStore = __webpack_require__(281);
 
 	var actionButton;
 	var clickdown = false;
@@ -35618,7 +35776,7 @@
 	module.exports = AudioPlayer;
 
 /***/ },
-/* 284 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35672,7 +35830,7 @@
 
 
 /***/ },
-/* 285 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35681,8 +35839,8 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    MusicStore = __webpack_require__(281);
 
 	var AudioDisplay = React.createClass({
 	  displayName: 'AudioDisplay',
@@ -35741,7 +35899,7 @@
 	module.exports = AudioDisplay;
 
 /***/ },
-/* 286 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35749,8 +35907,8 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//Components
-	var HomeContent = __webpack_require__(287),
-	    HomeSideBar = __webpack_require__(289);
+	var HomeContent = __webpack_require__(292),
+	    HomeSideBar = __webpack_require__(294);
 
 	var HomePage = React.createClass({
 	  displayName: 'HomePage',
@@ -35780,13 +35938,13 @@
 	module.exports = HomePage;
 
 /***/ },
-/* 287 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(282),
-	    TrackClientActions = __webpack_require__(278),
-	    HomeTracks = __webpack_require__(288);
+	    TrackStore = __webpack_require__(287),
+	    TrackClientActions = __webpack_require__(283),
+	    HomeTracks = __webpack_require__(293);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -35823,11 +35981,11 @@
 	module.exports = HomeContent;
 
 /***/ },
-/* 288 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    MusicStore = __webpack_require__(276),
+	    MusicStore = __webpack_require__(281),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var HomeTracks = React.createClass({
@@ -35873,7 +36031,7 @@
 	module.exports = HomeTracks;
 
 /***/ },
-/* 289 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35890,7 +36048,7 @@
 	module.exports = HomeSideBar;
 
 /***/ },
-/* 290 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35926,7 +36084,7 @@
 	module.exports = UploadPage;
 
 /***/ },
-/* 291 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35934,18 +36092,18 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    LikeStore = __webpack_require__(294);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    LikeStore = __webpack_require__(299);
 	//actions
-	var TrackClientActions = __webpack_require__(278),
-	    PlaylistClientActions = __webpack_require__(295),
-	    LikeClientActions = __webpack_require__(298);
+	var TrackClientActions = __webpack_require__(283),
+	    PlaylistClientActions = __webpack_require__(300),
+	    LikeClientActions = __webpack_require__(303);
 	//components
-	var TrackContent = __webpack_require__(299),
-	    TrackSideBar = __webpack_require__(301),
-	    TrackForeground = __webpack_require__(304),
-	    TrackNotFound = __webpack_require__(305);
+	var TrackContent = __webpack_require__(304),
+	    TrackSideBar = __webpack_require__(306),
+	    TrackForeground = __webpack_require__(309),
+	    TrackNotFound = __webpack_require__(310);
 
 	var TrackPage = React.createClass({
 	  displayName: 'TrackPage',
@@ -36016,12 +36174,12 @@
 	module.exports = TrackPage;
 
 /***/ },
-/* 292 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    PlaylistConstants = __webpack_require__(293);
+	    PlaylistConstants = __webpack_require__(298);
 
 	var _displayPlaylist = [];
 	var _playlists;
@@ -36094,7 +36252,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 293 */
+/* 298 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -36106,7 +36264,7 @@
 	};
 
 /***/ },
-/* 294 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
@@ -36138,10 +36296,10 @@
 	module.exports = LikeStore;
 
 /***/ },
-/* 295 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(296);
+	var PlaylistApiUtil = __webpack_require__(301);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36185,10 +36343,10 @@
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 296 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(297);
+	var PlaylistServerActions = __webpack_require__(302);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36326,11 +36484,11 @@
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 297 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    PlaylistConstants = __webpack_require__(293);
+	    PlaylistConstants = __webpack_require__(298);
 
 	var PlaylistServerActions = {
 	  receiveDisplayPlaylist: function (playlist) {
@@ -36369,7 +36527,7 @@
 	module.exports = PlaylistServerActions;
 
 /***/ },
-/* 298 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionApiUtil = __webpack_require__(252);
@@ -36385,18 +36543,18 @@
 	module.exports = LikeClientActions;
 
 /***/ },
-/* 299 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(282),
+	    TrackStore = __webpack_require__(287),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var NewPlaylistModal = __webpack_require__(300);
+	var NewPlaylistModal = __webpack_require__(305);
 	//actions
-	var LikeClientActions = __webpack_require__(298);
-	var TrackClientActions = __webpack_require__(278);
+	var LikeClientActions = __webpack_require__(303);
+	var TrackClientActions = __webpack_require__(283);
 	var SessionActions = __webpack_require__(246);
 	//stores
 	var SessionStore = __webpack_require__(255);
@@ -36525,7 +36683,7 @@
 	module.exports = TrackContent;
 
 /***/ },
-/* 300 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36534,15 +36692,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    MusicStore = __webpack_require__(281);
 	//actions
-	var TrackClientActions = __webpack_require__(278);
+	var TrackClientActions = __webpack_require__(283);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -36794,17 +36952,17 @@
 	module.exports = EditPlaylistModal;
 
 /***/ },
-/* 301 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var InPlaylistModal = __webpack_require__(302),
-	    LikesModal = __webpack_require__(303);
+	var InPlaylistModal = __webpack_require__(307),
+	    LikesModal = __webpack_require__(308);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282);
+	    TrackStore = __webpack_require__(287);
 
 	var TrackSideBar = React.createClass({
 	  displayName: 'TrackSideBar',
@@ -36932,7 +37090,7 @@
 	module.exports = TrackSideBar;
 
 /***/ },
-/* 302 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36941,15 +37099,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    MusicStore = __webpack_require__(281);
 	//actions
-	var TrackClientActions = __webpack_require__(278);
+	var TrackClientActions = __webpack_require__(283);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37066,7 +37224,7 @@
 	module.exports = InPlaylistModal;
 
 /***/ },
-/* 303 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37075,15 +37233,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    MusicStore = __webpack_require__(281);
 	//actions
-	var TrackClientActions = __webpack_require__(278);
+	var TrackClientActions = __webpack_require__(283);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37176,16 +37334,16 @@
 	module.exports = LikesModal;
 
 /***/ },
-/* 304 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(282),
+	    TrackStore = __webpack_require__(287),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//stores
-	var MusicStore = __webpack_require__(276);
+	var MusicStore = __webpack_require__(281);
 
 	var TrackForeground = React.createClass({
 	  displayName: 'TrackForeground',
@@ -37242,7 +37400,7 @@
 	module.exports = TrackForeground;
 
 /***/ },
-/* 305 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37264,22 +37422,22 @@
 	module.exports = TrackNotFound;
 
 /***/ },
-/* 306 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(307),
-	    LikeStore = __webpack_require__(294);
+	var UserStore = __webpack_require__(312),
+	    LikeStore = __webpack_require__(299);
 	//actions
-	var UserClientActions = __webpack_require__(309),
-	    LikeClientActions = __webpack_require__(298);
+	var UserClientActions = __webpack_require__(314),
+	    LikeClientActions = __webpack_require__(303);
 	//components
-	var UserForeground = __webpack_require__(312),
-	    UserSideBar = __webpack_require__(313),
-	    UserNotFound = __webpack_require__(315);
+	var UserForeground = __webpack_require__(317),
+	    UserSideBar = __webpack_require__(318),
+	    UserNotFound = __webpack_require__(320);
 
 	var page;
 
@@ -37402,12 +37560,12 @@
 	module.exports = UserPage;
 
 /***/ },
-/* 307 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    UserConstants = __webpack_require__(308);
+	    UserConstants = __webpack_require__(313);
 
 	var _displayUser = null;
 
@@ -37442,7 +37600,7 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 308 */
+/* 313 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -37451,10 +37609,10 @@
 	};
 
 /***/ },
-/* 309 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(310);
+	var UserApiUtil = __webpack_require__(315);
 
 	var UserClientActions = {
 
@@ -37466,10 +37624,10 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 310 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserServerActions = __webpack_require__(311);
+	var UserServerActions = __webpack_require__(316);
 
 	var UserApiUtil = {
 	  fetchDisplayUser: function (username) {
@@ -37492,11 +37650,11 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 311 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    UserConstants = __webpack_require__(308);
+	    UserConstants = __webpack_require__(313);
 
 	var UserServerActions = {
 	  receivedDisplayUser: function (user) {
@@ -37515,7 +37673,7 @@
 	module.exports = UserServerActions;
 
 /***/ },
-/* 312 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -37575,14 +37733,14 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 313 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(307),
+	    UserStore = __webpack_require__(312),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var LikedItemModal = __webpack_require__(314);
+	var LikedItemModal = __webpack_require__(319);
 
 	var UserSideBar = React.createClass({
 	  displayName: 'UserSideBar',
@@ -37597,7 +37755,7 @@
 	  },
 
 	  render: function () {
-	    console.log(this.props.likes);
+
 	    if (this.props.likes && this.props.likes.length > 0) {
 
 	      var likes = this.props.likes.slice(0, 5).map(function (like) {
@@ -37654,7 +37812,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 314 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37663,15 +37821,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    MusicStore = __webpack_require__(281);
 	//actions
-	var TrackClientActions = __webpack_require__(278);
+	var TrackClientActions = __webpack_require__(283);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37807,7 +37965,7 @@
 	module.exports = LikedItemModal;
 
 /***/ },
-/* 315 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37829,7 +37987,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 316 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37837,16 +37995,16 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(255),
-	    PlaylistStore = __webpack_require__(292),
-	    LikeStore = __webpack_require__(294);
+	    PlaylistStore = __webpack_require__(297),
+	    LikeStore = __webpack_require__(299);
 	//actions
-	var PlaylistClientActions = __webpack_require__(295),
-	    LikeClientActions = __webpack_require__(298);
+	var PlaylistClientActions = __webpack_require__(300),
+	    LikeClientActions = __webpack_require__(303);
 	//components
-	var PlaylistContent = __webpack_require__(317),
-	    PlaylistSideBar = __webpack_require__(320),
-	    PlaylistForeground = __webpack_require__(321),
-	    PlaylistNotFound = __webpack_require__(322);
+	var PlaylistContent = __webpack_require__(322),
+	    PlaylistSideBar = __webpack_require__(325),
+	    PlaylistForeground = __webpack_require__(326),
+	    PlaylistNotFound = __webpack_require__(327);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -37909,21 +38067,21 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 317 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
-	var LikeClientActions = __webpack_require__(298);
+	var PlaylistClientActions = __webpack_require__(300);
+	var LikeClientActions = __webpack_require__(303);
 	var SessionActions = __webpack_require__(246);
 	//components
-	var PlaylistContentItems = __webpack_require__(318);
-	var EditPlaylistModal = __webpack_require__(319);
+	var PlaylistContentItems = __webpack_require__(323);
+	var EditPlaylistModal = __webpack_require__(324);
 	///stores
-	var PlaylistStore = __webpack_require__(292);
+	var PlaylistStore = __webpack_require__(297);
 	var SessionStore = __webpack_require__(255);
 
 	var PlaylistContent = React.createClass({
@@ -38056,19 +38214,19 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 318 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory,
-	    MusicStore = __webpack_require__(276);
+	    MusicStore = __webpack_require__(281);
 	//components
-	var NewPlaylistModal = __webpack_require__(300);
+	var NewPlaylistModal = __webpack_require__(305);
 	//actions
-	var LikeClientActions = __webpack_require__(298);
+	var LikeClientActions = __webpack_require__(303);
 	var SessionActions = __webpack_require__(246);
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	var PlaylistContentItem = React.createClass({
 	  displayName: 'PlaylistContentItem',
@@ -38186,7 +38344,7 @@
 	module.exports = PlaylistContentItem;
 
 /***/ },
-/* 319 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -38195,7 +38353,7 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(295);
+	var PlaylistClientActions = __webpack_require__(300);
 
 	//stores
 	var SessionStore = __webpack_require__(255);
@@ -38489,17 +38647,17 @@
 	module.exports = EditPlaylistModal;
 
 /***/ },
-/* 320 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(297),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
-	var LikesModal = __webpack_require__(303);
+	var LikesModal = __webpack_require__(308);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282);
+	    TrackStore = __webpack_require__(287);
 
 	var PlaylistSideBar = React.createClass({
 	  displayName: 'PlaylistSideBar',
@@ -38565,14 +38723,14 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 321 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var MusicStore = __webpack_require__(276);
+	var MusicStore = __webpack_require__(281);
 
 	var PlaylistForeground = React.createClass({
 	  displayName: 'PlaylistForeground',
@@ -38630,11 +38788,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 322 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(297),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -38655,7 +38813,7 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 323 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38686,7 +38844,7 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 324 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -38695,7 +38853,7 @@
 	//stores
 
 	//actions
-	var UserClientActions = __webpack_require__(309);
+	var UserClientActions = __webpack_require__(314);
 
 	var YourPage = React.createClass({
 	  displayName: 'YourPage',
@@ -38796,21 +38954,58 @@
 	module.exports = YourPage;
 
 /***/ },
-/* 325 */
+/* 330 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SearchStore = __webpack_require__(276);
+
+	var SearchPage = React.createClass({
+	  displayName: 'SearchPage',
+
+	  getInitialState: function () {
+	    return { searches: [] };
+	  },
+
+	  componentDidMount: function () {
+	    this.searchstorelistener = SearchStore.addListener(this._onChange);
+	  },
+
+	  componentWillUnmount: function () {
+	    this.searchstorelistener.remove();
+	  },
+
+	  _onChange: function () {
+	    this.setState({ searches: SearchStore.fetchSearchPage() });
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'searchpage' },
+	      'search page'
+	    );
+	  }
+	});
+
+	module.exports = SearchPage;
+
+/***/ },
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
-	var UserStore = __webpack_require__(307),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292);
+	var UserStore = __webpack_require__(312),
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297);
 
 	//actions
-	var TrackClientActions = __webpack_require__(278),
-	    PlaylistClientActions = __webpack_require__(295);
+	var TrackClientActions = __webpack_require__(283),
+	    PlaylistClientActions = __webpack_require__(300);
 	//components
-	var UserContentItem = __webpack_require__(326);
+	var UserContentItem = __webpack_require__(332);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -38887,14 +39082,14 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 326 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var MusicStore = __webpack_require__(276);
+	var MusicStore = __webpack_require__(281);
 
 	var UserContentItem = React.createClass({
 	  displayName: "UserContentItem",
@@ -38957,25 +39152,25 @@
 	module.exports = UserContentItem;
 
 /***/ },
-/* 327 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//components
-	var YourContentItems = __webpack_require__(328),
-	    YourContentAll = __webpack_require__(329);
+	var YourContentItems = __webpack_require__(334),
+	    YourContentAll = __webpack_require__(335);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(282),
-	    PlaylistStore = __webpack_require__(292),
-	    MusicStore = __webpack_require__(276),
-	    LikeStore = __webpack_require__(294);
+	    TrackStore = __webpack_require__(287),
+	    PlaylistStore = __webpack_require__(297),
+	    MusicStore = __webpack_require__(281),
+	    LikeStore = __webpack_require__(299);
 	//actions
-	var TrackClientActions = __webpack_require__(278),
-	    PlaylistClientActions = __webpack_require__(295),
-	    LikeClientActions = __webpack_require__(298);
+	var TrackClientActions = __webpack_require__(283),
+	    PlaylistClientActions = __webpack_require__(300),
+	    LikeClientActions = __webpack_require__(303);
 
 	var list = ["tracks", "playlists"];
 
@@ -39047,15 +39242,15 @@
 	module.exports = YourContent;
 
 /***/ },
-/* 328 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var editPlaylistModal = __webpack_require__(319);
+	var editPlaylistModal = __webpack_require__(324);
 	//stores
-	var MusicStore = __webpack_require__(276);
+	var MusicStore = __webpack_require__(281);
 
 	var threshold = 6;
 
@@ -39196,11 +39391,11 @@
 	module.exports = YourContentItems;
 
 /***/ },
-/* 329 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var YourContentItems = __webpack_require__(328);
+	var YourContentItems = __webpack_require__(334);
 
 	var YourContentAll = React.createClass({
 	  displayName: 'YourContentAll',
@@ -39217,148 +39412,6 @@
 	});
 
 	module.exports = YourContentAll;
-
-/***/ },
-/* 330 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SearchStore = __webpack_require__(331);
-
-	var SearchPage = React.createClass({
-	  displayName: 'SearchPage',
-
-	  getInitialState: function () {
-	    return { searches: [] };
-	  },
-
-	  componentDidMount: function () {
-	    this.searchstorelistener = SearchStore.addListener(this._onChange);
-	  },
-
-	  componentWillUnmount: function () {
-	    this.searchstorelistener.remove();
-	  },
-
-	  _onChange: function () {
-	    this.setState({ searches: SearchStore.fetchSearchPage() });
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'searchpage' },
-	      'search page'
-	    );
-	  }
-	});
-
-	module.exports = SearchPage;
-
-/***/ },
-/* 331 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(247),
-	    Store = __webpack_require__(256).Store,
-	    SearchConstants = __webpack_require__(332);
-
-	var _searches = [];
-
-	var SearchStore = new Store(AppDispatcher);
-	SearchStore.fetchSearchBar = function () {
-	  return _searches;
-	};
-
-	SearchStore.fetchSearchPage = function () {
-	  return _searches;
-	};
-
-	SearchStore.receivedSearchBar = function (searches) {
-	  _searches = searches;
-	  this.__emitChange();
-	};
-
-	SearchStore.receivedSearchPage = function (searches) {
-	  _searches = searches;
-	  this.__emitChange();
-	};
-
-	SearchStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case SearchConstants.RECEIVESEARCHBAR:
-	      SearchStore.receivedSearchBar(payload.searches);
-	      break;
-	    case SearchConstants.RECEIVESEARCHPAGE:
-	      SearchStore.receivedSearchPage(payload.searches);
-	      break;
-	  }
-	};
-
-	module.exports = SearchStore;
-
-/***/ },
-/* 332 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  RECEIVESEARCHBAR: "RECEIVESEARCHBAR"
-	};
-
-/***/ },
-/* 333 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SearchApiUtils = __webpack_require__(334);
-
-	var SearchClientActions = {
-	  getSearchBarQuery: SearchApiUtils.getSearchBarQuery
-	};
-
-	module.exports = SearchClientActions;
-
-/***/ },
-/* 334 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(247);
-	//actions
-	var SearchServerActions = __webpack_require__(335);
-
-	var SearchApiUtils = {
-	  getSearchBarQuery: function (query) {
-	    var request = {
-	      url: "",
-	      type: "GET",
-	      success: SearchServerActions.receiveSearchBarQuery,
-	      error: function () {
-	        console.log("search not fetches");
-	      }
-	    };
-
-	    $.ajax(request);
-	  }
-	};
-
-	module.exports = SearchApiUtils;
-
-/***/ },
-/* 335 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(247),
-	    SearchConstants = __webpack_require__(332);
-
-	var SearchServerActions = {
-	  receiveSearchBarQuery: function (searches) {
-	    Dispatcher.dispatch({
-	      actionType: SearchConstants.RECEIVESEARCHBAR,
-	      searches: searches
-	    });
-	  }
-	};
-
-	module.exports = SearchServerActions;
 
 /***/ }
 /******/ ]);

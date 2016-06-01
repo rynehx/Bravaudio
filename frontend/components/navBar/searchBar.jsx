@@ -1,5 +1,6 @@
 //react
-var React = require('react');
+var React = require('react'),
+    hashHistory = require('react-router').hashHistory;
 //stores
 var SearchStore = require('../../stores/searchStore');
 //actions
@@ -24,15 +25,34 @@ var SearchBar = React.createClass({
     this.setState({searches: SearchStore.fetchSearchBar()});
   },
 
-  search: function(){
-    SearchClientActions.getSearchBarQuery(this.state.searchquery);
+  search: function(query){
+    SearchClientActions.getSearchBarQuery(query);
+  },
+
+  emptySearch: function(){
+    this.setState({searches: []});
+  },
+
+  populateSearch: function(){
+    this.setState({searches: SearchStore.fetchSearchBar()});
   },
 
   changeSearchQuery: function(event){
     this.setState({searchquery: event.target.value});
-    if(event.target.value.length>4){
-      this.search();
+    if(event.target.value.length>0){
+      this.search(event.target.value);
+    }else{
+      this.emptySearch();
     }
+  },
+
+  goToPage: function(searchItem){
+    if(searchItem.type === "user"){
+      hashHistory.push("/"+searchItem.title);
+    }else{
+      hashHistory.push("/"+ searchItem.author +"/"+searchItem.type+"/"+searchItem.title);
+    }
+
   },
 
   goToSearchPage: function(){
@@ -40,14 +60,34 @@ var SearchBar = React.createClass({
   },
 
   render: function(){
+
     return (
       <div className = "searchbar">
-        <input className = "searchbar-inner" placeholder="search"
-          onChange={this.changeSearchQuery}>
-        </input>
-        <div onClick = {this.goToSearchPage}>
-          go
+        <div className = "searchbar-top">
+          <input className = "searchbar-inner" placeholder="search"
+            onChange={this.changeSearchQuery} onBlur={this.emptySearch} onFocus={this.populateSearch}>
+          </input>
+          <div onClick = {this.goToSearchPage}>
+            go
+          </div>
         </div>
+        <ul className = "searchbar-bottom">
+        {
+          this.state.searches.slice(0,6).map(function(search){
+            return (<li key = {search.id+search.type} className = "searchbar-items" onMouseDown={function(){this.goToPage(search);}.bind(this)}>
+              <img className = "searchbar-items-image" src = {search.image_url}></img>
+              <div className = "searchbar-items-main">{
+                  search.title
+                }</div>
+              <div className = "searchbar-items-author">
+                {
+                  search.author
+                }
+              </div>
+            </li>);
+          }.bind(this))
+        }
+        </ul>
       </div>
     );
   }
