@@ -25327,13 +25327,6 @@
 	        { className: 'logged-in-nav' },
 	        React.createElement(
 	          'div',
-	          { className: 'upload-button nav-buttons', onClick: function () {
-	              hashHistory.push('upload');
-	            } },
-	          'upload'
-	        ),
-	        React.createElement(
-	          'div',
 	          { className: 'logout-button nav-buttons', onClick: this.logout },
 	          'logout'
 	        )
@@ -25358,12 +25351,14 @@
 	        { className: 'navBar-container' },
 	        React.createElement(
 	          'div',
-	          { className: 'navBar-title' },
+	          { className: 'navBar-title', onClick: function () {
+	              hashHistory.push('home');
+	            } },
 	          'Bravaudio'
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'nav-buttons home-button',
+	          { className: 'nav-buttons home-button', id: 'home-button',
 	            onClick: function () {
 	              hashHistory.push('home');
 	            } },
@@ -25371,7 +25366,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'nav-buttons you-button',
+	          { className: 'nav-buttons you-button', id: 'you-button',
 	            onClick: function () {
 	              hashHistory.push('you');
 	            } },
@@ -25387,6 +25382,8 @@
 	});
 
 	module.exports = NavBar;
+
+	//<div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
 
 /***/ },
 /* 221 */
@@ -34909,8 +34906,8 @@
 	          onChange: this.changeSearchQuery, onBlur: this.emptySearch, onFocus: this.populateSearch }),
 	        React.createElement(
 	          'div',
-	          { onClick: this.goToSearchPage },
-	          'go'
+	          { className: 'searchbar-go', onClick: this.goToSearchPage },
+	          '🔍'
 	        )
 	      ),
 	      React.createElement(
@@ -35366,27 +35363,26 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
 	    MusicStore = __webpack_require__(281);
 	//components
 	var AudioPlayer = __webpack_require__(288),
 	    AudioDisplay = __webpack_require__(290);
 
-	var hidden;
-
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
 
 
-	  componentDidMount: function () {
-	    this.musicstorelistener = MusicStore.addListener(function () {
-	      this.setState({});
-	    }.bind(this));
-	  },
-
-	  componentWillUnmount: function () {
-	    this.musicstorelistener.remove();
-	  },
+	  // componentDidMount: function(){
+	  //   this.musicstorelistener = MusicStore.addListener(function(){
+	  //     this.setState({});
+	  //   }.bind(this));
+	  // },
+	  //
+	  //
+	  // componentWillUnmount: function(){
+	  //   this.musicstorelistener.remove();
+	  // },
+	  //
 
 	  renderMusicBar: function () {
 
@@ -35836,7 +35832,9 @@
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
-
+	//actions
+	var LikeClientActions = __webpack_require__(303);
+	var SessionActions = __webpack_require__(246);
 	//Stores
 	var SessionStore = __webpack_require__(255),
 	    TrackStore = __webpack_require__(287),
@@ -35846,22 +35844,60 @@
 	  displayName: 'AudioDisplay',
 
 	  getInitialState: function () {
-	    return { track: { title: "", audio_url: "", image_url: "" }, playlist: {} };
+	    return { track: { title: "", audio_url: "", image_url: "" }, playlist: {}, user: { liked_tracks: [] } };
 	  },
 
 	  componentDidMount: function () {
-
-	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+	    this.setState({ user: SessionStore.fetchCurrentUser() });
 	    this.setState({ track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
+
+	    this.musicstorelistener = MusicStore.addListener(this._onChange);
+
+	    this.sessionlistener = SessionStore.addListener(function () {
+
+	      this.setState({ user: SessionStore.fetchCurrentUser() });
+	    }.bind(this));
 	  },
 
 	  componentWillUnmount: function () {
 	    this.musicstorelistener.remove();
+	    this.sessionlistener.remove();
+	  },
+
+	  likeTrack: function () {
+	    LikeClientActions.postSecondaryLike("track", this.state.track, function () {
+	      SessionActions.fetchCurrentUser();
+	    });
+	  },
+
+	  unlikeTrack: function () {
+	    LikeClientActions.deleteSecondaryLike("track", this.state.track, function () {
+	      SessionActions.fetchCurrentUser();
+	    });
+	  },
+
+	  _liked: function () {
+
+	    var currentUserTracks = this.state.user.liked_tracks;
+	    var liked = "";
+	    var clickEffect = this.likeTrack;
+	    if (currentUserTracks.find(function (el) {
+	      return el['id='] === this.state.track.id;
+	    }.bind(this))) {
+	      liked = " musicbar-liked";
+	      clickEffect = this.unlikeTrack;
+	    }
+
+	    return React.createElement(
+	      'div',
+	      { className: "musicbar-like" + liked, onClick: clickEffect },
+	      '♥'
+	    );
 	  },
 
 	  _onChange: function () {
-
+	    this.setState({ user: SessionStore.fetchCurrentUser() });
 	    this.setState({ track: MusicStore.currentTrack(),
 	      playlist: MusicStore.currentPlaylist() });
 	  },
@@ -35891,7 +35927,8 @@
 	          { className: 'musicbar-track-title', onClick: this.goToCurrentTrack },
 	          this.state.track.title
 	        )
-	      )
+	      ),
+	      this._liked()
 	    );
 	  }
 	});
@@ -35917,11 +35954,22 @@
 	    if (!SessionStore.fetchCurrentUser()) {
 	      hashHistory.push("/");
 	    }
+	    var youButton = document.getElementById("home-button");
+	    if (youButton) {
+	      youButton.style.backgroundColor = "black";
+	    }
 	  },
 
 	  componentWillUpdate: function () {
 	    if (!SessionStore.fetchCurrentUser()) {
 	      hashHistory.push("/");
+	    }
+	  },
+
+	  componentWillUnmount: function () {
+	    var youButton = document.getElementById("home-button");
+	    if (youButton) {
+	      youButton.style.backgroundColor = "";
 	    }
 	  },
 
@@ -38870,12 +38918,19 @@
 	  },
 
 	  componentDidMount: function () {
-
+	    var youButton = document.getElementById("you-button");
+	    if (youButton) {
+	      youButton.style.backgroundColor = "black";
+	    }
 	    //UserClientActions.fetchDisplayUser(this.state.user);
 	    // this.sessionStoreListener = SessionStore.addListener(this._onChange);
 	  },
 
 	  componentWillUnmount: function () {
+	    var youButton = document.getElementById("you-button");
+	    if (youButton) {
+	      youButton.style.backgroundColor = "";
+	    }
 	    //  this.sessionStoreListener.remove();
 	  },
 
@@ -39276,16 +39331,26 @@
 	    if (injElement) {
 	      var opaque = " your-content-items-opaque";
 	    } else {
+	      if (item.type === "playlist" || this.props.typing === "playlist") {
+	        var trackSpan = item.tracks.length === 1 ? " track" : " tracks";
+	        var numTracks = React.createElement(
+	          'div',
+	          { className: 'your-content-playlist-trackcount' },
+	          item.tracks.length + trackSpan
+	        );
+	      }
 	      var playbutton = React.createElement('img', { src: 'http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg',
 	        className: 'your-content-items-imageplay' });
 	      var opaque = "";
 	    }
+
 	    var typing;
 	    if (item.type) {
 	      typing = item.type;
 	    } else {
 	      typing = this.props.typing;
 	    }
+
 	    var key = item.type ? item.id + item.type : item.id;
 	    return React.createElement(
 	      'li',
@@ -39300,6 +39365,7 @@
 	              MusicStore.setMusic(item);
 	            }
 	          } },
+	        numTracks,
 	        React.createElement('img', { className: "your-content-items-image" + opaque, src: item.image_url }),
 	        playbutton
 	      ),
@@ -39341,7 +39407,8 @@
 	    }.bind(this));
 
 	    var pageLength = page.length;
-	    if (this.props.all === true && page.length > 0) {
+	    if (this.props.all === true) {
+	      //&& page.length>0
 	      var page = page.slice(0, threshold);
 
 	      if (pageLength < threshold) {

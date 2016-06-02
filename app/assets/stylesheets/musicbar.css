@@ -1,7 +1,5 @@
 
-#hidden{
-  display: none;
-}
+
 
 
 .musicbar {
@@ -16,15 +14,37 @@
   z-index: 90001
 }
 
+.hidden{
+  display: none;
+}
 
+.musicbar-like{
+  width: 25px;
+  height: 25px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #CCCCCC;
+  color: #CCCCCC;
+  border-radius: 5px;
+  margin-left: 10px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 
+.musicbar-liked{
+  color: orange;
+  border-color: orange;
+}
 
 
 .musicbar-audioplayer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 0px 30px 0px 90px;
+  margin: 0px 30px 0px 30px;
 }
 
 
@@ -44,6 +64,7 @@
   margin: 0px 12px;
   height: 35px;
   width: 35px;
+  cursor: pointer;
 }
 
 
@@ -65,6 +86,7 @@
   justify-content: center;
   align-items: center;
   height: 50px;
+  cursor: pointer;
 }
 
 .musicbar-rw {
@@ -76,6 +98,7 @@
   border-top: 8px solid transparent;
   border-left: 16px solid black;
   border-bottom: 8px solid transparent;
+
 }
 
 .musicbar-rw-bar {
@@ -98,6 +121,7 @@
   border-top: 8px solid transparent;
   border-right: 16px solid black;
   border-bottom: 8px solid transparent;
+
 }
 
 .musicbar-ff-bar {
@@ -117,6 +141,8 @@
   height: 100%;
   white-space: nowrap;
   font-family: sans-serif;
+  cursor: default;
+
 }
 
 .musicbar-track-title {
@@ -124,6 +150,12 @@
   align-items: flex-end;
   font-size: 13px;
   font-family: sans-serif;
+  cursor: pointer;
+  width: 180px;
+  white-space:nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .musicbar-playlist-title {
@@ -132,7 +164,12 @@
   font-size: 12px;
   font-family: sans-serif;
   color: #949494;
-
+  cursor: pointer;
+  width: 180px;
+  white-space:nowrap;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 
@@ -147,6 +184,7 @@
   border-right: 3px solid black;
   border-bottom: 15px solid ;
   background-color: solid black;
+  cursor: pointer;
 }
 
 .musicbar-pause:last-child {
@@ -164,6 +202,7 @@
   width: 50px;
   height: 50px;
   margin: 0px 10px 0px 10px;
+  cursor: pointer;
 }
 
 .musicbar-time{
@@ -177,6 +216,7 @@
   margin: 0px 10px 0px 10px;
   color: #ff5e00;
   font-family: sans-serif;
+  cursor: default;
 
 }
 
@@ -198,6 +238,7 @@
 
 .musicbar-track-title{
   height: 20px;
+  cursor: pointer;
 }
 
 .musicbar-repeat{
@@ -210,6 +251,7 @@
   font-size: 24px;
   font-weight: 600;
   color: orange;
+  cursor: pointer;
 }
 
 .musicbar-volume{
@@ -224,6 +266,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 
 .musicbar-volume-container{

@@ -5,29 +5,28 @@ var React = require('react'),
 
 //Stores
 var SessionStore = require('../stores/sessionStore'),
-    TrackStore = require('../stores/trackStore'),
     MusicStore = require('../stores/musicStore');
 //components
 var AudioPlayer = require('./musicBar/audioPlayer'),
     AudioDisplay = require('./musicBar/audioDisplay');
 
 
-var hidden;
+
 
 var MusicBar = React.createClass({
 
 
-  componentDidMount: function(){
-    this.musicstorelistener = MusicStore.addListener(function(){
-      this.setState({});
-    }.bind(this));
-  },
-
-
-  componentWillUnmount: function(){
-    this.musicstorelistener.remove();
-  },
-
+  // componentDidMount: function(){
+  //   this.musicstorelistener = MusicStore.addListener(function(){
+  //     this.setState({});
+  //   }.bind(this));
+  // },
+  //
+  //
+  // componentWillUnmount: function(){
+  //   this.musicstorelistener.remove();
+  // },
+  //
 
 
   renderMusicBar: function(){
@@ -42,9 +41,13 @@ var MusicBar = React.createClass({
         </div>
        );
     }else{
-      return (<div>
-        </div>);
+      return (
+        <div></div>
+      );
     }
+
+
+
   },
 
   render: function(){

@@ -23,8 +23,8 @@ var PlaylistContent = React.createClass({
   componentDidMount: function(){
     this.sessionlistener = SessionStore.addListener(function(){
 
-      this.setState({user: SessionStore.fetchCurrentUser()
-      });}.bind(this));
+    this.setState({user: SessionStore.fetchCurrentUser()
+    });}.bind(this));
   },
 
   componentWillUnmount: function(){

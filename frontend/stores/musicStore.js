@@ -113,20 +113,20 @@ MusicStore.updateToNextTrack = function(){
    _currentPlaylist.tracks.length );
 
 
-    if(toRepeat && _onRepeat){
-      if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
-      _currentTrack =  _currentPlaylist.tracks[0];
-
-  
-    }else if(toRepeat){
-      console.log("");
-    }else{
-      _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
+  if(toRepeat && _onRepeat){
+    if(_currentTrack ===  _currentPlaylist.tracks[0]){_repeatedSong = true;}
+    _currentTrack =  _currentPlaylist.tracks[0];
 
 
-    }
-    MusicStore.recordPlayed(_currentTrack);
-    this.__emitChange();
+  }else if(toRepeat){
+    console.log("");
+  }else{
+    _currentTrack =  _currentPlaylist.tracks[_currentPlaylist.tracks.indexOf(_currentTrack)+1];
+
+
+  }
+  MusicStore.recordPlayed(_currentTrack);
+  this.__emitChange();
 
 
 };

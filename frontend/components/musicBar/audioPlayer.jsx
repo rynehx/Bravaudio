@@ -113,7 +113,7 @@ var AudioPlayer = React.createClass({
 
   },
   trackEndedAction: function(){
-      MusicStore.nextTrack();
+    MusicStore.nextTrack();
   },
 
   nextTrack: function(){

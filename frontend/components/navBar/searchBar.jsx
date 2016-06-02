@@ -67,8 +67,8 @@ var SearchBar = React.createClass({
           <input className = "searchbar-inner" placeholder="search"
             onChange={this.changeSearchQuery} onBlur={this.emptySearch} onFocus={this.populateSearch}>
           </input>
-          <div onClick = {this.goToSearchPage}>
-            go
+          <div className = "searchbar-go" onClick = {this.goToSearchPage}>
+            🔍
           </div>
         </div>
         <ul className = "searchbar-bottom">
@@ -80,9 +80,7 @@ var SearchBar = React.createClass({
                   search.title
                 }</div>
               <div className = "searchbar-items-author">
-                {
-                  search.author
-                }
+                {search.author}
               </div>
             </li>);
           }.bind(this))

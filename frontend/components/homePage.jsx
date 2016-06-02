@@ -12,6 +12,11 @@ var HomePage = React.createClass({
     if(!SessionStore.fetchCurrentUser()){
       hashHistory.push("/");
     }
+    var youButton = document.getElementById("home-button");
+    if(youButton){
+      youButton.style.backgroundColor = "black";
+    }
+
   },
 
   componentWillUpdate: function(){
@@ -20,6 +25,12 @@ var HomePage = React.createClass({
     }
   },
 
+  componentWillUnmount: function(){
+    var youButton = document.getElementById("home-button");
+    if(youButton){
+      youButton.style.backgroundColor = "";
+    }
+  },
 
 
   render: function(){

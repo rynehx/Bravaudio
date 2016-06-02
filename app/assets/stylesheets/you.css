@@ -208,3 +208,23 @@
   display: flex;
   z-index: 50;
 }
+
+.your-content-playlist-trackcount{
+  border-radius: 50%;
+  width: 90px;
+  height: 90px;
+  background-color: black;
+  opacity: 0.8;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

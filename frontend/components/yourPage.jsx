@@ -21,12 +21,19 @@ var YourPage = React.createClass({
   },
 
   componentDidMount: function(){
-
+      var youButton = document.getElementById("you-button");
+      if(youButton){
+        youButton.style.backgroundColor = "black";
+      }
     //UserClientActions.fetchDisplayUser(this.state.user);
     // this.sessionStoreListener = SessionStore.addListener(this._onChange);
   },
 
   componentWillUnmount: function(){
+    var youButton = document.getElementById("you-button");
+    if(youButton){
+      youButton.style.backgroundColor = "";
+    }
   //  this.sessionStoreListener.remove();
   },
 

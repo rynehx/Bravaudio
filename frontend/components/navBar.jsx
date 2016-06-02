@@ -63,7 +63,7 @@ var NavBar = React.createClass({
     }else{
       return (
         <div className = "logged-in-nav">
-          <div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>
+
           <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
         </div>
       );
@@ -85,13 +85,13 @@ var NavBar = React.createClass({
     return (
       <div className = "navBar">
         <div className = "navBar-container">
-          <div className = "navBar-title" >Bravaudio</div>
+          <div className = "navBar-title" onClick ={function(){hashHistory.push('home');}} >Bravaudio</div>
 
-          <div className = "nav-buttons home-button"
+          <div className = "nav-buttons home-button" id="home-button"
             onClick={function(){hashHistory.push('home');}}>{homeButton}
           </div>
 
-          <div className = "nav-buttons you-button"
+          <div className = "nav-buttons you-button" id="you-button"
             onClick={function(){hashHistory.push('you');}}>{youButton}
           </div>
 
@@ -106,3 +106,5 @@ var NavBar = React.createClass({
 });
 
 module.exports = NavBar;
+
+//<div className = "upload-button nav-buttons" onClick={function(){hashHistory.push('upload');}}>upload</div>

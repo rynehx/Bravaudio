@@ -34,26 +34,41 @@ var YourContentItems = React.createClass({
       if(injElement){
         var opaque = " your-content-items-opaque";
       }else{
+        if(item.type === "playlist" || this.props.typing === "playlist"){
+          var trackSpan = (item.tracks.length===1) ? " track" : " tracks"
+          var numTracks = <div className = "your-content-playlist-trackcount">{item.tracks.length + trackSpan}</div>;
+        }
         var playbutton = <img src="http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg"
           className = "your-content-items-imageplay"/>;
         var opaque = "";
       }
+
+
+
+
+
       var typing;
       if(item.type){
         typing = item.type;
       }else{
         typing = this.props.typing;
       }
+
+
       var key = item.type ? item.id+item.type : item.id;
       return <li key = {key} className = {"your-content-items"}>
           {injElement}
-         <div className = "your-content-items-image-container" onClick = { function(){ if(item.tracks){
-           MusicStore.setMusic(undefined,item);
-         }else{
-           MusicStore.setMusic(item);
-         }}}>
+
+         <div className = "your-content-items-image-container" onClick = { function(){
+           if(item.tracks){
+             MusicStore.setMusic(undefined,item);
+           }else{
+             MusicStore.setMusic(item);
+           }}}>
+            {numTracks}
             <img className = {"your-content-items-image"+opaque} src = {item.image_url} />
             {playbutton}
+
           </div>
           <div className = {"your-content-items-text"+opaque} >
             <div className = "your-content-items-title"
@@ -85,7 +100,7 @@ var YourContentItems = React.createClass({
     var page = this.props.items.map(function(item){return this._getItems(item);}.bind(this));
 
     var pageLength=page.length;
-    if(this.props.all===true && page.length>0){
+    if(this.props.all===true ){ //&& page.length>0
       var page = page.slice(0,threshold);
 
       if(pageLength<threshold){
