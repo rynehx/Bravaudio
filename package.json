@@ -39,8 +39,8 @@
   },
   "homepage": "https://github.com/rynehx/Capstone#readme",
   "engines": {
-    "node": "6.2.0",
-    "npm": "3.8.9"
+    "node": "5.10.1",
+    "npm": "3.8.7"
   }
 
 }
