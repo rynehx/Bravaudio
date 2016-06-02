@@ -125,7 +125,17 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  opacity: 0.8;
 }
+
+.your-content-items:hover .your-content-items-viewall{
+  opacity: 1;
+}
+
+.your-content-items:hover .your-content-items-opaque{
+  opacity: 0.4;
+}
+
 
 .your-content-items-opaque{
   opacity: 0.2;
@@ -227,4 +237,5 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: default;
 }

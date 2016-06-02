@@ -50,7 +50,7 @@ var AudioPlayer = React.createClass({
       //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
       //also used to reset for slow audio fetching
 
-
+      this.refs.audioDom.src="";
 
       this.refs["displaytime-current"].innerHTML ="0:00";
       this.refs["displaytime-end"].innerHTML ="0:00";
@@ -59,16 +59,16 @@ var AudioPlayer = React.createClass({
 
       if(MusicStore.currentTrack().lastTime){
         this.refs["audioDom"].currentTime = MusicStore.currentTrack().lastTime;
+        this.refs["displaytime-current"].innerHTML =numberToTime(MusicStore.currentTrack().lastTime);
       }else{
         this.refs["audioDom"].currentTime = 0;
+        this.refs["displaytime-current"].innerHTML ="0:00";
       }
-          console.log(this.refs["audioDom"].currentTime);
+
       if(!(this.state.track.audio_url.length === 0)){
         this.refs.audioDom.play();
       }
 
-
-      setTimeout(this.refs.audioDom.play(),0);
 
   },
 

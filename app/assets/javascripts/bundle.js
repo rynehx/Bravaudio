@@ -35549,6 +35549,8 @@
 	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
 	    //also used to reset for slow audio fetching
 
+	    this.refs.audioDom.src = "";
+
 	    this.refs["displaytime-current"].innerHTML = "0:00";
 	    this.refs["displaytime-end"].innerHTML = "0:00";
 	    this.refs["displayprogress-inner"].style.width = "0px";
@@ -35556,15 +35558,15 @@
 
 	    if (MusicStore.currentTrack().lastTime) {
 	      this.refs["audioDom"].currentTime = MusicStore.currentTrack().lastTime;
+	      this.refs["displaytime-current"].innerHTML = numberToTime(MusicStore.currentTrack().lastTime);
 	    } else {
 	      this.refs["audioDom"].currentTime = 0;
+	      this.refs["displaytime-current"].innerHTML = "0:00";
 	    }
-	    console.log(this.refs["audioDom"].currentTime);
+
 	    if (!(this.state.track.audio_url.length === 0)) {
 	      this.refs.audioDom.play();
 	    }
-
-	    setTimeout(this.refs.audioDom.play(), 0);
 	  },
 
 	  audioActionButton: function () {
@@ -36086,7 +36088,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'home-tracks-image-container' },
-	        React.createElement('div', { className: 'home-tracks-play', onClick: this.addToMusicBar }),
+	        React.createElement('img', { className: 'home-tracks-play', onClick: this.addToMusicBar, src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" }),
 	        React.createElement('img', { className: 'home-tracks-image', onClick: this.goToTrack, src: this.props.track.image_url })
 	      ),
 	      React.createElement(

@@ -20,7 +20,7 @@ var HomeTracks = React.createClass({
     return (
       <div className = "home-tracks" >
         <div className = "home-tracks-image-container">
-          <div className = "home-tracks-play" onClick={this.addToMusicBar}></div>
+          <img className = "home-tracks-play" onClick={this.addToMusicBar} src = {"http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg"}/>
           <img className = "home-tracks-image" onClick={this.goToTrack} src ={this.props.track.image_url} />
         </div>
         <section className =  "home-tracks-author" onClick ={this.goToAuthor} >{this.props.track.author}</section>
