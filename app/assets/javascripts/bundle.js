@@ -35062,7 +35062,8 @@
 	    _currentTrack = { title: "", audio_url: "", image_url: "", id: null },
 	    _playedTracks = {},
 	    _onRepeat = true,
-	    _repeatedSong = false;
+	    _repeatedSong = false,
+	    _lastTime;
 
 	var TrackClientActions = __webpack_require__(283);
 
@@ -35090,6 +35091,10 @@
 
 	MusicStore.currentPlaylist = function () {
 	  return _currentPlaylist;
+	};
+
+	MusicStore.updateTrackTime = function (track, time) {
+	  _playedTracks[track.id] = time;
 	};
 
 	MusicStore.recordPlayed = function (track) {
@@ -35120,7 +35125,13 @@
 	  // _playedTracks[_currentTrack.id] = _currentTrack;
 
 	  if (track) {
-	    _currentTrack = track;
+	    if (_playedTracks[track.id]) {
+	      track.lastTime = _playedTracks[track.id];
+	      _currentTrack = track;
+	    } else {
+	      track.lastTime = 0;
+	      _currentTrack = track;
+	    }
 	  } else {
 	    _currentTrack = playlist.tracks[0];
 	  }
@@ -35537,15 +35548,23 @@
 	      playlist: MusicStore.currentPlaylist(), onRepeat: MusicStore.repeat() });
 	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
 	    //also used to reset for slow audio fetching
-	    this.refs["audioDom"].currentTime = 0;
+
 	    this.refs["displaytime-current"].innerHTML = "0:00";
 	    this.refs["displaytime-end"].innerHTML = "0:00";
 	    this.refs["displayprogress-inner"].style.width = "0px";
 	    this.refs.audioDom.src = this.state.track.audio_url;
 
+	    if (MusicStore.currentTrack().lastTime) {
+	      this.refs["audioDom"].currentTime = MusicStore.currentTrack().lastTime;
+	    } else {
+	      this.refs["audioDom"].currentTime = 0;
+	    }
+	    console.log(this.refs["audioDom"].currentTime);
 	    if (!(this.state.track.audio_url.length === 0)) {
 	      this.refs.audioDom.play();
 	    }
+
+	    setTimeout(this.refs.audioDom.play(), 0);
 	  },
 
 	  audioActionButton: function () {
@@ -35570,6 +35589,11 @@
 	    }
 
 	    this.refs["displayprogress-inner"].style.width = this.refs["audioDom"].currentTime / this.refs["audioDom"].duration * 400 + "px";
+
+	    if (!this.state.playlist.title) {
+
+	      MusicStore.updateTrackTime(this.state.track, this.refs["audioDom"].currentTime);
+	    }
 	  },
 
 	  updateProgress: function (e) {
@@ -35581,6 +35605,10 @@
 	      this.refs["displaytime-current"].innerHTML = numberToTime(selectedtime);
 
 	      this.refs["displayprogress-inner"].style.width = (e.clientX - this.refs["displayprogress"].offsetLeft) / this.refs["displayprogress"].offsetWidth * 400 + 'px';
+
+	      if (!this.state.playlist.title) {
+	        MusicStore.updateTrackTime(this.state.track, this.refs["audioDom"].currentTime);
+	      }
 	    }
 	  },
 	  trackEndedAction: function () {
@@ -35626,12 +35654,12 @@
 	      if (e.clientY > top + diff && e.clientY < bot - diff) {
 	        this.refs.volume.style.bottom = bot - e.clientY - 13 + "px";
 	        this.refs.audioDom.volume = (bot - diff - e.clientY) / (bot - diff - (top + diff));
-	        console.log(this.refs.audioDom.volume);
 	      }
 	    }
 	  },
 
 	  render: function () {
+
 	    if (this.refs.audioDom) {
 	      this.refs.audioDom.volume = 0.5;
 	    }

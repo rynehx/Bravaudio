@@ -4,7 +4,7 @@ var AppDispatcher = require('../dispatcher/dispatcher.js'),
 
 var _currentPlaylist = {title:"",audio_url: "", image_url:""},
     _currentTrack = {title:"",audio_url: "", image_url:"", id:null},
-    _playedTracks={}, _onRepeat = true, _repeatedSong = false;
+    _playedTracks={}, _onRepeat = true, _repeatedSong = false, _lastTime;
 
 var TrackClientActions = require('../actions/trackClientActions');
 
@@ -22,7 +22,6 @@ MusicStore.emptyMusicStore = function(){
       _currentPlaylist = {title:"",audio_url: "", image_url:""},
       _currentTrack = {title:"",audio_url: "", image_url:""},
       _playedTracks={}, _onRepeat = true, _repeatedSong = false;
-
 };
 
 MusicStore.repeat = function(){
@@ -36,6 +35,12 @@ MusicStore.currentTrack = function(){
 
 MusicStore.currentPlaylist = function(){
   return _currentPlaylist;
+};
+
+
+MusicStore.updateTrackTime = function(track,time){
+  _playedTracks[track.id]=time;
+
 };
 
 MusicStore.recordPlayed = function(track){
@@ -71,7 +76,15 @@ MusicStore.updateMusicBar= function(track,playlist){
 
 
   if(track){
-    _currentTrack = track;
+    if(_playedTracks[track.id]){
+      track.lastTime = _playedTracks[track.id];
+      _currentTrack = track;
+    }else{
+      track.lastTime= 0;
+      _currentTrack = track;
+    }
+
+
   }else{
     _currentTrack = playlist.tracks[0];
   }
