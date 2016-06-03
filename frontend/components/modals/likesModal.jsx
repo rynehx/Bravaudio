@@ -74,7 +74,7 @@ var LikesModal = React.createClass({
     return (
        <div >
          <div className="track-sidebar-likes-viewall" onClick={this.openModal}>view all</div>
-           <Modal className = "likes-modal"
+           <Modal className = "likes-modal modal-outer"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}

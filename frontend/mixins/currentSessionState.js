@@ -9,13 +9,7 @@ var CurrentSessionStateMixin = {
      };
   },
   componentWillMount: function(){
-
     SessionStore.addListener(this.updateUser);
-
-    // if (!this.state.currentUser){
-    //   UserActions.fetchCurrentUser();
-    // }
-
   },
   updateUser: function(){
 

@@ -102,7 +102,9 @@ min-height: 100%;
 
 
 .login-modal{
-  height: 100px;
+  outline: none;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  height: 150px;
   width: 400px;
   min-width: 400px;
   min-height: 100px;
@@ -144,6 +146,8 @@ min-height: 100%;
   font-family: Arial;
   margin: 0px 10px;
   padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .navBar-title{

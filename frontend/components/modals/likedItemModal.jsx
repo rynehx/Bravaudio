@@ -91,11 +91,11 @@ var LikedItemModal = React.createClass({
       }else{
         items = [];
       }
-  
+
     return (
        <div >
          <div className="track-sidebar-inplaylists-viewall"   onClick={this.openModal}>view all</div>
-           <Modal className = "likeditem-modal"
+           <Modal className = "likeditem-modal modal-outer"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}

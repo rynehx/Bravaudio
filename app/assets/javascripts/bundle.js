@@ -56,9 +56,9 @@
 	//Components
 	var NavBar = __webpack_require__(220),
 	    MusicBar = __webpack_require__(286),
-	    HomePage = __webpack_require__(291),
-	    UploadPage = __webpack_require__(295),
-	    TrackPage = __webpack_require__(296),
+	    HomePage = __webpack_require__(292),
+	    UploadPage = __webpack_require__(296),
+	    TrackPage = __webpack_require__(297),
 	    UserPage = __webpack_require__(311),
 	    PlaylistPage = __webpack_require__(321),
 	    SplashPage = __webpack_require__(328),
@@ -25475,7 +25475,7 @@
 	      ),
 	      React.createElement(
 	        Modal,
-	        { className: 'login-modal',
+	        { className: 'login-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -34781,12 +34781,7 @@
 	    };
 	  },
 	  componentWillMount: function () {
-
 	    SessionStore.addListener(this.updateUser);
-
-	    // if (!this.state.currentUser){
-	    //   UserActions.fetchCurrentUser();
-	    // }
 	  },
 	  updateUser: function () {
 
@@ -35376,8 +35371,8 @@
 	var SessionStore = __webpack_require__(255),
 	    MusicStore = __webpack_require__(281);
 	//components
-	var AudioPlayer = __webpack_require__(288),
-	    AudioDisplay = __webpack_require__(290);
+	var AudioPlayer = __webpack_require__(287),
+	    AudioDisplay = __webpack_require__(289);
 
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
@@ -35424,84 +35419,9 @@
 /* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(247),
-	    Store = __webpack_require__(256).Store,
-	    TrackConstants = __webpack_require__(282);
-
-	var _tracks = {};
-	var _displayTrack;
-	var _userTracks;
-	var TrackStore = new Store(AppDispatcher);
-
-	////Trending Page methods
-	TrackStore.all = function () {
-	  return _tracks;
-	};
-
-	TrackStore.recieveTracks = function (tracks) {
-	  _tracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	/////////Track Display Page Methods
-
-	TrackStore.displayTrack = function () {
-	  return _displayTrack;
-	};
-
-	TrackStore.recieveDisplayTrack = function (track) {
-	  _displayTrack = track;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.fetchedNoTrack = function () {
-	  _displayTrack = null;
-	  TrackStore.__emitChange();
-	};
-	///////User page tracklist methods
-	TrackStore.userTracks = function () {
-	  return _userTracks;
-	};
-
-	TrackStore.receiveUserTracks = function (tracks) {
-	  _userTracks = tracks;
-	  TrackStore.__emitChange();
-	};
-
-	TrackStore.displayUserTracks = function () {
-	  return _userTracks;
-	};
-
-	///////
-
-	TrackStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case TrackConstants.RECEIVETRACKS:
-	      TrackStore.recieveTracks(payload.tracks);
-	      break;
-	    case TrackConstants.RECEIVEDISPLAYTRACK:
-	      TrackStore.recieveDisplayTrack(payload.track);
-	      break;
-	    case TrackConstants.RECEIVEUSERTRACKS:
-	      TrackStore.receiveUserTracks(payload.tracks);
-	      break;
-	    case TrackConstants.DIDNOTFINDTRACK:
-	      TrackStore.fetchedNoTrack();
-	      break;
-	    case TrackConstants.DIDNOTFETCHTRACKS:
-	      break;
-	  }
-	};
-
-	module.exports = TrackStore;
-
-/***/ },
-/* 288 */
-/***/ function(module, exports, __webpack_require__) {
-
 	//react
 	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(289);
+	    classNames = __webpack_require__(288);
 
 	//stores
 	var MusicStore = __webpack_require__(281);
@@ -35802,7 +35722,7 @@
 	module.exports = AudioPlayer;
 
 /***/ },
-/* 289 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35856,18 +35776,18 @@
 
 
 /***/ },
-/* 290 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var LikeClientActions = __webpack_require__(303);
+	var LikeClientActions = __webpack_require__(290);
 	var SessionActions = __webpack_require__(246);
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(291),
 	    MusicStore = __webpack_require__(281);
 
 	var AudioDisplay = React.createClass({
@@ -35966,7 +35886,98 @@
 	module.exports = AudioDisplay;
 
 /***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SessionApiUtil = __webpack_require__(252);
+
+	var LikeClientActions = {
+	  postLike: SessionApiUtil.postLike,
+	  fetchLikes: SessionApiUtil.fetchLikes,
+	  deleteLike: SessionApiUtil.deleteLike,
+	  postSecondaryLike: SessionApiUtil.postSecondaryLike,
+	  deleteSecondaryLike: SessionApiUtil.deleteSecondaryLike
+	};
+
+	module.exports = LikeClientActions;
+
+/***/ },
 /* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(247),
+	    Store = __webpack_require__(256).Store,
+	    TrackConstants = __webpack_require__(282);
+
+	var _tracks = {};
+	var _displayTrack;
+	var _userTracks;
+	var TrackStore = new Store(AppDispatcher);
+
+	////Trending Page methods
+	TrackStore.all = function () {
+	  return _tracks;
+	};
+
+	TrackStore.recieveTracks = function (tracks) {
+	  _tracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	/////////Track Display Page Methods
+
+	TrackStore.displayTrack = function () {
+	  return _displayTrack;
+	};
+
+	TrackStore.recieveDisplayTrack = function (track) {
+	  _displayTrack = track;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.fetchedNoTrack = function () {
+	  _displayTrack = null;
+	  TrackStore.__emitChange();
+	};
+	///////User page tracklist methods
+	TrackStore.userTracks = function () {
+	  return _userTracks;
+	};
+
+	TrackStore.receiveUserTracks = function (tracks) {
+	  _userTracks = tracks;
+	  TrackStore.__emitChange();
+	};
+
+	TrackStore.displayUserTracks = function () {
+	  return _userTracks;
+	};
+
+	///////
+
+	TrackStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case TrackConstants.RECEIVETRACKS:
+	      TrackStore.recieveTracks(payload.tracks);
+	      break;
+	    case TrackConstants.RECEIVEDISPLAYTRACK:
+	      TrackStore.recieveDisplayTrack(payload.track);
+	      break;
+	    case TrackConstants.RECEIVEUSERTRACKS:
+	      TrackStore.receiveUserTracks(payload.tracks);
+	      break;
+	    case TrackConstants.DIDNOTFINDTRACK:
+	      TrackStore.fetchedNoTrack();
+	      break;
+	    case TrackConstants.DIDNOTFETCHTRACKS:
+	      break;
+	  }
+	};
+
+	module.exports = TrackStore;
+
+/***/ },
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35974,8 +35985,8 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//Components
-	var HomeContent = __webpack_require__(292),
-	    HomeSideBar = __webpack_require__(294);
+	var HomeContent = __webpack_require__(293),
+	    HomeSideBar = __webpack_require__(295);
 
 	var HomePage = React.createClass({
 	  displayName: 'HomePage',
@@ -36016,13 +36027,13 @@
 	module.exports = HomePage;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(291),
 	    TrackClientActions = __webpack_require__(283),
-	    HomeTracks = __webpack_require__(293);
+	    HomeTracks = __webpack_require__(294);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -36059,7 +36070,7 @@
 	module.exports = HomeContent;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36109,7 +36120,7 @@
 	module.exports = HomeTracks;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36126,7 +36137,7 @@
 	module.exports = HomeSideBar;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36162,7 +36173,7 @@
 	module.exports = UploadPage;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36170,13 +36181,13 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
-	    LikeStore = __webpack_require__(299);
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
+	    LikeStore = __webpack_require__(300);
 	//actions
 	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(300),
-	    LikeClientActions = __webpack_require__(303);
+	    PlaylistClientActions = __webpack_require__(301),
+	    LikeClientActions = __webpack_require__(290);
 	//components
 	var TrackContent = __webpack_require__(304),
 	    TrackSideBar = __webpack_require__(306),
@@ -36252,12 +36263,12 @@
 	module.exports = TrackPage;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    PlaylistConstants = __webpack_require__(298);
+	    PlaylistConstants = __webpack_require__(299);
 
 	var _displayPlaylist = [];
 	var _playlists;
@@ -36330,7 +36341,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -36342,7 +36353,7 @@
 	};
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
@@ -36374,10 +36385,10 @@
 	module.exports = LikeStore;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(301);
+	var PlaylistApiUtil = __webpack_require__(302);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36421,10 +36432,10 @@
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(302);
+	var PlaylistServerActions = __webpack_require__(303);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36562,11 +36573,11 @@
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    PlaylistConstants = __webpack_require__(298);
+	    PlaylistConstants = __webpack_require__(299);
 
 	var PlaylistServerActions = {
 	  receiveDisplayPlaylist: function (playlist) {
@@ -36605,33 +36616,17 @@
 	module.exports = PlaylistServerActions;
 
 /***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SessionApiUtil = __webpack_require__(252);
-
-	var LikeClientActions = {
-	  postLike: SessionApiUtil.postLike,
-	  fetchLikes: SessionApiUtil.fetchLikes,
-	  deleteLike: SessionApiUtil.deleteLike,
-	  postSecondaryLike: SessionApiUtil.postSecondaryLike,
-	  deleteSecondaryLike: SessionApiUtil.deleteSecondaryLike
-	};
-
-	module.exports = LikeClientActions;
-
-/***/ },
 /* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(291),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
 	var NewPlaylistModal = __webpack_require__(305);
 	//actions
-	var LikeClientActions = __webpack_require__(303);
+	var LikeClientActions = __webpack_require__(290);
 	var TrackClientActions = __webpack_require__(283);
 	var SessionActions = __webpack_require__(246);
 	//stores
@@ -36770,12 +36765,12 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
 	    MusicStore = __webpack_require__(281);
 	//actions
 	var TrackClientActions = __webpack_require__(283);
@@ -36998,7 +36993,7 @@
 	      React.createElement('img', { className: 'new-playlist-button-image', src: this.props.icon, onClick: this.openModal }),
 	      React.createElement(
 	        Modal,
-	        { className: 'new-playlist-modal',
+	        { className: 'new-playlist-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -37040,7 +37035,7 @@
 	    LikesModal = __webpack_require__(308);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287);
+	    TrackStore = __webpack_require__(291);
 
 	var TrackSideBar = React.createClass({
 	  displayName: 'TrackSideBar',
@@ -37177,12 +37172,12 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
 	    MusicStore = __webpack_require__(281);
 	//actions
 	var TrackClientActions = __webpack_require__(283);
@@ -37254,7 +37249,7 @@
 	      ),
 	      React.createElement(
 	        Modal,
-	        { className: 'inplaylists-modal',
+	        { className: 'inplaylists-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -37311,12 +37306,12 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
 	    MusicStore = __webpack_require__(281);
 	//actions
 	var TrackClientActions = __webpack_require__(283);
@@ -37381,7 +37376,7 @@
 	      ),
 	      React.createElement(
 	        Modal,
-	        { className: 'likes-modal',
+	        { className: 'likes-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -37417,7 +37412,7 @@
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(287),
+	    TrackStore = __webpack_require__(291),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//stores
@@ -37508,10 +37503,10 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var UserStore = __webpack_require__(312),
-	    LikeStore = __webpack_require__(299);
+	    LikeStore = __webpack_require__(300);
 	//actions
 	var UserClientActions = __webpack_require__(314),
-	    LikeClientActions = __webpack_require__(303);
+	    LikeClientActions = __webpack_require__(290);
 	//components
 	var UserForeground = __webpack_require__(317),
 	    UserSideBar = __webpack_require__(318),
@@ -37899,12 +37894,12 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
 	    MusicStore = __webpack_require__(281);
 	//actions
 	var TrackClientActions = __webpack_require__(283);
@@ -37991,7 +37986,7 @@
 	      ),
 	      React.createElement(
 	        Modal,
-	        { className: 'likeditem-modal',
+	        { className: 'likeditem-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -38073,11 +38068,11 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(255),
-	    PlaylistStore = __webpack_require__(297),
-	    LikeStore = __webpack_require__(299);
+	    PlaylistStore = __webpack_require__(298),
+	    LikeStore = __webpack_require__(300);
 	//actions
-	var PlaylistClientActions = __webpack_require__(300),
-	    LikeClientActions = __webpack_require__(303);
+	var PlaylistClientActions = __webpack_require__(301),
+	    LikeClientActions = __webpack_require__(290);
 	//components
 	var PlaylistContent = __webpack_require__(322),
 	    PlaylistSideBar = __webpack_require__(325),
@@ -38152,14 +38147,14 @@
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
-	var LikeClientActions = __webpack_require__(303);
+	var PlaylistClientActions = __webpack_require__(301);
+	var LikeClientActions = __webpack_require__(290);
 	var SessionActions = __webpack_require__(246);
 	//components
 	var PlaylistContentItems = __webpack_require__(323);
 	var EditPlaylistModal = __webpack_require__(324);
 	///stores
-	var PlaylistStore = __webpack_require__(297);
+	var PlaylistStore = __webpack_require__(298);
 	var SessionStore = __webpack_require__(255);
 
 	var PlaylistContent = React.createClass({
@@ -38302,9 +38297,9 @@
 	//components
 	var NewPlaylistModal = __webpack_require__(305);
 	//actions
-	var LikeClientActions = __webpack_require__(303);
+	var LikeClientActions = __webpack_require__(290);
 	var SessionActions = __webpack_require__(246);
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	var PlaylistContentItem = React.createClass({
 	  displayName: 'PlaylistContentItem',
@@ -38431,7 +38426,7 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(300);
+	var PlaylistClientActions = __webpack_require__(301);
 
 	//stores
 	var SessionStore = __webpack_require__(255);
@@ -38691,7 +38686,7 @@
 	      React.createElement('img', { className: 'playlist-content-top-button', src: this.props.icon, onClick: this.openModal }),
 	      React.createElement(
 	        Modal,
-	        { className: 'playlist-modal',
+	        { className: 'playlist-modal modal-outer',
 	          isOpen: this.state.modalIsOpen,
 	          onAfterOpen: this.afterOpenModal,
 	          onRequestClose: this.closeModal,
@@ -38729,13 +38724,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(297),
+	    PlaylistStore = __webpack_require__(298),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var LikesModal = __webpack_require__(308);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287);
+	    TrackStore = __webpack_require__(291);
 
 	var PlaylistSideBar = React.createClass({
 	  displayName: 'PlaylistSideBar',
@@ -38870,7 +38865,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(297),
+	    PlaylistStore = __webpack_require__(298),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -39083,12 +39078,12 @@
 	var React = __webpack_require__(1);
 	//stores
 	var UserStore = __webpack_require__(312),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297);
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298);
 
 	//actions
 	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(300);
+	    PlaylistClientActions = __webpack_require__(301);
 	//components
 	var UserContentItem = __webpack_require__(332);
 
@@ -39248,14 +39243,14 @@
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(287),
-	    PlaylistStore = __webpack_require__(297),
+	    TrackStore = __webpack_require__(291),
+	    PlaylistStore = __webpack_require__(298),
 	    MusicStore = __webpack_require__(281),
-	    LikeStore = __webpack_require__(299);
+	    LikeStore = __webpack_require__(300);
 	//actions
 	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(300),
-	    LikeClientActions = __webpack_require__(303);
+	    PlaylistClientActions = __webpack_require__(301),
+	    LikeClientActions = __webpack_require__(290);
 
 	var list = ["tracks", "playlists"];
 

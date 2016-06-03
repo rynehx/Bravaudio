@@ -83,7 +83,7 @@ var InPlaylistModal = React.createClass({
     return (
        <div >
          <div className="track-sidebar-inplaylists-viewall"   onClick={this.openModal}>view all</div>
-           <Modal className = "inplaylists-modal"
+           <Modal className = "inplaylists-modal modal-outer"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}

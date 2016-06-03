@@ -234,7 +234,7 @@ var EditPlaylistModal = React.createClass({
     return (
        <div >
          <img className="playlist-content-top-button" src={this.props.icon}  onClick={this.openModal}/>
-           <Modal className = "playlist-modal"
+           <Modal className = "playlist-modal modal-outer"
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}
