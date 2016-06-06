@@ -69,9 +69,9 @@
 
 
 .newplaylist-modal-inside-tabbed{
-  color: orange;
+  color: #ff5e00;
   border-bottom: 1px solid;
-  border-color: orange;
+  border-color: #ff5e00;
 }
 
 .newplaylist-modal-list-items{
@@ -106,18 +106,18 @@
   width: 80px;
   height: 20px;
   border: 1px solid;
-  border-color: orange;
+  border-color: #ff5e00;
   border-radius: 5px;
   font-size: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: orange;
+  color: #ff5e00;
   cursor: pointer;
 }
 
 .newplaylist-modal-list-added{
-  background-color: orange;
+  background-color: #ff5e00;
   color: white;
 }
 
@@ -134,8 +134,8 @@
 }
 
 .newplaylist-modal-inside-save{
-  border: 2px solid orange;
-  background-color: orange;
+  border: 2px solid #ff5e00;
+  background-color: #ff5e00;
   color: white;
   border-radius: 5px;
   margin: 0px 20px;

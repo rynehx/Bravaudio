@@ -75,6 +75,15 @@ var PlaylistContent = React.createClass({
     hashHistory.push("/"+data.username+"/playlists");
   },
 
+  editButtons: function(){
+    if(!this.props.playlist.author || this.props.playlist.author !== this.state.user.username){
+      return " hidden";
+    }else{
+      return "";
+    }
+
+  },
+
   render: function(){
 
   return(
@@ -82,12 +91,15 @@ var PlaylistContent = React.createClass({
       <div className = "playlist-content-top">
         <div className = "playlist-content-top-buttons">
           {this._liked()}
-          <EditPlaylistModal className = "playlist-content-top-button"
-            icon="http://simpleicon.com/wp-content/uploads/pen-15.svg"
-            playlist = {this.props.playlist}/>
-          <img className = "playlist-content-top-button"
-            src= "http://simpleicon.com/wp-content/uploads/trash.png"
-            onClick = {this.deleteDisplayPlaylist}/>
+          <div className = {"playlist-content-editbuttons"+this.editButtons()}>
+            <EditPlaylistModal
+              icon="http://simpleicon.com/wp-content/uploads/pen-15.svg"
+              playlist = {this.props.playlist}/>
+            <img className = "playlist-content-top-button"
+              src= "http://simpleicon.com/wp-content/uploads/trash.png"
+              onClick = {this.deleteDisplayPlaylist}/>
+          </div>
+
         </div>
       </div>
       <div className = "playlist-content-bottom">

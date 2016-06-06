@@ -41,7 +41,7 @@ var style = {
         WebkitOverflowScrolling    : 'touch',
       }
 		};
-//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 
 

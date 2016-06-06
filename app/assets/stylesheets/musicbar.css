@@ -35,8 +35,8 @@
 }
 
 .musicbar-liked{
-  color: orange;
-  border-color: orange;
+  color: #ff5e00;
+  border-color: #ff5e00;
 }
 
 
@@ -250,7 +250,7 @@
   align-items: center;
   font-size: 24px;
   font-weight: 600;
-  color: orange;
+  color: #ff5e00;
   cursor: pointer;
 }
 

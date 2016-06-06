@@ -142,7 +142,7 @@ min-height: 100%;
 }
 
 .login-input-button{
-  background-color: orange;
+  background-color: #ff5e00;
   color:white;
   font-family: Arial;
   margin: 0px 10px;
@@ -161,12 +161,12 @@ min-height: 100%;
 	line-height: 26.4px;
   display: flex;
   align-items: center;
-  color: orange;
+  color: #ff5e00;
 }
 
 
 .tab-selected{
-  color: orange;
+  color: #ff5e00;
   border-style: solid;
   border-width: 0 0 2px 0;
 }
@@ -185,4 +185,8 @@ min-height: 100%;
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;           /* Non-prefixed version, currently
                                   not supported by any browser */
+}
+
+.hidden{
+  visibility: hidden;
 }

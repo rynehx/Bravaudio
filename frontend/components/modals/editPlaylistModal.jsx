@@ -35,7 +35,7 @@ var style = {
         WebkitOverflowScrolling    : 'touch',
       }
 		};
-//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 var placeholder = document.createElement("li");
 placeholder.className = "placeholder";
@@ -176,10 +176,7 @@ var EditPlaylistModal = React.createClass({
                defaultValue = {this.state.title}
                 onChange={this.changeTitle}></input>
 
-            <div className = "playlist-modal-inside-title">Tags</div>
-            <input className = "playlist-modal-inside-input"
-              defaultValue = {""}
-              ></input>
+
 
             <div className = "playlist-modal-inside-title">Description</div>
             <textarea className = "playlist-modal-inside-textarea"
@@ -264,3 +261,10 @@ var EditPlaylistModal = React.createClass({
 
 
 module.exports = EditPlaylistModal;
+
+
+// //tags
+// <div className = "playlist-modal-inside-title">Tags</div>
+// <input className = "playlist-modal-inside-input"
+//   defaultValue = {""}
+//   ></input>

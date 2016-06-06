@@ -36802,7 +36802,7 @@
 	    WebkitOverflowScrolling: 'touch'
 	  }
 	};
-	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 	var EditPlaylistModal = React.createClass({
 	  displayName: 'EditPlaylistModal',
@@ -37209,7 +37209,7 @@
 	    WebkitOverflowScrolling: 'touch'
 	  }
 	};
-	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 	var InPlaylistModal = React.createClass({
 	  displayName: 'InPlaylistModal',
@@ -37343,7 +37343,7 @@
 	    WebkitOverflowScrolling: 'touch'
 	  }
 	};
-	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 	var LikesModal = React.createClass({
 	  displayName: 'LikesModal',
@@ -37931,7 +37931,7 @@
 	    WebkitOverflowScrolling: 'touch'
 	  }
 	};
-	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 	var LikedItemModal = React.createClass({
 	  displayName: 'LikedItemModal',
@@ -38226,6 +38226,14 @@
 	    hashHistory.push("/" + data.username + "/playlists");
 	  },
 
+	  editButtons: function () {
+	    if (!this.props.playlist.author || this.props.playlist.author !== this.state.user.username) {
+	      return " hidden";
+	    } else {
+	      return "";
+	    }
+	  },
+
 	  render: function () {
 
 	    return React.createElement(
@@ -38238,12 +38246,16 @@
 	          'div',
 	          { className: 'playlist-content-top-buttons' },
 	          this._liked(),
-	          React.createElement(EditPlaylistModal, { className: 'playlist-content-top-button',
-	            icon: 'http://simpleicon.com/wp-content/uploads/pen-15.svg',
-	            playlist: this.props.playlist }),
-	          React.createElement('img', { className: 'playlist-content-top-button',
-	            src: 'http://simpleicon.com/wp-content/uploads/trash.png',
-	            onClick: this.deleteDisplayPlaylist })
+	          React.createElement(
+	            'div',
+	            { className: "playlist-content-editbuttons" + this.editButtons() },
+	            React.createElement(EditPlaylistModal, {
+	              icon: 'http://simpleicon.com/wp-content/uploads/pen-15.svg',
+	              playlist: this.props.playlist }),
+	            React.createElement('img', { className: 'playlist-content-top-button',
+	              src: 'http://simpleicon.com/wp-content/uploads/trash.png',
+	              onClick: this.deleteDisplayPlaylist })
+	          )
 	        )
 	      ),
 	      React.createElement(
@@ -38458,7 +38470,7 @@
 	    WebkitOverflowScrolling: 'touch'
 	  }
 	};
-	//var colors = ["Red","Green","Blue","Yellow","Black","White","Orange"];
+	//var colors = ["Red","Green","Blue","Yellow","Black","White","#ff5e00"];
 
 	var placeholder = document.createElement("li");
 	placeholder.className = "placeholder";
@@ -38599,14 +38611,6 @@
 	        React.createElement(
 	          'div',
 	          { className: 'playlist-modal-inside-title' },
-	          'Tags'
-	        ),
-	        React.createElement('input', { className: 'playlist-modal-inside-input',
-	          defaultValue: ""
-	        }),
-	        React.createElement(
-	          'div',
-	          { className: 'playlist-modal-inside-title' },
 	          'Description'
 	        ),
 	        React.createElement('textarea', { className: 'playlist-modal-inside-textarea',
@@ -38719,6 +38723,12 @@
 	});
 
 	module.exports = EditPlaylistModal;
+
+	// //tags
+	// <div className = "playlist-modal-inside-title">Tags</div>
+	// <input className = "playlist-modal-inside-input"
+	//   defaultValue = {""}
+	//   ></input>
 
 /***/ },
 /* 325 */
