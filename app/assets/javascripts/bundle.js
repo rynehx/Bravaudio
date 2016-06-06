@@ -34873,6 +34873,7 @@
 	  changeSearchQuery: function (event) {
 	    this.setState({ searchquery: event.target.value });
 	    if (event.target.value.length > 0) {
+	      this.emptySearch();
 	      this.search(event.target.value);
 	    } else {
 	      this.emptySearch();
@@ -38894,7 +38895,34 @@
 	var SplashPage = React.createClass({
 	  displayName: "SplashPage",
 
-	  goToLogin: function () {},
+	  // getInitialState: function () {
+	  //   return { videoList: ["https://s3-us-west-1.amazonaws.com/bravaudio/splash1.mp4",
+	  //     "https://s3-us-west-1.amazonaws.com/bravaudio/splash2.mp4",
+	  //     "https://s3-us-west-1.amazonaws.com/bravaudio/splash3.mp4"
+	  //     ,"https://s3-us-west-1.amazonaws.com/bravaudio/splash5.mp4"] };
+	  // },
+	  //
+	  // goToLogin: function(){
+	  //
+	  // },
+	  //
+	  // componentDidMount: function(){
+	  //   this.video = document.getElementById("splashvideo");
+	  //   this.counter=1;
+	  //
+	  // },
+	  //
+	  // changeVideo: function(){
+	  //
+	  //   if(this.counter || (this.counter <= this.state.videoList.length)){
+	  //     this.video.setAttribute("src", this.state.videoList[this.counter]);
+	  //     this.counter+=1;
+	  //   }else{
+	  //     this.counter=1;
+	  //     this.video.setAttribute("src", this.state.videoList[this.counter]);
+	  //   }
+	  //   this.video.play();
+	  // },
 
 	  render: function () {
 
@@ -38902,9 +38930,11 @@
 	    return React.createElement(
 	      "div",
 	      { className: "splashpage" },
-	      React.createElement("video", {
-	        autoPlay: true, id: "splashvideo", loop: true, muted: true,
-	        src: "https://s3-us-west-1.amazonaws.com/bravaudio/lights.mp4", type: "video/mp4" }),
+	      React.createElement(
+	        "video",
+	        { autoPlay: true, id: "splashvideo", muted: true, loop: true, type: "video/mp4", className: "splashvideo" },
+	        React.createElement("source", { src: "https://s3-us-west-1.amazonaws.com/bravaudio/splash+combined.mp4", type: "video/mp4" })
+	      ),
 	      React.createElement(
 	        "div",
 	        { className: "splash-entry", onClick: this.goToLogin },

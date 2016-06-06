@@ -40,6 +40,7 @@ var SearchBar = React.createClass({
   changeSearchQuery: function(event){
     this.setState({searchquery: event.target.value});
     if(event.target.value.length>0){
+      this.emptySearch();
       this.search(event.target.value);
     }else{
       this.emptySearch();

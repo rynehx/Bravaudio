@@ -15,6 +15,11 @@ video#splashvideo {
 
 }
 
+
+.splashvideo{
+  background-color: black;
+}
+
 .splashpage{
   display: flex;
   justify-content: center;
