@@ -4,6 +4,7 @@ var React = require('react'),
 
 //Components
 var LoginModal = require('./navBar/loginModal'),
+    SignUpModal = require('./navBar/signUpModal'),
     UserProfile = require('./navBar/userProfile'),
     SearchBar = require('./navBar/searchBar');
 //Mixins
@@ -17,8 +18,13 @@ var NavBar = React.createClass({
   },
 
   componentWillMount: function(){
+    SessionStore.addListener(this._onChange);
     SessionActions.fetchCurrentUser();
-    this.setState({user: SessionStore.fetchCurrentUser()});
+
+  },
+
+  _onChange: function(){
+      this.setState({user: SessionStore.fetchCurrentUser()});
   },
 
 	errors: function(){
@@ -56,14 +62,13 @@ var NavBar = React.createClass({
 
       return (
         <div className = "logged-out-nav">
-          <LoginModal sessionAction = "signup" errors = {this.errors()} />
+          <SignUpModal sessionAction = "signup" errors = {this.errors()} />
           <LoginModal sessionAction = "login" errors = {this.errors()}/>
         </div>
       );
     }else{
       return (
         <div className = "logged-in-nav">
-
           <div className = "logout-button nav-buttons" onClick={this.logout}>logout</div>
         </div>
       );
@@ -71,28 +76,28 @@ var NavBar = React.createClass({
 
   },
 
-
-
-  render: function(){
-    var homeButton="";
-    var youButton="";
+  loggedIn: function(){
 
     if(this.state.user){
-      homeButton =  "home";
-      youButton = "collection";
+      return "";
     }
+    return " hidden";
+  },
+
+  render: function(){
+
 
     return (
       <div className = "navBar">
         <div className = "navBar-container">
           <div className = "navBar-title" onClick ={function(){hashHistory.push('home');}} >Bravaudio</div>
 
-          <div className = "nav-buttons home-button" id="home-button"
-            onClick={function(){hashHistory.push('home');}}>{homeButton}
+          <div className = {"nav-buttons home-button" + this.loggedIn()} id="home-button"
+            onClick={function(){hashHistory.push('home');}}>{"Home"}
           </div>
 
-          <div className = "nav-buttons you-button" id="you-button"
-            onClick={function(){hashHistory.push('you');}}>{youButton}
+          <div className = {"nav-buttons you-button" + this.loggedIn()} id="you-button"
+            onClick={function(){hashHistory.push('you');}}>{"Collection"}
           </div>
 
           <SearchBar />

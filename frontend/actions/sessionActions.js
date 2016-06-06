@@ -16,7 +16,7 @@ var SessionActions = {
 
 
 	signup: function(user){
-
+    user.profile_picture_url = "https://s3-us-west-1.amazonaws.com/bravaudio/default-profile.png";
 		SessionApiUtil.post({
 			url: "/api/users",
 			user: user,
@@ -38,7 +38,7 @@ var SessionActions = {
 
 
 	receiveCurrentUser: function(user){
-
+    console.log(user)
 		AppDispatcher.dispatch({
 			actionType: SessionConstants.LOGIN,
 			user: user

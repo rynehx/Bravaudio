@@ -120,6 +120,26 @@ min-height: 100%;
   border-style: none;
 }
 
+.signup-modal{
+  outline: none;
+  font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+  height: 300px;
+  width: 400px;
+  min-width: 400px;
+  min-height: 100px;
+  background-color: black;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translateX(-200px) translateY(-100px);
+  -moz-transform: translateX(-200px) translateY(-100px);
+  -webkit-transform: translateX(-200px) translateY(-100px);
+  transform: translateX(-200px) translateY(-100px);
+  border-style: none;
+}
+
+
+
 .login-title{
     color: white;
     text-align: center;
@@ -149,6 +169,10 @@ min-height: 100%;
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.login-input-button-disable{
+  background-color: #CCCCCC;
 }
 
 .navBar-title{

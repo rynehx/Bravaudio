@@ -41,11 +41,11 @@ class Api::UsersController < ApplicationController
     end
   end
 
-  
+
 
 	private
 
 	def user_params
-		params.require(:user).permit(:username, :password)
+		params.require(:user).permit(:username, :password, :city, :state, :country, :profile_picture_url, :name)
 	end
 end

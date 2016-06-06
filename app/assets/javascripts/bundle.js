@@ -25260,6 +25260,7 @@
 
 	//Components
 	var LoginModal = __webpack_require__(221),
+	    SignUpModal = __webpack_require__(336),
 	    UserProfile = __webpack_require__(274),
 	    SearchBar = __webpack_require__(275);
 	//Mixins
@@ -25275,7 +25276,11 @@
 	  },
 
 	  componentWillMount: function () {
+	    SessionStore.addListener(this._onChange);
 	    SessionActions.fetchCurrentUser();
+	  },
+
+	  _onChange: function () {
 	    this.setState({ user: SessionStore.fetchCurrentUser() });
 	  },
 
@@ -25318,7 +25323,7 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'logged-out-nav' },
-	        React.createElement(LoginModal, { sessionAction: 'signup', errors: this.errors() }),
+	        React.createElement(SignUpModal, { sessionAction: 'signup', errors: this.errors() }),
 	        React.createElement(LoginModal, { sessionAction: 'login', errors: this.errors() })
 	      );
 	    } else {
@@ -25334,14 +25339,15 @@
 	    }
 	  },
 
-	  render: function () {
-	    var homeButton = "";
-	    var youButton = "";
+	  loggedIn: function () {
 
 	    if (this.state.user) {
-	      homeButton = "home";
-	      youButton = "collection";
+	      return "";
 	    }
+	    return " hidden";
+	  },
+
+	  render: function () {
 
 	    return React.createElement(
 	      'div',
@@ -25358,19 +25364,19 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'nav-buttons home-button', id: 'home-button',
+	          { className: "nav-buttons home-button" + this.loggedIn(), id: 'home-button',
 	            onClick: function () {
 	              hashHistory.push('home');
 	            } },
-	          homeButton
+	          "Home"
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'nav-buttons you-button', id: 'you-button',
+	          { className: "nav-buttons you-button" + this.loggedIn(), id: 'you-button',
 	            onClick: function () {
 	              hashHistory.push('you');
 	            } },
-	          youButton
+	          "Collection"
 	        ),
 	        React.createElement(SearchBar, null),
 	        this.userProfile(),
@@ -25445,7 +25451,7 @@
 	  },
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    SessionActions[this.props.sessionAction]({
+	    SessionActions["login"]({
 	      username: this.state.username,
 	      password: this.state.password
 	    });
@@ -25458,7 +25464,7 @@
 	  },
 
 	  guestLogin: function () {
-	    SessionActions[this.props.sessionAction]({
+	    SessionActions["login"]({
 	      username: "guest",
 	      password: "password"
 	    });
@@ -27720,7 +27726,7 @@
 		},
 
 		signup: function (user) {
-
+			user.profile_picture_url = "https://s3-us-west-1.amazonaws.com/bravaudio/default-profile.png";
 			SessionApiUtil.post({
 				url: "/api/users",
 				user: user,
@@ -27741,7 +27747,7 @@
 		},
 
 		receiveCurrentUser: function (user) {
-
+			console.log(user);
 			AppDispatcher.dispatch({
 				actionType: SessionConstants.LOGIN,
 				user: user
@@ -36643,8 +36649,7 @@
 
 	  componentDidMount: function () {
 	    this.sessionlistener = SessionStore.addListener(function () {
-	      this.setState({ user: SessionStore.fetchCurrentUser()
-	      });
+	      this.setState({ user: SessionStore.fetchCurrentUser() });
 	    }.bind(this));
 	  },
 
@@ -39544,6 +39549,216 @@
 	});
 
 	module.exports = YourContentAll;
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(222),
+	    Modal = __webpack_require__(226),
+	    SessionActions = __webpack_require__(246),
+	    SessionStore = __webpack_require__(255),
+	    CurrentSessionState = __webpack_require__(273);
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.90)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: '1px solid #ccc',
+	    padding: '20px',
+	    zIndex: 1001,
+	    width: '30%',
+	    maxWidth: '500px'
+	  }
+	};
+
+	var LoginModal = React.createClass({
+	  displayName: 'LoginModal',
+
+	  mixins: [LinkedStateMixin],
+	  getInitialState: function () {
+	    return { modalIsOpen: false, city: "San Francisco", state: "California", country: "USA", name: "guest" };
+	  },
+	  componentWillMount: function () {
+	    var container = document.getElementById("content");
+	    Modal.setAppElement(container);
+	  },
+	  componentWillUpdate: function () {
+	    if (SessionStore.fetchCurrentUser() && this.state.modalIsOpen) {
+	      this.closeModal();
+	    }
+	  },
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    SessionActions[this.props.sessionAction]({
+	      username: this.state.username,
+	      password: this.state.password,
+	      name: this.state.name,
+	      city: this.state.city,
+	      state: this.state.state,
+	      country: this.state.country
+	    });
+	  },
+	  showErrors: function () {
+
+	    if (this.props.errors != "null") {
+	      return this.props.errors;
+	    }
+	  },
+
+	  signUpButton: function () {
+
+	    if (this.state.username && this.state.name && this.state.password && this.state.city && this.state.state && this.state.country) {
+	      return React.createElement(
+	        'div',
+	        { className: 'login-input-button', onClick: this.handleSubmit },
+	        'Sign Up'
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'login-input-button login-input-button-disable' },
+	        'Sign Up'
+	      );
+	    }
+	  },
+
+	  setValue: function (e) {
+	    var obj = {};
+	    obj[e.target.placeholder] = e.target.value;
+	    this.setState(obj);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'logged-out-modals' },
+	      React.createElement(
+	        'div',
+	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
+	        this.props.sessionAction
+	      ),
+	      React.createElement(
+	        Modal,
+	        { className: 'signup-modal modal-outer',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'p',
+	          { className: 'login-title' },
+	          this.props.sessionAction
+	        ),
+	        React.createElement(
+	          'section',
+	          null,
+	          this.showErrors()
+	        ),
+	        React.createElement(
+	          'form',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'signup-input' },
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'username'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'username' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'password'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'password', onChange: this.setValue, placeholder: 'password' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'name'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'name', defaultValue: 'guest' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'city'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'city', defaultValue: 'San Franciso' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'state'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'state', defaultValue: 'California' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'country'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'country', defaultValue: 'USA' })
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'login-input-buttons' },
+	            this.signUpButton(),
+	            React.createElement(
+	              'div',
+	              { className: 'login-input-button', onClick: this.closeModal },
+	              'Close'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = LoginModal;
 
 /***/ }
 /******/ ]);

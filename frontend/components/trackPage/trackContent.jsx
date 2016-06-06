@@ -19,9 +19,11 @@ getInitialState: function () {
 },
 
 componentDidMount: function(){
-  this.sessionlistener = SessionStore.addListener(function(){
-    this.setState({user: SessionStore.fetchCurrentUser()
-    });}.bind(this));
+  this.sessionlistener = SessionStore.addListener(
+    function(){
+    this.setState({user: SessionStore.fetchCurrentUser()});
+  }.bind(this));
+
 },
 
 componentWillUnmount: function(){
@@ -47,7 +49,6 @@ unlikeTrack: function(){
 _liked: function(){
 
   var currentUserTracks = this.state.user.liked_tracks;
-
 
   if(currentUserTracks.find(function(el){ return el['id='] ===this.props.track.id; }.bind(this))){
     return <div className = {"like-button"+ " " + "like-button-unlike"} onClick = {this.unlikeTrack}>

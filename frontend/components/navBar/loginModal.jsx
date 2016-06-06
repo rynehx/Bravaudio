@@ -53,7 +53,7 @@ var LoginModal = React.createClass({
     },
     handleSubmit: function(e){
   		e.preventDefault();
-  		SessionActions[this.props.sessionAction]({
+  		SessionActions["login"]({
   			username: this.state.username,
   			password: this.state.password
   		});
@@ -68,7 +68,7 @@ var LoginModal = React.createClass({
     },
 
     guestLogin: function(){
-      SessionActions[this.props.sessionAction]({
+      SessionActions["login"]({
         username: "guest",
         password: "password"
       });

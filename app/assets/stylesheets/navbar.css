@@ -211,3 +211,31 @@
  background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462475938/Untitled_Diagram_8_bdqezm.svg");
  background-size: 30px;
 }
+
+.signup-input{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 12px;
+  color: white;
+}
+
+.signup-sub{
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content:  flex-start;
+  margin: 5px 0px;
+
+}
+
+.signup-title{
+  margin: 0px 40px;
+  min-width: 100px;
+}
+
+.signup-field{
+  margin: 0px 60px;
+  min-width: 100px;
+}
