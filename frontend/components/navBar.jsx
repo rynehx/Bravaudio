@@ -76,6 +76,15 @@ var NavBar = React.createClass({
 
   },
 
+  searchBar: function(){
+    if(!SessionStore.fetchCurrentUser()){
+        return <div></div>;
+    }else{
+
+        return <SearchBar />;
+    }
+  },
+
   loggedIn: function(){
 
     if(this.state.user){
@@ -90,7 +99,7 @@ var NavBar = React.createClass({
     return (
       <div className = "navBar">
         <div className = "navBar-container">
-          <div className = "navBar-title" onClick ={function(){hashHistory.push('home');}} >Bravaudio</div>
+          <img className = "navBar-title" src = "http://www.clker.com/cliparts/r/P/X/U/g/h/orange-note-md.png" onClick ={function(){hashHistory.push('home');}} ></img>
 
           <div className = {"nav-buttons home-button" + this.loggedIn()} id="home-button"
             onClick={function(){hashHistory.push('home');}}>{"Home"}
@@ -100,7 +109,8 @@ var NavBar = React.createClass({
             onClick={function(){hashHistory.push('you');}}>{"Collection"}
           </div>
 
-          <SearchBar />
+
+          {this.searchBar()}
           {this.userProfile()}
           {this.loginButtons()}
         </div>

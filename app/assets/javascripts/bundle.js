@@ -55,15 +55,15 @@
 	    hashHistory = ReactRouter.hashHistory;
 	//Components
 	var NavBar = __webpack_require__(220),
-	    MusicBar = __webpack_require__(286),
-	    HomePage = __webpack_require__(292),
-	    UploadPage = __webpack_require__(296),
-	    TrackPage = __webpack_require__(297),
-	    UserPage = __webpack_require__(311),
-	    PlaylistPage = __webpack_require__(321),
-	    SplashPage = __webpack_require__(328),
-	    YourPage = __webpack_require__(329),
-	    SearchPage = __webpack_require__(330);
+	    MusicBar = __webpack_require__(287),
+	    HomePage = __webpack_require__(293),
+	    UploadPage = __webpack_require__(297),
+	    TrackPage = __webpack_require__(298),
+	    UserPage = __webpack_require__(312),
+	    PlaylistPage = __webpack_require__(322),
+	    SplashPage = __webpack_require__(329),
+	    YourPage = __webpack_require__(330),
+	    SearchPage = __webpack_require__(331);
 
 	//Sessions
 	var CurrentSessionState = __webpack_require__(273),
@@ -71,9 +71,9 @@
 	    SessionStore = __webpack_require__(255);
 
 	//userpage components
-	var UserContentTab = __webpack_require__(331);
+	var UserContentTab = __webpack_require__(332);
 	//yourpage components
-	var YourContent = __webpack_require__(333);
+	var YourContent = __webpack_require__(334);
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -25260,13 +25260,13 @@
 
 	//Components
 	var LoginModal = __webpack_require__(221),
-	    SignUpModal = __webpack_require__(336),
-	    UserProfile = __webpack_require__(274),
-	    SearchBar = __webpack_require__(275);
+	    SignUpModal = __webpack_require__(274),
+	    UserProfile = __webpack_require__(275),
+	    SearchBar = __webpack_require__(276);
 	//Mixins
 	var SessionStore = __webpack_require__(255),
 	    SessionActions = __webpack_require__(246),
-	    MusicStore = __webpack_require__(281);
+	    MusicStore = __webpack_require__(282);
 
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -25339,6 +25339,15 @@
 	    }
 	  },
 
+	  searchBar: function () {
+	    if (!SessionStore.fetchCurrentUser()) {
+	      return React.createElement('div', null);
+	    } else {
+
+	      return React.createElement(SearchBar, null);
+	    }
+	  },
+
 	  loggedIn: function () {
 
 	    if (this.state.user) {
@@ -25355,13 +25364,9 @@
 	      React.createElement(
 	        'div',
 	        { className: 'navBar-container' },
-	        React.createElement(
-	          'div',
-	          { className: 'navBar-title', onClick: function () {
-	              hashHistory.push('home');
-	            } },
-	          'Bravaudio'
-	        ),
+	        React.createElement('img', { className: 'navBar-title', src: 'http://www.clker.com/cliparts/r/P/X/U/g/h/orange-note-md.png', onClick: function () {
+	            hashHistory.push('home');
+	          } }),
 	        React.createElement(
 	          'div',
 	          { className: "nav-buttons home-button" + this.loggedIn(), id: 'home-button',
@@ -25378,7 +25383,7 @@
 	            } },
 	          "Collection"
 	        ),
-	        React.createElement(SearchBar, null),
+	        this.searchBar(),
 	        this.userProfile(),
 	        this.loginButtons()
 	      )
@@ -34805,6 +34810,216 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
+	    LinkedStateMixin = __webpack_require__(222),
+	    Modal = __webpack_require__(226),
+	    SessionActions = __webpack_require__(246),
+	    SessionStore = __webpack_require__(255),
+	    CurrentSessionState = __webpack_require__(273);
+	var style = {
+	  overlay: {
+	    position: 'fixed',
+	    top: 0,
+	    left: 0,
+	    right: 0,
+	    bottom: 0,
+	    backgroundColor: 'rgba(255, 255, 255, 0.90)',
+	    zIndex: 1000
+	  },
+	  content: {
+	    position: 'fixed',
+	    margin: '0 auto',
+	    border: '1px solid #ccc',
+	    padding: '20px',
+	    zIndex: 1001,
+	    width: '30%',
+	    maxWidth: '500px'
+	  }
+	};
+
+	var LoginModal = React.createClass({
+	  displayName: 'LoginModal',
+
+	  mixins: [LinkedStateMixin],
+	  getInitialState: function () {
+	    return { modalIsOpen: false, city: "San Francisco", state: "California", country: "USA", name: "guest" };
+	  },
+	  componentWillMount: function () {
+	    var container = document.getElementById("content");
+	    Modal.setAppElement(container);
+	  },
+	  componentWillUpdate: function () {
+	    if (SessionStore.fetchCurrentUser() && this.state.modalIsOpen) {
+	      this.closeModal();
+	    }
+	  },
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
+
+	  afterOpenModal: function () {
+	    // references are now sync'd and can be accessed.
+	  },
+
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    SessionActions[this.props.sessionAction]({
+	      username: this.state.username,
+	      password: this.state.password,
+	      name: this.state.name,
+	      city: this.state.city,
+	      state: this.state.state,
+	      country: this.state.country
+	    });
+	  },
+	  showErrors: function () {
+
+	    if (this.props.errors != "null") {
+	      return this.props.errors;
+	    }
+	  },
+
+	  signUpButton: function () {
+
+	    if (this.state.username && this.state.name && this.state.password && this.state.city && this.state.state && this.state.country) {
+	      return React.createElement(
+	        'div',
+	        { className: 'login-input-button', onClick: this.handleSubmit },
+	        'Sign Up'
+	      );
+	    } else {
+	      return React.createElement(
+	        'div',
+	        { className: 'login-input-button login-input-button-disable' },
+	        'Sign Up'
+	      );
+	    }
+	  },
+
+	  setValue: function (e) {
+	    var obj = {};
+	    obj[e.target.placeholder] = e.target.value;
+	    this.setState(obj);
+	  },
+
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'logged-out-modals' },
+	      React.createElement(
+	        'div',
+	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
+	        this.props.sessionAction
+	      ),
+	      React.createElement(
+	        Modal,
+	        { className: 'signup-modal modal-outer',
+	          isOpen: this.state.modalIsOpen,
+	          onAfterOpen: this.afterOpenModal,
+	          onRequestClose: this.closeModal,
+	          style: style },
+	        React.createElement(
+	          'p',
+	          { className: 'login-title' },
+	          this.props.sessionAction
+	        ),
+	        React.createElement(
+	          'section',
+	          null,
+	          this.showErrors()
+	        ),
+	        React.createElement(
+	          'form',
+	          null,
+	          React.createElement(
+	            'div',
+	            { className: 'signup-input' },
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'username'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'username' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'password'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'password', onChange: this.setValue, placeholder: 'password' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'name'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'name', defaultValue: 'guest' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'city'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'city', defaultValue: 'San Franciso' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'state'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'state', defaultValue: 'California' })
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'signup-sub' },
+	              React.createElement(
+	                'div',
+	                { className: 'signup-title' },
+	                'country'
+	              ),
+	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'country', defaultValue: 'USA' })
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'login-input-buttons' },
+	            this.signUpButton(),
+	            React.createElement(
+	              'div',
+	              { className: 'login-input-button', onClick: this.closeModal },
+	              'Close'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = LoginModal;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//this.props.user.profile_picture_url
@@ -34833,16 +35048,16 @@
 	module.exports = UserProfile;
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var SearchStore = __webpack_require__(276);
+	var SearchStore = __webpack_require__(277);
 	//actions
-	var SearchClientActions = __webpack_require__(278);
+	var SearchClientActions = __webpack_require__(279);
 
 	var SearchBar = React.createClass({
 	  displayName: 'SearchBar',
@@ -34942,12 +35157,12 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    SearchConstants = __webpack_require__(277);
+	    SearchConstants = __webpack_require__(278);
 
 	var _searchedTracks = [];
 	var _searchedPlaylists = [];
@@ -34990,7 +35205,7 @@
 	module.exports = SearchStore;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -34998,10 +35213,10 @@
 	};
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchApiUtils = __webpack_require__(279);
+	var SearchApiUtils = __webpack_require__(280);
 
 	var SearchClientActions = {
 	  getSearchBarQuery: SearchApiUtils.getSearchBarQuery
@@ -35010,12 +35225,12 @@
 	module.exports = SearchClientActions;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247);
 	//actions
-	var SearchServerActions = __webpack_require__(280);
+	var SearchServerActions = __webpack_require__(281);
 
 	var SearchApiUtils = {
 	  getSearchBarQuery: function (query) {
@@ -35035,11 +35250,11 @@
 	module.exports = SearchApiUtils;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    SearchConstants = __webpack_require__(277);
+	    SearchConstants = __webpack_require__(278);
 
 	var SearchServerActions = {
 	  receiveSearchBarQuery: function (searches) {
@@ -35053,12 +35268,12 @@
 	module.exports = SearchServerActions;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    trackConstants = __webpack_require__(282);
+	    trackConstants = __webpack_require__(283);
 
 	var _currentPlaylist = { title: "", audio_url: "", image_url: "" },
 	    _currentTrack = { title: "", audio_url: "", image_url: "", id: null },
@@ -35067,7 +35282,7 @@
 	    _repeatedSong = false,
 	    _lastTime;
 
-	var TrackClientActions = __webpack_require__(283);
+	var TrackClientActions = __webpack_require__(284);
 
 	var MusicStore = new Store(AppDispatcher);
 
@@ -35208,7 +35423,7 @@
 	module.exports = MusicStore;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -35220,10 +35435,10 @@
 	};
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackApiUtil = __webpack_require__(284);
+	var TrackApiUtil = __webpack_require__(285);
 
 	var TrackClientActions = {
 	  fetchTopChart: function () {
@@ -35249,10 +35464,10 @@
 	module.exports = TrackClientActions;
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackServerActions = __webpack_require__(285);
+	var TrackServerActions = __webpack_require__(286);
 
 	var TrackApiUtil = {
 
@@ -35326,11 +35541,11 @@
 	module.exports = TrackApiUtil;
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    trackConstants = __webpack_require__(282);
+	    trackConstants = __webpack_require__(283);
 
 	var TrackServerActions = {
 	  receiveTracks: function (tracks) {
@@ -35367,7 +35582,7 @@
 	module.exports = TrackServerActions;
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -35376,10 +35591,10 @@
 
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    MusicStore = __webpack_require__(281);
+	    MusicStore = __webpack_require__(282);
 	//components
-	var AudioPlayer = __webpack_require__(287),
-	    AudioDisplay = __webpack_require__(289);
+	var AudioPlayer = __webpack_require__(288),
+	    AudioDisplay = __webpack_require__(290);
 
 	var MusicBar = React.createClass({
 	  displayName: 'MusicBar',
@@ -35423,15 +35638,15 @@
 	module.exports = MusicBar;
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    classNames = __webpack_require__(288);
+	    classNames = __webpack_require__(289);
 
 	//stores
-	var MusicStore = __webpack_require__(281);
+	var MusicStore = __webpack_require__(282);
 
 	var actionButton;
 	var clickdown = false;
@@ -35729,7 +35944,7 @@
 	module.exports = AudioPlayer;
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35783,19 +35998,19 @@
 
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var LikeClientActions = __webpack_require__(290);
+	var LikeClientActions = __webpack_require__(291);
 	var SessionActions = __webpack_require__(246);
 	//Stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    MusicStore = __webpack_require__(281);
+	    TrackStore = __webpack_require__(292),
+	    MusicStore = __webpack_require__(282);
 
 	var AudioDisplay = React.createClass({
 	  displayName: 'AudioDisplay',
@@ -35893,7 +36108,7 @@
 	module.exports = AudioDisplay;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var SessionApiUtil = __webpack_require__(252);
@@ -35909,12 +36124,12 @@
 	module.exports = LikeClientActions;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    TrackConstants = __webpack_require__(282);
+	    TrackConstants = __webpack_require__(283);
 
 	var _tracks = {};
 	var _displayTrack;
@@ -35984,7 +36199,7 @@
 	module.exports = TrackStore;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -35992,8 +36207,8 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//Components
-	var HomeContent = __webpack_require__(293),
-	    HomeSideBar = __webpack_require__(295);
+	var HomeContent = __webpack_require__(294),
+	    HomeSideBar = __webpack_require__(296);
 
 	var HomePage = React.createClass({
 	  displayName: 'HomePage',
@@ -36034,13 +36249,13 @@
 	module.exports = HomePage;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(291),
-	    TrackClientActions = __webpack_require__(283),
-	    HomeTracks = __webpack_require__(294);
+	    TrackStore = __webpack_require__(292),
+	    TrackClientActions = __webpack_require__(284),
+	    HomeTracks = __webpack_require__(295);
 
 	var HomeContent = React.createClass({
 	  displayName: 'HomeContent',
@@ -36077,11 +36292,11 @@
 	module.exports = HomeContent;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    MusicStore = __webpack_require__(281),
+	    MusicStore = __webpack_require__(282),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var HomeTracks = React.createClass({
@@ -36127,7 +36342,7 @@
 	module.exports = HomeTracks;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -36144,7 +36359,7 @@
 	module.exports = HomeSideBar;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -36180,7 +36395,7 @@
 	module.exports = UploadPage;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36188,18 +36403,18 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    LikeStore = __webpack_require__(300);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    LikeStore = __webpack_require__(301);
 	//actions
-	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(301),
-	    LikeClientActions = __webpack_require__(290);
+	var TrackClientActions = __webpack_require__(284),
+	    PlaylistClientActions = __webpack_require__(302),
+	    LikeClientActions = __webpack_require__(291);
 	//components
-	var TrackContent = __webpack_require__(304),
-	    TrackSideBar = __webpack_require__(306),
-	    TrackForeground = __webpack_require__(309),
-	    TrackNotFound = __webpack_require__(310);
+	var TrackContent = __webpack_require__(305),
+	    TrackSideBar = __webpack_require__(307),
+	    TrackForeground = __webpack_require__(310),
+	    TrackNotFound = __webpack_require__(311);
 
 	var TrackPage = React.createClass({
 	  displayName: 'TrackPage',
@@ -36270,12 +36485,12 @@
 	module.exports = TrackPage;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    PlaylistConstants = __webpack_require__(299);
+	    PlaylistConstants = __webpack_require__(300);
 
 	var _displayPlaylist = [];
 	var _playlists;
@@ -36348,7 +36563,7 @@
 	module.exports = PlaylistStore;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -36360,7 +36575,7 @@
 	};
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
@@ -36392,10 +36607,10 @@
 	module.exports = LikeStore;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistApiUtil = __webpack_require__(302);
+	var PlaylistApiUtil = __webpack_require__(303);
 
 	var PlaylistClientActions = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36439,10 +36654,10 @@
 	module.exports = PlaylistClientActions;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var PlaylistServerActions = __webpack_require__(303);
+	var PlaylistServerActions = __webpack_require__(304);
 
 	var PlaylistApiUtil = {
 	  fetchDisplayPlaylist: function (user, playlist) {
@@ -36580,11 +36795,11 @@
 	module.exports = PlaylistApiUtil;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    PlaylistConstants = __webpack_require__(299);
+	    PlaylistConstants = __webpack_require__(300);
 
 	var PlaylistServerActions = {
 	  receiveDisplayPlaylist: function (playlist) {
@@ -36623,18 +36838,18 @@
 	module.exports = PlaylistServerActions;
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(291),
+	    TrackStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var NewPlaylistModal = __webpack_require__(305);
+	var NewPlaylistModal = __webpack_require__(306);
 	//actions
-	var LikeClientActions = __webpack_require__(290);
-	var TrackClientActions = __webpack_require__(283);
+	var LikeClientActions = __webpack_require__(291);
+	var TrackClientActions = __webpack_require__(284);
 	var SessionActions = __webpack_require__(246);
 	//stores
 	var SessionStore = __webpack_require__(255);
@@ -36762,7 +36977,7 @@
 	module.exports = TrackContent;
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -36771,15 +36986,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    MusicStore = __webpack_require__(281);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    MusicStore = __webpack_require__(282);
 	//actions
-	var TrackClientActions = __webpack_require__(283);
+	var TrackClientActions = __webpack_require__(284);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37031,17 +37246,17 @@
 	module.exports = EditPlaylistModal;
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var InPlaylistModal = __webpack_require__(307),
-	    LikesModal = __webpack_require__(308);
+	var InPlaylistModal = __webpack_require__(308),
+	    LikesModal = __webpack_require__(309);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291);
+	    TrackStore = __webpack_require__(292);
 
 	var TrackSideBar = React.createClass({
 	  displayName: 'TrackSideBar',
@@ -37169,7 +37384,7 @@
 	module.exports = TrackSideBar;
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37178,15 +37393,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    MusicStore = __webpack_require__(281);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    MusicStore = __webpack_require__(282);
 	//actions
-	var TrackClientActions = __webpack_require__(283);
+	var TrackClientActions = __webpack_require__(284);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37303,7 +37518,7 @@
 	module.exports = InPlaylistModal;
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37312,15 +37527,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    MusicStore = __webpack_require__(281);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    MusicStore = __webpack_require__(282);
 	//actions
-	var TrackClientActions = __webpack_require__(283);
+	var TrackClientActions = __webpack_require__(284);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -37413,16 +37628,16 @@
 	module.exports = LikesModal;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
-	    TrackStore = __webpack_require__(291),
+	    TrackStore = __webpack_require__(292),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	//stores
-	var MusicStore = __webpack_require__(281);
+	var MusicStore = __webpack_require__(282);
 
 	var TrackForeground = React.createClass({
 	  displayName: 'TrackForeground',
@@ -37479,7 +37694,7 @@
 	module.exports = TrackForeground;
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -37501,22 +37716,22 @@
 	module.exports = TrackNotFound;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var UserStore = __webpack_require__(312),
-	    LikeStore = __webpack_require__(300);
+	var UserStore = __webpack_require__(313),
+	    LikeStore = __webpack_require__(301);
 	//actions
-	var UserClientActions = __webpack_require__(314),
-	    LikeClientActions = __webpack_require__(290);
+	var UserClientActions = __webpack_require__(315),
+	    LikeClientActions = __webpack_require__(291);
 	//components
-	var UserForeground = __webpack_require__(317),
-	    UserSideBar = __webpack_require__(318),
-	    UserNotFound = __webpack_require__(320);
+	var UserForeground = __webpack_require__(318),
+	    UserSideBar = __webpack_require__(319),
+	    UserNotFound = __webpack_require__(321);
 
 	var page;
 
@@ -37639,12 +37854,12 @@
 	module.exports = UserPage;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(247),
 	    Store = __webpack_require__(256).Store,
-	    UserConstants = __webpack_require__(313);
+	    UserConstants = __webpack_require__(314);
 
 	var _displayUser = null;
 
@@ -37679,7 +37894,7 @@
 	module.exports = UserStore;
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -37688,10 +37903,10 @@
 	};
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserApiUtil = __webpack_require__(315);
+	var UserApiUtil = __webpack_require__(316);
 
 	var UserClientActions = {
 
@@ -37703,10 +37918,10 @@
 	module.exports = UserClientActions;
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserServerActions = __webpack_require__(316);
+	var UserServerActions = __webpack_require__(317);
 
 	var UserApiUtil = {
 	  fetchDisplayUser: function (username) {
@@ -37729,11 +37944,11 @@
 	module.exports = UserApiUtil;
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(247),
-	    UserConstants = __webpack_require__(313);
+	    UserConstants = __webpack_require__(314);
 
 	var UserServerActions = {
 	  receivedDisplayUser: function (user) {
@@ -37752,7 +37967,7 @@
 	module.exports = UserServerActions;
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -37812,14 +38027,14 @@
 	module.exports = UserForeground;
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    UserStore = __webpack_require__(312),
+	    UserStore = __webpack_require__(313),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var LikedItemModal = __webpack_require__(319);
+	var LikedItemModal = __webpack_require__(320);
 
 	var UserSideBar = React.createClass({
 	  displayName: 'UserSideBar',
@@ -37891,7 +38106,7 @@
 	module.exports = UserSideBar;
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -37900,15 +38115,15 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    MusicStore = __webpack_require__(281);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    MusicStore = __webpack_require__(282);
 	//actions
-	var TrackClientActions = __webpack_require__(283);
+	var TrackClientActions = __webpack_require__(284);
 
 	var modalWidth = window.innerWidth * 0.7;
 	var modalHeight = window.innerHeight * 0.7;
@@ -38044,7 +38259,7 @@
 	module.exports = LikedItemModal;
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38066,7 +38281,7 @@
 	module.exports = UserNotFound;
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -38074,16 +38289,16 @@
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores-
 	var SessionStore = __webpack_require__(255),
-	    PlaylistStore = __webpack_require__(298),
-	    LikeStore = __webpack_require__(300);
+	    PlaylistStore = __webpack_require__(299),
+	    LikeStore = __webpack_require__(301);
 	//actions
-	var PlaylistClientActions = __webpack_require__(301),
-	    LikeClientActions = __webpack_require__(290);
+	var PlaylistClientActions = __webpack_require__(302),
+	    LikeClientActions = __webpack_require__(291);
 	//components
-	var PlaylistContent = __webpack_require__(322),
-	    PlaylistSideBar = __webpack_require__(325),
-	    PlaylistForeground = __webpack_require__(326),
-	    PlaylistNotFound = __webpack_require__(327);
+	var PlaylistContent = __webpack_require__(323),
+	    PlaylistSideBar = __webpack_require__(326),
+	    PlaylistForeground = __webpack_require__(327),
+	    PlaylistNotFound = __webpack_require__(328);
 
 	var PlaylistPage = React.createClass({
 	  displayName: 'PlaylistPage',
@@ -38146,21 +38361,21 @@
 	module.exports = PlaylistPage;
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
-	var LikeClientActions = __webpack_require__(290);
+	var PlaylistClientActions = __webpack_require__(302);
+	var LikeClientActions = __webpack_require__(291);
 	var SessionActions = __webpack_require__(246);
 	//components
-	var PlaylistContentItems = __webpack_require__(323);
-	var EditPlaylistModal = __webpack_require__(324);
+	var PlaylistContentItems = __webpack_require__(324);
+	var EditPlaylistModal = __webpack_require__(325);
 	///stores
-	var PlaylistStore = __webpack_require__(298);
+	var PlaylistStore = __webpack_require__(299);
 	var SessionStore = __webpack_require__(255);
 
 	var PlaylistContent = React.createClass({
@@ -38305,19 +38520,19 @@
 	module.exports = PlaylistContent;
 
 /***/ },
-/* 323 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory,
-	    MusicStore = __webpack_require__(281);
+	    MusicStore = __webpack_require__(282);
 	//components
-	var NewPlaylistModal = __webpack_require__(305);
+	var NewPlaylistModal = __webpack_require__(306);
 	//actions
-	var LikeClientActions = __webpack_require__(290);
+	var LikeClientActions = __webpack_require__(291);
 	var SessionActions = __webpack_require__(246);
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	var PlaylistContentItem = React.createClass({
 	  displayName: 'PlaylistContentItem',
@@ -38435,7 +38650,7 @@
 	module.exports = PlaylistContentItem;
 
 /***/ },
-/* 324 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -38444,7 +38659,7 @@
 	    Modal = __webpack_require__(226),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//actions
-	var PlaylistClientActions = __webpack_require__(301);
+	var PlaylistClientActions = __webpack_require__(302);
 
 	//stores
 	var SessionStore = __webpack_require__(255);
@@ -38736,17 +38951,17 @@
 	//   ></input>
 
 /***/ },
-/* 325 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(298),
+	    PlaylistStore = __webpack_require__(299),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
-	var LikesModal = __webpack_require__(308);
+	var LikesModal = __webpack_require__(309);
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291);
+	    TrackStore = __webpack_require__(292);
 
 	var PlaylistSideBar = React.createClass({
 	  displayName: 'PlaylistSideBar',
@@ -38812,14 +39027,14 @@
 	module.exports = PlaylistSideBar;
 
 /***/ },
-/* 326 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var MusicStore = __webpack_require__(281);
+	var MusicStore = __webpack_require__(282);
 
 	var PlaylistForeground = React.createClass({
 	  displayName: 'PlaylistForeground',
@@ -38877,11 +39092,11 @@
 	module.exports = PlaylistForeground;
 
 /***/ },
-/* 327 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    PlaylistStore = __webpack_require__(298),
+	    PlaylistStore = __webpack_require__(299),
 	    hashHistory = __webpack_require__(159).hashHistory;
 
 	var PlaylistNotFound = React.createClass({
@@ -38902,7 +39117,7 @@
 	module.exports = PlaylistNotFound;
 
 /***/ },
-/* 328 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -38962,7 +39177,7 @@
 	module.exports = SplashPage;
 
 /***/ },
-/* 329 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
@@ -38971,7 +39186,7 @@
 	//stores
 
 	//actions
-	var UserClientActions = __webpack_require__(314);
+	var UserClientActions = __webpack_require__(315);
 
 	var YourPage = React.createClass({
 	  displayName: 'YourPage',
@@ -39079,11 +39294,11 @@
 	module.exports = YourPage;
 
 /***/ },
-/* 330 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SearchStore = __webpack_require__(276);
+	var SearchStore = __webpack_require__(277);
 
 	var SearchPage = React.createClass({
 	  displayName: 'SearchPage',
@@ -39116,21 +39331,21 @@
 	module.exports = SearchPage;
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//stores
-	var UserStore = __webpack_require__(312),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298);
+	var UserStore = __webpack_require__(313),
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299);
 
 	//actions
-	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(301);
+	var TrackClientActions = __webpack_require__(284),
+	    PlaylistClientActions = __webpack_require__(302);
 	//components
-	var UserContentItem = __webpack_require__(332);
+	var UserContentItem = __webpack_require__(333);
 
 	var dateComparator = function (time1, time2) {
 	  var t1 = new Date(time1.created_at);
@@ -39207,14 +39422,14 @@
 	module.exports = UserContentTab;
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//stores
-	var MusicStore = __webpack_require__(281);
+	var MusicStore = __webpack_require__(282);
 
 	var UserContentItem = React.createClass({
 	  displayName: "UserContentItem",
@@ -39277,25 +39492,25 @@
 	module.exports = UserContentItem;
 
 /***/ },
-/* 333 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//react
 	var React = __webpack_require__(1);
 	//components
-	var YourContentItems = __webpack_require__(334),
-	    YourContentAll = __webpack_require__(335);
+	var YourContentItems = __webpack_require__(335),
+	    YourContentAll = __webpack_require__(336);
 
 	//stores
 	var SessionStore = __webpack_require__(255),
-	    TrackStore = __webpack_require__(291),
-	    PlaylistStore = __webpack_require__(298),
-	    MusicStore = __webpack_require__(281),
-	    LikeStore = __webpack_require__(300);
+	    TrackStore = __webpack_require__(292),
+	    PlaylistStore = __webpack_require__(299),
+	    MusicStore = __webpack_require__(282),
+	    LikeStore = __webpack_require__(301);
 	//actions
-	var TrackClientActions = __webpack_require__(283),
-	    PlaylistClientActions = __webpack_require__(301),
-	    LikeClientActions = __webpack_require__(290);
+	var TrackClientActions = __webpack_require__(284),
+	    PlaylistClientActions = __webpack_require__(302),
+	    LikeClientActions = __webpack_require__(291);
 
 	var list = ["tracks", "playlists"];
 
@@ -39367,15 +39582,15 @@
 	module.exports = YourContent;
 
 /***/ },
-/* 334 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    hashHistory = __webpack_require__(159).hashHistory;
 	//components
-	var editPlaylistModal = __webpack_require__(324);
+	var editPlaylistModal = __webpack_require__(325);
 	//stores
-	var MusicStore = __webpack_require__(281);
+	var MusicStore = __webpack_require__(282);
 
 	var threshold = 6;
 
@@ -39528,11 +39743,11 @@
 	module.exports = YourContentItems;
 
 /***/ },
-/* 335 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var YourContentItems = __webpack_require__(334);
+	var YourContentItems = __webpack_require__(335);
 
 	var YourContentAll = React.createClass({
 	  displayName: 'YourContentAll',
@@ -39549,216 +39764,6 @@
 	});
 
 	module.exports = YourContentAll;
-
-/***/ },
-/* 336 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    LinkedStateMixin = __webpack_require__(222),
-	    Modal = __webpack_require__(226),
-	    SessionActions = __webpack_require__(246),
-	    SessionStore = __webpack_require__(255),
-	    CurrentSessionState = __webpack_require__(273);
-	var style = {
-	  overlay: {
-	    position: 'fixed',
-	    top: 0,
-	    left: 0,
-	    right: 0,
-	    bottom: 0,
-	    backgroundColor: 'rgba(255, 255, 255, 0.90)',
-	    zIndex: 1000
-	  },
-	  content: {
-	    position: 'fixed',
-	    margin: '0 auto',
-	    border: '1px solid #ccc',
-	    padding: '20px',
-	    zIndex: 1001,
-	    width: '30%',
-	    maxWidth: '500px'
-	  }
-	};
-
-	var LoginModal = React.createClass({
-	  displayName: 'LoginModal',
-
-	  mixins: [LinkedStateMixin],
-	  getInitialState: function () {
-	    return { modalIsOpen: false, city: "San Francisco", state: "California", country: "USA", name: "guest" };
-	  },
-	  componentWillMount: function () {
-	    var container = document.getElementById("content");
-	    Modal.setAppElement(container);
-	  },
-	  componentWillUpdate: function () {
-	    if (SessionStore.fetchCurrentUser() && this.state.modalIsOpen) {
-	      this.closeModal();
-	    }
-	  },
-	  openModal: function () {
-	    this.setState({ modalIsOpen: true });
-	  },
-
-	  afterOpenModal: function () {
-	    // references are now sync'd and can be accessed.
-	  },
-
-	  closeModal: function () {
-	    this.setState({ modalIsOpen: false });
-	  },
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    SessionActions[this.props.sessionAction]({
-	      username: this.state.username,
-	      password: this.state.password,
-	      name: this.state.name,
-	      city: this.state.city,
-	      state: this.state.state,
-	      country: this.state.country
-	    });
-	  },
-	  showErrors: function () {
-
-	    if (this.props.errors != "null") {
-	      return this.props.errors;
-	    }
-	  },
-
-	  signUpButton: function () {
-
-	    if (this.state.username && this.state.name && this.state.password && this.state.city && this.state.state && this.state.country) {
-	      return React.createElement(
-	        'div',
-	        { className: 'login-input-button', onClick: this.handleSubmit },
-	        'Sign Up'
-	      );
-	    } else {
-	      return React.createElement(
-	        'div',
-	        { className: 'login-input-button login-input-button-disable' },
-	        'Sign Up'
-	      );
-	    }
-	  },
-
-	  setValue: function (e) {
-	    var obj = {};
-	    obj[e.target.placeholder] = e.target.value;
-	    this.setState(obj);
-	  },
-
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'logged-out-modals' },
-	      React.createElement(
-	        'div',
-	        { className: this.props.sessionAction + "-button nav-buttons", onClick: this.openModal },
-	        this.props.sessionAction
-	      ),
-	      React.createElement(
-	        Modal,
-	        { className: 'signup-modal modal-outer',
-	          isOpen: this.state.modalIsOpen,
-	          onAfterOpen: this.afterOpenModal,
-	          onRequestClose: this.closeModal,
-	          style: style },
-	        React.createElement(
-	          'p',
-	          { className: 'login-title' },
-	          this.props.sessionAction
-	        ),
-	        React.createElement(
-	          'section',
-	          null,
-	          this.showErrors()
-	        ),
-	        React.createElement(
-	          'form',
-	          null,
-	          React.createElement(
-	            'div',
-	            { className: 'signup-input' },
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'username'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'username' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'password'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'password', onChange: this.setValue, placeholder: 'password' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'name'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'name', defaultValue: 'guest' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'city'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'city', defaultValue: 'San Franciso' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'state'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'state', defaultValue: 'California' })
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'signup-sub' },
-	              React.createElement(
-	                'div',
-	                { className: 'signup-title' },
-	                'country'
-	              ),
-	              React.createElement('input', { className: 'signup-field', type: 'text', onChange: this.setValue, placeholder: 'country', defaultValue: 'USA' })
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'login-input-buttons' },
-	            this.signUpButton(),
-	            React.createElement(
-	              'div',
-	              { className: 'login-input-button', onClick: this.closeModal },
-	              'Close'
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	module.exports = LoginModal;
 
 /***/ }
 /******/ ]);
