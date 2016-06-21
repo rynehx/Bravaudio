@@ -526,3 +526,293 @@ Track.create({title: "Red Hot Chili Peppers - Californication", description: "Ca
 image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/RedHotChiliPeppersCalifornication.jpg",
 audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/081.+Red+Hot+Chili+Peppers+-+Californication.mp3",
 author_id: 18});
+
+
+
+
+#strokes - Angeles
+Track.create({title: "The Strokes - Machu Picchu", description: "mountain to claim",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/01+-+Machu+Picchu.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Under Cover of Darkness", description: "Track 2 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/02+-+Under+Cover+Of+Darkness.mp3",
+author_id: 18});
+
+
+Track.create({title: "The Strokes - Two Kinds of Happiness", description: "Track 3 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/03+-+Two+Kinds+Of+Happiness.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Your're So Right", description: "Track 4 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/04+-+You%27re+So+Right.mp3",
+author_id: 18});
+
+
+Track.create({title: "The Strokes - Taken For A Fool", description: "Track 5 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/05+-+Taken+For+A+Fool.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Games", description: "Track 6 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/06+-+Games.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Call Me Back", description: "Track 7 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/07+-+Call+Me+Back.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Gratisfaction", description: "Track 8 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/08+-+Gratisfaction.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Metabolism", description: "Track 9 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/09+-+Metabolism.mp3",
+author_id: 18});
+
+Track.create({title: "The Strokes - Life Is Simple In The Moonlight", description: "Track 10 of angles",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2011+-+Angles/10+-+Life+Is+Simple+In+The+Moonlight.mp3",
+author_id: 18});
+###
+
+Track.create({title: "The Strokes - What Ever Happened", description: "Track 1 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/01+-+What+Ever+Happened!.mp3",
+author_id: 7});
+
+
+Track.create({title: "The Strokes - Reptilla", description: "Track 2 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/02+-+Reptilia.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - Automatic Stop", description: "Track 3 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/03+-+Automatic+Stop.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - 12-51", description: "Track 4 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/04+-+12-51.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - You Talk Way Too Much", description: "Track 5 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/05+-+You+Talk+Way+Too+Much.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - Between Love and Hate", description: "Track 6 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/06+-+Between+Love+%26+Hate.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - Meet Me In The Bathroom", description: "Track 7 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/07+-+Meet+Me+In+The+Bathroom.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - Under Control", description: "Track 8 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/08+-+Under+Control.mp3",
+author_id: 7});
+
+Track.create({title: "The Strokes - The Way It Is", description: "Track 9 of Room On Fire",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/Cover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/2003+-+Room+On+Fire/09+-+The+Way+It+Is.mp3",
+author_id: 7});
+
+##the weekend
+Track.create({title: "The Weekend - Real Life", description: "Track 1 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/01+Real+Life.mp3",
+author_id: 7});
+
+Track.create({title: "The Weekend - Losers", description: "Track 2 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/02+Losers+(feat.+Labrinth).mp3",
+author_id: 7});
+
+Track.create({title: "The Weekend - Tell Your Friends", description: "Track 3 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/03+Tell+Your+Friends.mp3",
+author_id: 7});
+
+Track.create({title: "The Weekend - Often", description: "Track 4 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/04+Often.mp3",
+author_id: 7});
+
+Track.create({title: "The Weekend - The Hills", description: "Track 5 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/05+The+Hills.mp3",
+author_id: 7});
+
+Track.create({title: "The Weekend - Acquainted", description: "Track 6 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/06+Acquainted.mp3",
+author_id: 7});
+
+
+Track.create({title: "The Weekend - I Can't Feel My Face", description: "Track 7 of Method Behind The Madness",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/a75b689c.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/The+Weeknd+-+Beauty+Behind+the+Madness/07+Can%27t+Feel+My+Face.mp3",
+author_id: 7});
+
+
+##views
+Track.create({title: "Drake - Feel No Way", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/04+Feel+No+Ways.m4a",
+author_id: 7});
+
+Track.create({title: "Drake - Controlla", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/11+Controlla.m4a",
+author_id: 7});
+
+Track.create({title: "Drake - One Dance", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/12+One+Dance+(feat.+Wizkid+%26+Kyla).m4a",
+author_id: 7});
+
+Track.create({title: "Drake - Pop Style", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/15+Pop+Style.m4a",
+author_id: 7});
+
+Track.create({title: "Drake - Too Good", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/16+Too+Good+(feat.+Rihanna).m4a",
+author_id: 7});
+
+Track.create({title: "Drake - With You", description: "Track from Album Views",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/Drakeviewsfromthe6.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/Views/08+With+You+(feat.+PARTYNEXTDOOR).m4a",
+author_id: 7});
+
+Track.create({title: "Drake - Hotline Bling", description: "You use to call me on my cellphone",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/singles/hotlinebling.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/singles/01+Hotline+Bling.m4a",
+author_id: 7});
+##
+Track.create({title: "Kanye - Famous", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/Famous.mp3",
+author_id: 7});
+
+Track.create({title: "Kanye - FeedBack", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/Feedback.mp3",
+author_id: 7});
+
+Track.create({title: "Kanye - Highlights", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/Highlights.mp3",
+author_id: 7});
+
+Track.create({title: "Kanye - I Love Kanye", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/I+Love+Kanye.mp3",
+author_id: 7});
+
+Track.create({title: "Kanye - Ultralight Beam", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/Ultralight+Beam.mp3",
+author_id: 7});
+
+Track.create({title: "Kanye - Wolves", description: "Track from Life of Pablo",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/1035x1035-8c74ca69.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/LOP/Wolves.mp3",
+author_id: 7});
+
+#Pure heroine
+
+Track.create({title: "Lorde - 400 LUX", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/400+Lux.mp3",
+author_id: 7});
+
+Track.create({title: "Lorde - A World Alone", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/A+World+Alone.mp3",
+author_id: 7});
+
+Track.create({title: "Lorde - Bravaudio", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/Bravado.mp3",
+author_id: 7});
+
+
+Track.create({title: "Lorde - Royal", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/Royals.mp3",
+author_id: 7});
+
+
+
+Track.create({title: "Lorde - Team", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/Team.mp3",
+author_id: 7});
+
+
+Track.create({title: "Lorde - Tennis Court", description: "Track from Pure Heroine",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/LORDE-PURE-HEROINE.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/pure+heroine/Tennis+Court.mp3",
+author_id: 7});
+
+#graduation
+Track.create({title: "Kanye - Flashing Lights", description: "Track from Graduation",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/afa9da9d.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/Flashing+Lights.m4a",
+author_id: 7});
+
+Track.create({title: "Kanye - Good Life", description: "Track from Graduation",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/afa9da9d.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/Good+Life.m4a",
+author_id: 7});
+
+Track.create({title: "Kanye - Homecoming", description: "Track from Graduation",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/afa9da9d.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/Homecoming.m4a",
+author_id: 7});
+
+Track.create({title: "Kanye - I Wonder", description: "Track from Graduation",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/afa9da9d.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/I+Wonder.m4a",
+author_id: 7});
+
+Track.create({title: "Kanye - Stronger", description: "Track from Graduation",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/afa9da9d.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/graduation/Stronger.m4a",
+author_id: 7});
+
+##
+# Track.create({title: "Drake - Crew Love", description: "Track from Take Care",
+# image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/90efbd9ee9091147cdd46cb6b5f55e64.600x600x1.jpg",
+# audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/Crew+Love.flac",
+# author_id: 7});
+#
+# Track.create({title: "Drake - Headlines", description: "Track from Take Care",
+# image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/90efbd9ee9091147cdd46cb6b5f55e64.600x600x1.jpg",
+# audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/Headlines.flac",
+# author_id: 7});
+#
+# Track.create({title: "Drake - Over My Dead Body", description: "Track from Take Care",
+# image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/90efbd9ee9091147cdd46cb6b5f55e64.600x600x1.jpg",
+# audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/Over+My+Dead+Body.flac",
+# author_id: 7});
+#
+# Track.create({title: "Drake - Take Care", description: "Track from Take Care",
+# image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/90efbd9ee9091147cdd46cb6b5f55e64.600x600x1.jpg",
+# audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/Take+Care.flac",
+# author_id: 7});
