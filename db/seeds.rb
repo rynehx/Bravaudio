@@ -60,142 +60,142 @@ User.create([
 
 
 
-  Track.create({title: "Drake & Fetty Wap - Come my Way", description: "cuz I go hard in this ish",
-    image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461868384/a4ddb3a5d3dd9dc6103d4f328db55d26.500x500x1_wwsow4.jpg",
-    audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3",
-    author_id: 3});
-
-  Track.create({title: "Kid Cudi - Pursuit of Happiness", description: "Luv me bck",
-    image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899137/kid-cudi-man-on-the-moon-the-end-of-day-cover-1_ckt7tz.jpg",
-    audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899083/13-kid_cudi-pusuit_of_happiness_ft._mgmt_ratatat_zdvcbq.mp3",
-    author_id: 3});
-
-
-  Track.create({title: "Fetty Wap -Boomin", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899190/82f7a2ef_axhjwk.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899073/10_Boomin_v6jauy.mp3",
-  author_id: 3});
-
-
-  Track.create({title: "Soundgarden - Black Hole Sun", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899160/Soundgarden-Superunknown_qncwxg.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899068/07_-_Black_Hole_Sun_zfrw3x.mp3",
-  author_id: 3});
-
-
-  Track.create({title: "SoundGarden - 4th of July", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899160/Soundgarden-Superunknown_qncwxg.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899077/13_-_4th_Of_July_kahhei.mp3",
-  author_id: 4});
-
-  Track.create({title: "A$AP Rocky - Wild for Night", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899234/AtLongLastASAPCover_ncw4ac.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3",
-  author_id: 4});
-
-
-  Track.create({title: "Fetty Wap - Trap Queen", description: "infooo",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899190/82f7a2ef_axhjwk.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899071/01_Trap_Queen_grjdrs.mp3",
-  author_id: 3});
-
-  Track.create({title: "Kid Cudi - Day n Nite", description: "Luv me bck",
-    image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899137/kid-cudi-man-on-the-moon-the-end-of-day-cover-1_ckt7tz.jpg",
-    audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899076/07-kid_cudi-day_n_nite_jzvdvj.mp3",
-    author_id: 3});
-
-
-
-  Track.create([{title: "Drake & Future - Jumpman", description: "boomin on production, WOW",
-image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
-audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314743/09_Jumpman_iqy603.mp3",
-author_id: 1},
- {title: "DJ Sona - Kinetic", description: "Energize!!",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315513/hqdefault_ukscof.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315064/DJ_Sona_Kinetic_The_Crystal_Method_x_Dada_Life_sqdwhq.mp3",
- author_id: 2},
- {title: "DJ Sona - Concussive", description: "Bass Drop!!",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315655/hqdefault_ypm2ag.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315060/DJ_Sona_Concussive_Bassnectar_x_Renholde%CC%88r_rirkay.mp3",
- author_id: 2},
- {title: "DJ Sona - Ethereal", description: "Serenity!!",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315589/hqdefault_usb3fy.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315063/DJ_Sona_Ethereal_Nosaj_Thing_x_Pretty_Lights_yu5g3v.mp3",
- author_id: 2},
- {title: "Drake & Future - Digital Dash", description: "dashing",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314720/01_Digital_Dash_fssh5h.mp3",
- author_id: 1},
- {title: "Drake & Future - Big Rings", description: "We are talking about teams",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314719/02_Big_Rings_canhws.mp3",
- author_id: 1},
- {title: "Drake & Future - Live From The Gutter", description: "Gutta Guttta",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314702/03_Live_From_the_Gutter_bjdsga.mp3",
- author_id: 1},
- {title: "Drake & Future - Diamonds Dancing", description: "Bling",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314702/03_Live_From_the_Gutter_bjdsga.mp3",
- author_id: 1},
- {title: "Drake & Future - Scholarships", description: "college",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314678/05_Scholarships_azmphv.mp3",
- author_id: 1},
- {title: "Drake & Future - Plastic Bag", description: "empty",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314715/06_Plastic_Bag_i40a61.mp3",
- author_id: 1},
- {title: "Drake & Future - I'm The Plug", description: "dont pull please",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314710/07_I_m_the_Plug_j1fmpf.mp3",
- author_id: 1},
- {title: "Drake & Future - Change Locations", description: "moving away",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314749/08_Change_Locations_az1pir.mp3",
- author_id: 1},
- {title: "Drake & Future - Jersey", description: "beach",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314775/10_Jersey_euhrif.mp3",
- author_id: 1},
- {title: "Drake & Future - 30 for 30 Freestyle", description: "beach",
- image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
- audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314785/11_30_for_30_Freestyle_okk1xw.mp3",
- author_id: 1},
- {title: "Evanescence - Bring Me To Life", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512309/Album-Cover-evanescence-1019990_600_600_fbxid3.bmp",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314818/Evanescence_-_Bring_Me_To_Life_oomzo3.mp3",
-  author_id: 4},
-  {title: "Evanescence - My Immortal", description: "the new track",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512309/Album-Cover-evanescence-1019990_600_600_fbxid3.bmp",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314836/Evanescence_-_My_Immortal_ta5pwx.mp3",
-  author_id: 4},
-  {title: "Muse - Unnatural Selection", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512463/Unnatural-Selection-cover-muse-24031001-320-349_jg8sak.png",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314790/06_Unnatural_Selection_uev4yc.mp3",
-  author_id: 4},
-  {title: "Muse - Exogenesis", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512601/18af2a73d33e4c2898f2eaae615c9bd9_ca3xk6.png",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314800/11_Exogenesis_Symphony_Part_3_hzs2rx.mp3",
-  author_id: 4},
-  {title: "Muse - Uprising", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512716/b7330d0e_dtkqit.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314761/01-Uprising_yzfdir.mp3",
-  author_id: 4},
-  {title: "Muse - Guiding Light", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512875/Theresistance_aoztjk.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314790/05_Guiding_Light_g4euxw.mp3",
-  author_id: 4},
-  {title: "Muse - The Resistance", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512875/Theresistance_aoztjk.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314784/02-Resistance_mfdabh.mp3",
-  author_id: 4},
-  {title: "Muse - United States of Eurasia", description: "Spooky",
-  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512980/United_States_of_Eurasia__Muse_single_-_cover_art_jz9nxq.jpg",
-  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314816/04_United_States_of_Eurasia_Collateral_Damage_pnp8hj.mp3",
-  author_id: 4},
-
-])
+#   Track.create({title: "Drake & Fetty Wap - Come my Way", description: "cuz I go hard in this ish",
+#     image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461868384/a4ddb3a5d3dd9dc6103d4f328db55d26.500x500x1_wwsow4.jpg",
+#     audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461867581/Fetty_Wap_ft._Drake_-_My_Way_Remix_CDQ_cuaq28.mp3",
+#     author_id: 3});
+#
+#   Track.create({title: "Kid Cudi - Pursuit of Happiness", description: "Luv me bck",
+#     image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899137/kid-cudi-man-on-the-moon-the-end-of-day-cover-1_ckt7tz.jpg",
+#     audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899083/13-kid_cudi-pusuit_of_happiness_ft._mgmt_ratatat_zdvcbq.mp3",
+#     author_id: 3});
+#
+#
+#   Track.create({title: "Fetty Wap -Boomin", description: "infooo",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899190/82f7a2ef_axhjwk.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899073/10_Boomin_v6jauy.mp3",
+#   author_id: 3});
+#
+#
+#   Track.create({title: "Soundgarden - Black Hole Sun", description: "infooo",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899160/Soundgarden-Superunknown_qncwxg.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899068/07_-_Black_Hole_Sun_zfrw3x.mp3",
+#   author_id: 3});
+#
+#
+#   Track.create({title: "SoundGarden - 4th of July", description: "infooo",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899160/Soundgarden-Superunknown_qncwxg.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899077/13_-_4th_Of_July_kahhei.mp3",
+#   author_id: 4});
+#
+#   Track.create({title: "A$AP Rocky - Wild for Night", description: "infooo",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899234/AtLongLastASAPCover_ncw4ac.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899057/08_Wild_For_The_Night_feat._Skrillex_cpvzjw.mp3",
+#   author_id: 4});
+#
+#
+#   Track.create({title: "Fetty Wap - Trap Queen", description: "infooo",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899190/82f7a2ef_axhjwk.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899071/01_Trap_Queen_grjdrs.mp3",
+#   author_id: 3});
+#
+#   Track.create({title: "Kid Cudi - Day n Nite", description: "Luv me bck",
+#     image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1461899137/kid-cudi-man-on-the-moon-the-end-of-day-cover-1_ckt7tz.jpg",
+#     audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1461899076/07-kid_cudi-day_n_nite_jzvdvj.mp3",
+#     author_id: 3});
+#
+#
+#
+#   Track.create([{title: "Drake & Future - Jumpman", description: "boomin on production, WOW",
+# image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+# audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314743/09_Jumpman_iqy603.mp3",
+# author_id: 1},
+#  {title: "DJ Sona - Kinetic", description: "Energize!!",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315513/hqdefault_ukscof.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315064/DJ_Sona_Kinetic_The_Crystal_Method_x_Dada_Life_sqdwhq.mp3",
+#  author_id: 2},
+#  {title: "DJ Sona - Concussive", description: "Bass Drop!!",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315655/hqdefault_ypm2ag.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315060/DJ_Sona_Concussive_Bassnectar_x_Renholde%CC%88r_rirkay.mp3",
+#  author_id: 2},
+#  {title: "DJ Sona - Ethereal", description: "Serenity!!",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315589/hqdefault_usb3fy.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462315063/DJ_Sona_Ethereal_Nosaj_Thing_x_Pretty_Lights_yu5g3v.mp3",
+#  author_id: 2},
+#  {title: "Drake & Future - Digital Dash", description: "dashing",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314720/01_Digital_Dash_fssh5h.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Big Rings", description: "We are talking about teams",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314719/02_Big_Rings_canhws.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Live From The Gutter", description: "Gutta Guttta",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314702/03_Live_From_the_Gutter_bjdsga.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Diamonds Dancing", description: "Bling",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314702/03_Live_From_the_Gutter_bjdsga.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Scholarships", description: "college",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314678/05_Scholarships_azmphv.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Plastic Bag", description: "empty",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314715/06_Plastic_Bag_i40a61.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - I'm The Plug", description: "dont pull please",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314710/07_I_m_the_Plug_j1fmpf.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Change Locations", description: "moving away",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314749/08_Change_Locations_az1pir.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - Jersey", description: "beach",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314775/10_Jersey_euhrif.mp3",
+#  author_id: 1},
+#  {title: "Drake & Future - 30 for 30 Freestyle", description: "beach",
+#  image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462315350/9cd0f669d4df4cd85d57b059f6ff29f3.1000x1000x1_wemnkw.jpg",
+#  audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314785/11_30_for_30_Freestyle_okk1xw.mp3",
+#  author_id: 1},
+#  {title: "Evanescence - Bring Me To Life", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512309/Album-Cover-evanescence-1019990_600_600_fbxid3.bmp",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314818/Evanescence_-_Bring_Me_To_Life_oomzo3.mp3",
+#   author_id: 4},
+#   {title: "Evanescence - My Immortal", description: "the new track",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512309/Album-Cover-evanescence-1019990_600_600_fbxid3.bmp",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314836/Evanescence_-_My_Immortal_ta5pwx.mp3",
+#   author_id: 4},
+#   {title: "Muse - Unnatural Selection", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512463/Unnatural-Selection-cover-muse-24031001-320-349_jg8sak.png",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314790/06_Unnatural_Selection_uev4yc.mp3",
+#   author_id: 4},
+#   {title: "Muse - Exogenesis", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512601/18af2a73d33e4c2898f2eaae615c9bd9_ca3xk6.png",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314800/11_Exogenesis_Symphony_Part_3_hzs2rx.mp3",
+#   author_id: 4},
+#   {title: "Muse - Uprising", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512716/b7330d0e_dtkqit.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314761/01-Uprising_yzfdir.mp3",
+#   author_id: 4},
+#   {title: "Muse - Guiding Light", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512875/Theresistance_aoztjk.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314790/05_Guiding_Light_g4euxw.mp3",
+#   author_id: 4},
+#   {title: "Muse - The Resistance", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512875/Theresistance_aoztjk.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314784/02-Resistance_mfdabh.mp3",
+#   author_id: 4},
+#   {title: "Muse - United States of Eurasia", description: "Spooky",
+#   image_url: "http://res.cloudinary.com/bravaudio/image/upload/v1462512980/United_States_of_Eurasia__Muse_single_-_cover_art_jz9nxq.jpg",
+#   audio_url: "http://res.cloudinary.com/bravaudio/video/upload/v1462314816/04_United_States_of_Eurasia_Collateral_Damage_pnp8hj.mp3",
+#   author_id: 4},
+#
+# ])
 
 
 
@@ -816,3 +816,41 @@ author_id: 7});
 # image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/90efbd9ee9091147cdd46cb6b5f55e64.600x600x1.jpg",
 # audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/take+care/Take+Care.flac",
 # author_id: 7});
+
+
+###
+Track.create({title: "Avicii - Broken Arrows", description: "Avicii Broken Arrows",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/Avicii-Broken-Arrows.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/113-avicii-broken_arrows-1ndd.mp3",
+author_id: 7});
+
+Track.create({title: "Justin Bieber - Sorry", description: "Is it too late to say sorry?",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/jb.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/202-justin_bieber-sorry-1ndd.mp3",
+author_id: 7});
+
+Track.create({title: "Coldplay Adventure Of A Life time", description: "Coldplays new track!",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/codyplay.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/101-coldplay-adventure_of_a_lifetime-1ndd.mp3",
+author_id: 7});
+
+Track.create({title: "Hardwell - Mad World", description: "Mad World",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/Hardwell+feat.+Jake+Reese+-+Mad+World.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/215-hardwell_feat_jake_reese-mad_world-1ndd.mp3",
+author_id: 7});
+
+
+Track.create({title: "David Guetta - Bang My Head", description: "ft. Sia and Fetty Wap",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/david-guetta.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/301-david_guetta_feat_sia_and_fetty_wap-bang_my_head-1ndd.mp3",
+author_id: 7});
+
+Track.create({title: "Kygo - Here For You", description: "ft. Ella Henderson",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/here+for+you.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/110-kygo_feat_ella_henderson-here_for_you-1ndd.mp3",
+author_id: 7});
+
+Track.create({title: "Alessia Cara - Here", description: "HERE!",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/here.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/NRJ-2016/317-alessia_cara-here-1ndd.mp3",
+author_id: 7});
