@@ -1,10 +1,60 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+#seeds for bravaudio
+
+profile_pic = [
+    "",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user1.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user2.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user3.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user4.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user5.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user6.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user7.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user8.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user9.png",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user10.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user11.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user12.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user13.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user14.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user15.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user16.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user17.png",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user18.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user19.jpeg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user20.jpg",
+    "https://s3-us-west-1.amazonaws.com/bravaudio/images/profile_pic/user21.jpg",
+  ];
+
+
+
+
+
+
+User.create([
+  {username: "guest", password:"password" , name: "Guest", profile_picture_url: profile_pic[1] , city: "San Francisco", state: "California", country: "USA", session_token: "dir"},
+  {username: "Rynehx", password:"password" , name: "Henry Lean", profile_picture_url: profile_pic[2] , city: "Houston", state: "Texas", country: "USA", session_token: "dir"},
+  {username: "Walid", password:"password" , name: "Walid Argen", profile_picture_url: profile_pic[3] , city: "Seattle", state: "Washington", country: "USA", session_token: "dir"},
+  {username: "teal_leaves", password:"password" , name: "Megan S", profile_picture_url: profile_pic[4] , city: "Savannah", state: "Georgia", country: "USA", session_token: "dir"},
+  {username: "sky_blue", password:"password" , name: "Brit J", profile_picture_url: profile_pic[5] , city: "Dallas", state: "Texas", country: "USA", session_token: "dir"},
+  {username: "NVR_WNTER", password:"password" , name: "SARA S", profile_picture_url: profile_pic[6] , city: "Auburn", state: "Alabama", country: "USA", session_token: "dir"},
+  {username: "water_flarez", password:"password" , name: "Jean T", profile_picture_url: profile_pic[7] , city: "New York City", state: "New York", country: "USA", session_token: "dir"},
+  {username: "blues", password:"password" , name: "Claudia E", profile_picture_url: profile_pic[8] , city: "Singapore City", state: "Singapore", country: "Singapore", session_token: "dir"},
+  {username: "Roar_YY", password:"password" , name: "Sean Live", profile_picture_url: profile_pic[9] , city: "Auckland", state: "Auckland", country: "New Zealand", session_token: "dir"},
+  {username: "Limitless", password:"password" , name: "Jessica O", profile_picture_url: profile_pic[10] , city: "Pittsburgh", state: "Pennsylvania", country: "USA", session_token: "dir"},
+  {username: "Limitless", password:"password" , name: "Kasper O", profile_picture_url: profile_pic[11] , city: "Pittsburgh", state: "Pennsylvania", country: "USA", session_token: "dir"},
+  {username: "Beach_LIFE", password:"password" , name: "Tim Brown", profile_picture_url: profile_pic[12] , city: "Austin", state: "Texas", country: "USA", session_token: "dir"},
+  {username: "MountainMan", password:"password" , name: "James Hatcher", profile_picture_url: profile_pic[13] , city: "Austin", state: "Texas", country: "USA", session_token: "dir"},
+  {username: "ICE_ICE_BBY", password:"password" , name: "Ice Cool", profile_picture_url: profile_pic[14] , city: "London", state: "England", country: "UK", session_token: "dir"},
+  {username: "DJ Sona", password:"password" , name: "Sona Sound", profile_picture_url: profile_pic[15] , city: "Las Vegas", state: "Nevada", country: "USA", session_token: "dir"},
+  {username: "TYTX", password:"password" , name: "Jennier I", profile_picture_url: profile_pic[16] , city: "Litte Rock", state: "Arkansas", country: "USA", session_token: "dir"},
+  {username: "Shadow_Boxer", password:"password" , name: "Raymond C", profile_picture_url: profile_pic[17] , city: "Litte Rock", state: "Arkansas", country: "USA", session_token: "dir"},
+  {username: "JamesH", password:"password" , name: "James Harden", profile_picture_url: profile_pic[18] , city: "San Diego", state: "California", country: "USA", session_token: "dir"},
+  {username: "OVO", password:"password" , name: "Drizzy B", profile_picture_url: profile_pic[19] , city: "Toronto", state: "Ontario", country: "Canada", session_token: "dir"},
+  {username: "EDCC", password:"password" , name: "Bun B", profile_picture_url: profile_pic[20] , city: "Los Angeles", state: "California", country: "USA", session_token: "dir"},
+  {username: "ACER", password:"password" , name: "Quinn D", profile_picture_url: profile_pic[21] , city: "Los Angeles", state: "California", country: "USA", session_token: "dir"},
+  ])
+
+
 
 
 
@@ -373,17 +423,106 @@ author_id: 1},
     ])
 
 
-    User.create([
-      {username: "rynehx", password:"123456" , name: "Levon", profile_picture_url: "https://lh5.googleusercontent.com/-ZadaXoUTBfs/AAAAAAAAAAI/AAAAAAAAAGA/19US52OmBqc/photo.jpg" , city: "Calgary", state: "Alberta", country: "Canada", session_token: "dir"},
-      {username: "OVO", password:"password" , name: "Drake", profile_picture_url: "https://www.morganstanley.com/assets/images/people/tiles/karlene-quigley-large.jpg" , city: "Toronto", state: "Ontario", country: "Canada", session_token: "dir"},
-      {username: "TIMID_neuce", password:"password" , name: "Andy", profile_picture_url: "http://www.google.com/+/images/learnmore/getstarted/feat-profile.png" , city: "Houston", state: "Texas", country: "USA", session_token: "dir"},
-      {username: "hatcher_man", password:"password" , name: "James", profile_picture_url: "https://www.cheme.cornell.edu/engineering/customcf/iws_ai_faculty_display/ai_images/ads10-profile.jpg" , city: "Austin", state: "Texas", country: "USA", session_token: "dir"},
-      {username: "guest", password:"password" , name: "Guest", profile_picture_url: "http://www.outsidemediakit.com/images/cntntimgs_aud_demprofile_2015_01.jpg" , city: "San Francisco", state: "California", country: "USA", session_token: "dir"},
-      {username: "dieselpwr", password:"password" , name: "Steve", profile_picture_url: "https://i.vimeocdn.com/portrait/12321126_300x300.jpg" , city: "Oakland", state: "California", country: "USA", session_token: "dir"},
-      {username: "zyrtantar", password:"password" , name: "Mitch", profile_picture_url: "https://expertbeacon.com/sites/default/files/advice_for_men_on_selecting_your_online_dating_profile_photo.jpg" , city: "Los Angeles", state: "California", country: "USA", session_token: "dir"}
-      ])
+###############
 
-  # Track.create({title: "", description: "infooo",
-  # image_url: "",
-  # audio_url: "",
-  # author_id: 1});
+Track.create({title: "Gary Moore - Still Got The Blues", description: "Listen to the blues",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/Stillgottheblues.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/001.+Gary+Moore+-+Still+Got+The+Blues.mp3",
+author_id: 10});
+
+Track.create({title: "Toni Braxton - Un-Break My Heart", description: "Un-break my Heart =(",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/ToniBraxtonUnBreakMyHeartCDSingleCover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/002.+Toni+Braxton+-+Un-Break+My+Heart.mp3",
+author_id: 11});
+
+Track.create({title: "Marlon Roudette - New Age", description: "Welcome to the New Age",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/NewAg72dpi_380_380_s_cy_100_sha.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/003.+Marlon+Roudette+-+New+Age.mp3",
+author_id: 12});
+
+
+Track.create({title: "David Usher - Black Black Heart", description: "new single BBH",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/black+black+heart.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/004.+David+Usher+-+Black+Black+Heart.mp3",
+author_id: 13});
+
+Track.create({title: "George Benson - Nothing's Gonna Change My Love For You", description: "<3",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/georgeBenson_myloveforyou.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/005.+George+Benson+-+Nothing%27s+Gonna+Change+My+Love+For+You.mp3",
+author_id: 13});
+
+Track.create({title: "Lionel Richie - How Long", description: "too long, too long",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/lionel-howlong.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/006.+Lionel+Richie+-+How+Long.mp3",
+author_id: 13});
+
+
+Track.create({title: "Whitney Houston - Saving All My Love For You", description: "all for you",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/Whitney-Houston-Saving-All-My-Love-For-You-single-cover-500x489.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/007.+Whitney+Houston+-+Saving+All+My+Love+For+You.mp3",
+author_id: 13});
+
+Track.create({title: "Lara Fabian - Je T'aime", description: "I love you",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/lara_fabian1.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/008.+Lara+Fabian+-+Je+T%27aime.mp3",
+author_id: 13});
+
+
+Track.create({title: "ATB - Missing", description: "lost then found",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/missingATB.jpeg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/009.+ATB+-+Missing.mp3",
+author_id: 13});
+
+
+Track.create({title: "Backstreet Boys - Show Me The Meaning Of Being Lonely", description: "SHOW ME",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/BSB_ShowMeTheMeaning.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/010.+Backstreet+Boys+-+Show+Me+The+Meaning+Of+Being+Lonely.mp3",
+author_id: 14});
+
+
+Track.create({title: "Linkin Park - What I've Done", description: "what I've done!",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/linkinpark.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/011.+Linkin+Park+-+What+I%27ve+Done.mp3",
+author_id: 14});
+
+
+Track.create({title: "Sting - Shape Of My Heart", description: "heart shaped",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/Fields-of-gold-sting.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/012.+Sting+-+Shape+Of+My+Heart.mp3",
+author_id: 14});
+
+Track.create({title: "Toni Braxton - Spanish Guitar", description: "guitarrrr",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/ToniBraxtonUnBreakMyHeartCDSingleCover.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/013.+Toni+Braxton+-+Spanish+Guitar.mp3",
+author_id: 16});
+
+Track.create({title: "Britney Spears - Born To Make You Happy", description: "be happy",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/Born_to_Make_You_Happy.png",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/014.+Britney+Spears+-+Born+To+Make+You+Happy.mp3",
+author_id: 16});
+
+
+Track.create({title: "Metallica - The Unforgiven", description: "one",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/metallica.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/021.+Metallica+-+The+Unforgiven.mp3",
+author_id: 16});
+
+Track.create({title: "Sia - Chandelier", description: "SWING",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/sia.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/039.+Sia+-+Chandelier+Piano+Version.mp3",
+author_id: 16});
+
+Track.create({title: "Lana Del Rey - Young And Beautiful", description: "orchestra version",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/BornToDieAlbumCover.png",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/070.+Lana+Del+Rey+-+Young+And+BeautifulDHOrchestralVersion.mp3",
+author_id: 19});
+
+Track.create({title: "Madonna - Take A Bow", description: "take a bow",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/Madonna%2C_debut_album_cover.png",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/097.+Madonna+-+Take+A+Bow.mp3",
+author_id: 18});
+
+Track.create({title: "Red Hot Chili Peppers - Californication", description: "Californication!",
+image_url: "https://s3-us-west-1.amazonaws.com/bravaudio/images/track/RedHotChiliPeppersCalifornication.jpg",
+audio_url: "https://s3-us-west-1.amazonaws.com/bravaudio/audio/top100/081.+Red+Hot+Chili+Peppers+-+Californication.mp3",
+author_id: 18});
