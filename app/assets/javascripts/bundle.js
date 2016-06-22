@@ -36321,7 +36321,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'home-tracks-image-container' },
-	        React.createElement('img', { className: 'home-tracks-play', src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" }),
+	        React.createElement('img', { className: 'home-tracks-play', onClick: this.addToMusicBar, src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" }),
 	        React.createElement('img', { className: 'home-tracks-image', onClick: this.addToMusicBar, src: this.props.track.image_url })
 	      ),
 	      React.createElement(
