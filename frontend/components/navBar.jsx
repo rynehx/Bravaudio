@@ -99,7 +99,7 @@ var NavBar = React.createClass({
     return (
       <div className = "navBar">
         <div className = "navBar-container">
-          <img className = "navBar-title" src = "http://www.clker.com/cliparts/r/P/X/U/g/h/orange-note-md.png" onClick ={function(){hashHistory.push('home');}} ></img>
+          <img className = "navBar-title" src = "https://s3-us-west-1.amazonaws.com/bravaudio/orange-note-md.png" onClick ={function(){hashHistory.push('home');}} ></img>
 
           <div className = {"nav-buttons home-button" + this.loggedIn()} id="home-button"
             onClick={function(){hashHistory.push('home');}}>{"Home"}
