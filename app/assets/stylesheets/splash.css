@@ -50,5 +50,6 @@ video#splashvideo {
   -ms-transform: translateX(-50%) translateY(-50%);
   -moz-transform: translateX(-50%) translateY(-50%);
   -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-270px) translateY(-75px);
+  transform: translateX(-50%) translateY(-50%);
+  cursor: pointer;
 }

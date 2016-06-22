@@ -1,5 +1,5 @@
 var React = require('react');
-
+var SessionActions = require("../actions/sessionActions");
 
 var SplashPage = React.createClass({
   // getInitialState: function () {
@@ -9,9 +9,14 @@ var SplashPage = React.createClass({
   //     ,"https://s3-us-west-1.amazonaws.com/bravaudio/splash5.mp4"] };
   // },
   //
-  // goToLogin: function(){
-  //
-  // },
+
+  guestLogin: function(){
+    SessionActions["login"]({
+      username: "guest",
+      password: "password"
+    });
+  },
+
   //
   // componentDidMount: function(){
   //   this.video = document.getElementById("splashvideo");
@@ -46,7 +51,7 @@ var SplashPage = React.createClass({
 
 
 
-        <div  className = "splash-entry" onClick={this.goToLogin} >
+        <div  className = "splash-entry" onClick={this.guestLogin} >
           Immerse Yourself In Music
         </div>
 

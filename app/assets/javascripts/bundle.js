@@ -39104,6 +39104,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var SessionActions = __webpack_require__(246);
 
 	var SplashPage = React.createClass({
 	  displayName: "SplashPage",
@@ -39115,9 +39116,14 @@
 	  //     ,"https://s3-us-west-1.amazonaws.com/bravaudio/splash5.mp4"] };
 	  // },
 	  //
-	  // goToLogin: function(){
-	  //
-	  // },
+
+	  guestLogin: function () {
+	    SessionActions["login"]({
+	      username: "guest",
+	      password: "password"
+	    });
+	  },
+
 	  //
 	  // componentDidMount: function(){
 	  //   this.video = document.getElementById("splashvideo");
@@ -39150,7 +39156,7 @@
 	      ),
 	      React.createElement(
 	        "div",
-	        { className: "splash-entry", onClick: this.goToLogin },
+	        { className: "splash-entry", onClick: this.guestLogin },
 	        "Immerse Yourself In Music"
 	      )
 	    );
