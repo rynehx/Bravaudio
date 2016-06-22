@@ -25341,7 +25341,7 @@
 
 	  searchBar: function () {
 	    if (!SessionStore.fetchCurrentUser()) {
-	      return React.createElement('div', null);
+	      return React.createElement('div', { className: 'searchbar-spacer' });
 	    } else {
 
 	      return React.createElement(SearchBar, null);
@@ -37157,13 +37157,6 @@
 	          onChange: this.changeTitle }),
 	        React.createElement(
 	          'div',
-	          { className: 'newplaylist-modal-inside-tags' },
-	          'Tags'
-	        ),
-	        React.createElement('input', { className: 'newplaylist-modal-inside-input',
-	          defaultValue: "" }),
-	        React.createElement(
-	          'div',
 	          { className: 'newplaylist-modal-inside-description' },
 	          'Description'
 	        ),
@@ -37244,6 +37237,10 @@
 	});
 
 	module.exports = EditPlaylistModal;
+
+	// <div className = "newplaylist-modal-inside-tags">Tags</div>
+	// <input className = "newplaylist-modal-inside-input"
+	//   defaultValue = {""}></input>
 
 /***/ },
 /* 307 */

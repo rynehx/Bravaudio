@@ -220,6 +220,21 @@
  background-size: 30px;
 }
 
+.searchbar-spacer{
+  height: 70%;
+  width: 500px;
+  min-width: 400px;
+
+  margin: 0px 20px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  visibility: hidden;
+}
+
 .signup-input{
   display: flex;
   flex-direction: column;

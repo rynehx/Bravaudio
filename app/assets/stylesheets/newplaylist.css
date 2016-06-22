@@ -57,6 +57,7 @@
   padding: 0px 10px;
   font-size: 18px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 
@@ -95,11 +96,13 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 }
 
 .newplaylist-modal-list-trackcount{
   font-size: 12px;
   width: 70px;
+  cursor: pointer;
 }
 
 .newplaylist-modal-list-add{

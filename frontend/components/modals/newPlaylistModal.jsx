@@ -157,9 +157,7 @@ var EditPlaylistModal = React.createClass({
               className = "newplaylist-modal-inside-input"
               onChange={this.changeTitle}></input>
 
-            <div className = "newplaylist-modal-inside-tags">Tags</div>
-            <input className = "newplaylist-modal-inside-input"
-              defaultValue = {""}></input>
+
 
             <div className = "newplaylist-modal-inside-description">Description</div>
             <textarea className = "newplaylist-modal-inside-textarea"
@@ -228,3 +226,8 @@ var EditPlaylistModal = React.createClass({
 
 
 module.exports = EditPlaylistModal;
+
+
+// <div className = "newplaylist-modal-inside-tags">Tags</div>
+// <input className = "newplaylist-modal-inside-input"
+//   defaultValue = {""}></input>

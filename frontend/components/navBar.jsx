@@ -78,7 +78,7 @@ var NavBar = React.createClass({
 
   searchBar: function(){
     if(!SessionStore.fetchCurrentUser()){
-        return <div></div>;
+        return <div className = "searchbar-spacer"></div>;
     }else{
 
         return <SearchBar />;
