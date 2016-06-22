@@ -5,25 +5,6 @@ var React = require('react'),
 var UserForeground = React.createClass({
 
 
-  componentDidMount: function(){
-
-    // var img = document.createElement('img');
-    // img.setAttribute('src', imgsrc);
-    //
-    //
-    // var lol = new Vibrant(img,3);
-
-
-    // Vibrant.from('path/to/image').getPalette(function(err, palette){
-    //   console.log(palette);
-    // });
-  },
-  click: function(){
-
-
-
-  },
-
   render: function(){
 
     return (
@@ -38,7 +19,7 @@ var UserForeground = React.createClass({
               {this.props.user.username}
             </div>
             <div className = "user-profile-location">{this.props.user.name}</div>
-            <div className = "user-profile-location">{this.props.user.city+" "+ this.props.user.state + " " + this.props.user.country}</div>
+            <div className = "user-profile-location">{this.props.user.city+",  "+ this.props.user.state + ",  " + this.props.user.country}</div>
         </div>
       </div>
     );

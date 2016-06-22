@@ -62,7 +62,7 @@
   background-image: url("http://res.cloudinary.com/bravaudio/image/upload/v1462339116/Untitled_Diagram_2_gil7ay.svg");
   background-size: 75px;
   background-repeat: no-repeat;
-
+  cursor: pointer;
 }
 
 
@@ -92,7 +92,7 @@
   color: white;
   padding: 2px 8px;
   margin: 5px;
-
+  cursor: default;
 
 }
 
@@ -103,7 +103,7 @@
   color: white;
   padding: 2px 8px;
   margin: 5px;
-
+  cursor: default;
 
 }
 
