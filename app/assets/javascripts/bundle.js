@@ -25364,7 +25364,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'navBar-container' },
-	        React.createElement('img', { className: 'navBar-title', src: 'http://www.clker.com/cliparts/r/P/X/U/g/h/orange-note-md.png', onClick: function () {
+	        React.createElement('img', { className: 'navBar-title', src: 'https://s3-us-west-1.amazonaws.com/bravaudio/orange-note-md.png', onClick: function () {
 	            hashHistory.push('home');
 	          } }),
 	        React.createElement(
@@ -36321,8 +36321,8 @@
 	      React.createElement(
 	        'div',
 	        { className: 'home-tracks-image-container' },
-	        React.createElement('img', { className: 'home-tracks-play', onClick: this.addToMusicBar, src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" }),
-	        React.createElement('img', { className: 'home-tracks-image', onClick: this.goToTrack, src: this.props.track.image_url })
+	        React.createElement('img', { className: 'home-tracks-play', src: "http://res.cloudinary.com/bravaudio/image/upload/v1462401134/Untitled_Diagram_3_jxrtjl.svg" }),
+	        React.createElement('img', { className: 'home-tracks-image', onClick: this.addToMusicBar, src: this.props.track.image_url })
 	      ),
 	      React.createElement(
 	        'section',
@@ -37974,20 +37974,6 @@
 	  displayName: 'UserForeground',
 
 
-	  componentDidMount: function () {
-
-	    // var img = document.createElement('img');
-	    // img.setAttribute('src', imgsrc);
-	    //
-	    //
-	    // var lol = new Vibrant(img,3);
-
-	    // Vibrant.from('path/to/image').getPalette(function(err, palette){
-	    //   console.log(palette);
-	    // });
-	  },
-	  click: function () {},
-
 	  render: function () {
 
 	    return React.createElement(
@@ -38014,7 +38000,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'user-profile-location' },
-	          this.props.user.city + " " + this.props.user.state + " " + this.props.user.country
+	          this.props.user.city + ",  " + this.props.user.state + ",  " + this.props.user.country
 	        )
 	      )
 	    );
