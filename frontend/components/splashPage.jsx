@@ -1,5 +1,7 @@
 var React = require('react');
 var SessionActions = require("../actions/sessionActions");
+var SessionStore = require('../stores/sessionStore');
+var hashHistory = require('react-router').hashHistory;
 
 var SplashPage = React.createClass({
   // getInitialState: function () {
@@ -11,10 +13,14 @@ var SplashPage = React.createClass({
   //
 
   guestLogin: function(){
-    SessionActions["login"]({
-      username: "guest",
-      password: "password"
-    });
+    if(SessionStore.fetchCurrentUser()){
+      hashHistory.push("home");
+    }else{
+        SessionActions["login"]({
+          username: "guest",
+          password: "password"
+        });
+    }
   },
 
   //

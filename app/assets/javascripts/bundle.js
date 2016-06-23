@@ -39105,9 +39105,11 @@
 
 	var React = __webpack_require__(1);
 	var SessionActions = __webpack_require__(246);
+	var SessionStore = __webpack_require__(255);
+	var hashHistory = __webpack_require__(159).hashHistory;
 
 	var SplashPage = React.createClass({
-	  displayName: "SplashPage",
+	  displayName: 'SplashPage',
 
 	  // getInitialState: function () {
 	  //   return { videoList: ["https://s3-us-west-1.amazonaws.com/bravaudio/splash1.mp4",
@@ -39118,10 +39120,14 @@
 	  //
 
 	  guestLogin: function () {
-	    SessionActions["login"]({
-	      username: "guest",
-	      password: "password"
-	    });
+	    if (SessionStore.fetchCurrentUser()) {
+	      hashHistory.push("home");
+	    } else {
+	      SessionActions["login"]({
+	        username: "guest",
+	        password: "password"
+	      });
+	    }
 	  },
 
 	  //
@@ -39147,17 +39153,17 @@
 
 	    var modalWidth = "300px";
 	    return React.createElement(
-	      "div",
-	      { className: "splashpage" },
+	      'div',
+	      { className: 'splashpage' },
 	      React.createElement(
-	        "video",
-	        { autoPlay: true, id: "splashvideo", muted: true, loop: true, type: "video/mp4", className: "splashvideo" },
-	        React.createElement("source", { src: "https://s3-us-west-1.amazonaws.com/bravaudio/splash+combined.mp4", type: "video/mp4" })
+	        'video',
+	        { autoPlay: true, id: 'splashvideo', muted: true, loop: true, type: 'video/mp4', className: 'splashvideo' },
+	        React.createElement('source', { src: 'https://s3-us-west-1.amazonaws.com/bravaudio/splash+combined.mp4', type: 'video/mp4' })
 	      ),
 	      React.createElement(
-	        "div",
-	        { className: "splash-entry", onClick: this.guestLogin },
-	        "Immerse Yourself In Music"
+	        'div',
+	        { className: 'splash-entry', onClick: this.guestLogin },
+	        'Immerse Yourself In Music'
 	      )
 	    );
 	  }
