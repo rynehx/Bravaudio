@@ -35691,7 +35691,7 @@
 	    //used the reset below to restart song on ff if its the only song on playlist otherwise do not need
 	    //also used to reset for slow audio fetching
 
-	    this.refs.audioDom.src = "";
+	    //  this.refs.audioDom.src="";
 
 	    this.refs["displaytime-current"].innerHTML = "0:00";
 	    this.refs["displaytime-end"].innerHTML = "0:00";
