@@ -1,8 +1,8 @@
 # Bravaudio
 
-[Bravaudio live][heroku] **NB:** This should be a link to your production site
+[Bravaudio live][heroku] **NB:**
 
-[heroku]: http://www.bravaudio.herokuapp.com
+[heroku]: http://www.bravaudio.com
 
 Bravaudio is a full-stack web application inspired by SoundCloud.  It utilizes Ruby on Rails on the backend, a PostgreSQL database, and React.js with a Flux architectural framework on the frontend.  
 
@@ -40,4 +40,4 @@ Tracks are implemented through the `Track` Table in the data base. The table has
 
 ###Playlists
 
-Playlists are stored in the playlist table. The tracks are connected to the playlist by track-playlist join table. 
+Playlists are stored in the playlist table. The tracks are connected to the playlist by track-playlist join table.
