@@ -53,12 +53,12 @@ For playlists that are owned by the user, an edit and delete button are availabl
 
 ###Likes
 
-A user's likes is persisted on the user's page.
+A user's likes are persisted on the user's page.
 
 ![user_likes]
 [user_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+userlikes.png
 
-User's who liked a track/playlists is persisted on that item's page.
+Users who liked a track/playlists are persisted on that item's page.
 
 ![track_likes]
 [track_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track+likes.png
