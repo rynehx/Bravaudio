@@ -11,7 +11,7 @@ Bravaudio is a full-stack web application inspired by SoundCloud.  It utilizes R
 
 ## Features & Implementation
 
-Bravaudio is a music playing app that allows users to play music through tracks and playlists of other users. Users, tracks, and playlists all have distinct pages. A likes feature is implemented for tracks and playlists. A user's liked tracks and playlists are shown on the user's show page and the user's collections page. Each track and playlist page shows users whom liked the track or playlist. Fuzzy search for users, tracks, and playlist is implemented using a ranking algorithm that checks the proximity of the queried characters.
+Bravaudio is a music playing app that allows users to play music through tracks and playlists of other users. Users, tracks, and playlists all have distinct pages. A likes feature is implemented for both tracks and playlists. A user's liked tracks and playlists are shown on the user's show page and the user's collection page. Each track and playlist page shows the users whom liked the track or playlist. Fuzzy search for users, tracks, and playlist is implemented using a ranking algorithm that checks the proximity of the queried characters.
 
 ## Single-Page App
 
@@ -65,7 +65,7 @@ Users who liked a track/playlists are persisted on that item's page.
 
 ###Collections
 
-Bravaudio features a collection page to display all the user's activities. The page includes all the user's tracks, playlist and likes.
+Bravaudio features a collection page to display all of the user's activities. The page includes all the user's tracks, playlists and liked items.
 
 ![collection]
 [collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
