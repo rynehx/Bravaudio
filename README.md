@@ -6,6 +6,9 @@
 
 Bravaudio is a full-stack web application inspired by SoundCloud.  It utilizes Ruby on Rails on the back-end, a PostgreSQL database, and React.js with a Flux architectural framework on the front-end.  
 
+![home]
+[home]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+home.png
+
 ## Features & Implementation
 
 Bravaudio is a music playing app that allows users to play music through tracks and playlists of other users. Users, tracks, and playlists all have distinct pages. A likes feature is implemented for tracks and playlists. A user's liked tracks and playlists are shown on the user's show page and the user's collections page. Each track and playlist page shows users whom liked the track or playlist. Fuzzy search for users, tracks, and playlist is implemented using a ranking algorithm that checks the proximity of the queried characters.
@@ -33,7 +36,7 @@ On the database side, the tracks are stored in one table in the database, which 
 
 
 
-Music plays when a track or playlist is pushed into the `MusicStore` which the music bar React component listens to. 
+Music plays when a track or playlist is pushed into the `MusicStore` which the music bar React component listens to.
 
 
 
@@ -45,7 +48,7 @@ Tracks are implemented through the `Track` Table in the data base. The table has
 
 Playlists are stored in the playlist table. The tracks are connected to the playlist by track-playlist join table.
 
-###likes
+###Likes
 
 
 ###Search
