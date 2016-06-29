@@ -31,10 +31,43 @@ A drag interface is implemented to allow easy playing time navigation on the `Au
 [trackpage]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track.png
 
 ###Playlists
+![playlist]
+[playlist]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+playlist.png
+
+![addtrack]
+[addtrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+add+to+playlist.png
+
+![edittrack]
+[edittrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+edit+playlist.png
 
 Playlists are stored in the playlist table. The tracks are connected to the playlist by track-playlist join table.
 
 ###Likes
 
+![user_likes]
+[user_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+userlikes.png
+
+![track_likes]
+[track_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track+likes.png
+
+###Collections
+![collection]
+[collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
+
+
+###Collections
+![collection]
+[collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
+
+###Users
+![users]
+[users]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+user.png
+
 
 ###Search
+
+![search_drake]
+[search_drake]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+search+drake.png
+
+![search_hot]
+[search_hot]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+search+hot.png
