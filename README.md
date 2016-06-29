@@ -15,11 +15,11 @@ Bravaudio is a music playing app that allows users to play music through tracks 
 
 ## Single-Page App
 
-Bravaudio is truly a single-page. All content is delivered on one static page. Page navigation is handled by different React.js components.
+Bravaudio is truly a single-page. All content is delivered on one static page. Page navigation is handled by React.js components.
 
 ### Audio
 
-Music plays when a track is added to the `MusicStore` which the audio-bar React component listens to. The `Audio-Bar` works similarly for playlists. When a playlist is added the `MusicStore`, the store keeps track of the different tracks of the playlists. Each time a track is finished or the fast forward button is pressed, the music store updates the current track which persists to the `Audio-Bar` component.
+Music plays when a track is added to the `MusicStore` which the `Audio-Bar` React component listens to. The `Audio-Bar` works similarly for playlists. When a playlist is added the `MusicStore`, the store keeps track of the different tracks of the playlists. Each time a track is finished or the fast forward button is pressed, the `MusicStore` updates the current track which persists to the `Audio-Bar` component.
 
 A drag interface is implemented to allow easy playing time navigation on the `Audio-Bar`.
 
@@ -79,7 +79,7 @@ Each individual user have their own page which includes their tracks, playlists,
 
 ###Search
 
-A search bar is implemented on the top nav bar. Fuzzy search is used to find matched results. 
+A search bar is implemented on the top nav bar. Fuzzy search is used to find matched results.
 
 ![search_drake]
 [search_drake]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+search+drake.png
