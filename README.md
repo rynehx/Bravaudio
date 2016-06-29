@@ -19,18 +19,20 @@ Bravaudio is truly a single-page. All content is delivered on one static page. P
 
 ### Audio
 
-![audiobar]
-[audiobar]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+musicbar.png
-
 Music plays when a track is added to the `MusicStore` which the audio-bar React component listens to. The `Audio-Bar` works similarly for playlists. When a playlist is added the `MusicStore`, the store keeps track of the different tracks of the playlists. Each time a track is finished or the fast forward button is pressed, the music store updates the current track which persists to the `Audio-Bar` component.
 
 A drag interface is implemented to allow easy playing time navigation on the `Audio-Bar`.
 
+![audiobar]
+[audiobar]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+musicbar.png
+
 ### Tracks
+
+The track page includes information regarding the track including, playlists it is in, users whom liked the track, option to like the track, author of the track, and the option to add to a playlist.
+
 ![trackpage]
 [trackpage]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track.png
 
-The track page includes information regarding the track including, playlists it is in, users whom liked the track, option to like the track, author of the track, and the option to add to a playlist.
 
 When the user clicks on the add to playlist button, a modal opens up with option to add to existing playlists or to create a new playlist.
 
@@ -44,29 +46,34 @@ The playlist page includes its owner, all the tracks in the playlist, and users 
 ![playlist]
 [playlist]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+playlist.png
 
-For playlists that are owned by the user, an edit and delete button is available. Users can edit the order that the tracks are store in the playlist, delete existing tracks, and edit the title and description.
+For playlists that are owned by the user, an edit and delete button is available. Users can edit the order that the tracks are store in the playlist (by a draggable interface), delete existing tracks, and edit the title and description.
 
 ![edittrack]
 [edittrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+edit+playlist.png
 
-
 ###Likes
+
+A user's likes is persisted on the user's page.
 
 ![user_likes]
 [user_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+userlikes.png
+
+User's who liked a track/playlists is persisted on that item's page.
 
 ![track_likes]
 [track_likes]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track+likes.png
 
 ###Collections
+
+Bravaudio features a collection page to display all the user's activities. The page includes all the user's tracks, playlist and likes.
+
 ![collection]
 [collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
 
-
 ###Users
+
 ![users]
 [users]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+user.png
-
 
 ###Search
 
