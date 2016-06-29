@@ -46,7 +46,7 @@ The playlist page includes its owner, all the tracks in the playlist, and users 
 ![playlist]
 [playlist]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+playlist.png
 
-For playlists that are owned by the user, an edit and delete button is available. Users can edit the order that the tracks are store in the playlist (by a draggable interface), delete existing tracks, and edit the title and description.
+For playlists that are owned by the user, an edit and delete button are available. Users can edit the order that the tracks are stored in the playlist (by a draggable interface), delete existing tracks, and edit the title and description.
 
 ![edittrack]
 [edittrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+edit+playlist.png
