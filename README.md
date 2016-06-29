@@ -72,10 +72,14 @@ Bravaudio features a collection page to display all the user's activities. The p
 
 ###Users
 
+Each individual user have their own page which includes their tracks, playlists, and liked items.
+
 ![users]
 [users]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+user.png
 
 ###Search
+
+A search bar is implemented on the top nav bar. Fuzzy search is used to find matched results. 
 
 ![search_drake]
 [search_drake]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+search+drake.png
