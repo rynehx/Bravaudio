@@ -30,17 +30,25 @@ A drag interface is implemented to allow easy playing time navigation on the `Au
 ![trackpage]
 [trackpage]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+track.png
 
-###Playlists
-![playlist]
-[playlist]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+playlist.png
+The track page includes information regarding the track including, playlists it is in, users whom liked the track, option to like the track, author of the track, and the option to add to a playlist.
+
+When the user clicks on the add to playlist button, a modal opens up with option to add to existing playlists or to create a new playlist.
 
 ![addtrack]
 [addtrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+add+to+playlist.png
 
+###Playlists
+
+The playlist page includes its owner, all the tracks in the playlist, and users whom liked the playlists. In addition to the tracks of the playlist, users have the option to like each of the displayed tracks or add them to their playlist.
+
+![playlist]
+[playlist]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+playlist.png
+
+For playlists that are owned by the user, an edit and delete button is available. Users can edit the order that the tracks are store in the playlist, delete existing tracks, and edit the title and description.
+
 ![edittrack]
 [edittrack]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+edit+playlist.png
 
-Playlists are stored in the playlist table. The tracks are connected to the playlist by track-playlist join table.
 
 ###Likes
 
@@ -54,10 +62,6 @@ Playlists are stored in the playlist table. The tracks are connected to the play
 ![collection]
 [collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
 
-
-###Collections
-![collection]
-[collection]: https://s3-us-west-1.amazonaws.com/bravaudio/readme/bravaudio+-+collection.png
 
 ###Users
 ![users]
